@@ -8,36 +8,36 @@ Given a software project, Selet calculates the full cost (people, tools, infrast
 
 ## 2. Decisions so far
 
-| Area | Decision |
-| --- | --- |
-| Users | Separate accounts: Owner, Project Manager, Developer |
-| Visibility | Salaries, costs and margins are hidden from non-owners; the client PDF shows the total plus selected items |
-| Currency | ETB base; USD and EUR conversion; automatic rates with manual override; quotes can show two currencies |
-| Calendars | Gregorian and Ethiopian |
-| Languages | English and Amharic, i18n from day one |
-| Output | PDF quote with company branding (Afro Digital identity) |
-| Estimation | Three-point (optimistic / likely / pessimistic), single value, t-shirt sizes, story points, work breakdown structure |
-| Pricing | Target margin and market-rate comparison; what-if mode; Margin Balancer |
-| Milestones | Flexible per quote, with saved presets |
-| Reports | Profit per project, per client, per team member |
-| Not included | CRM, sales pipeline, e-signature, quote tiers (Basic/Standard/Premium), actual-hours tracking, AI features |
-| Starter data | Starter templates provided, all removable |
-| License / deploy | Apache-2.0; Docker Compose |
+| Area             | Decision                                                                                                             |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Users            | Separate accounts: Owner, Project Manager, Developer                                                                 |
+| Visibility       | Salaries, costs and margins are hidden from non-owners; the client PDF shows the total plus selected items           |
+| Currency         | ETB base; USD and EUR conversion; automatic rates with manual override; quotes can show two currencies               |
+| Calendars        | Gregorian and Ethiopian                                                                                              |
+| Languages        | English and Amharic, i18n from day one                                                                               |
+| Output           | PDF quote with company branding (Afro Digital identity)                                                              |
+| Estimation       | Three-point (optimistic / likely / pessimistic), single value, t-shirt sizes, story points, work breakdown structure |
+| Pricing          | Target margin and market-rate comparison; what-if mode; Margin Balancer                                              |
+| Milestones       | Flexible per quote, with saved presets                                                                               |
+| Reports          | Profit per project, per client, per team member                                                                      |
+| Not included     | CRM, sales pipeline, e-signature, quote tiers (Basic/Standard/Premium), actual-hours tracking, AI features           |
+| Starter data     | Starter templates provided, all removable                                                                            |
+| License / deploy | Apache-2.0; Docker Compose                                                                                           |
 
 A minimal client record (name, TIN, contact) is kept only so a quote can be addressed and filtered in reports. It is not a CRM.
 
 ## 3. Roles and permissions
 
-| Capability | Owner | Project Manager | Developer |
-| --- | --- | --- | --- |
-| See salaries and hourly costs | Yes | No | No |
-| See margins and profit | Yes | Configurable | No |
-| Create and edit estimates | Yes | Yes | Own features only |
-| Enter hours for features | Yes | Yes | Yes |
-| Use Margin Balancer | Yes | Yes (within owner floors) | No |
-| Set margin floors and tax pack | Yes | No | No |
-| Generate and download quote PDF | Yes | Yes | No |
-| Reports | Yes | Limited | No |
+| Capability                      | Owner | Project Manager           | Developer         |
+| ------------------------------- | ----- | ------------------------- | ----------------- |
+| See salaries and hourly costs   | Yes   | No                        | No                |
+| See margins and profit          | Yes   | Configurable              | No                |
+| Create and edit estimates       | Yes   | Yes                       | Own features only |
+| Enter hours for features        | Yes   | Yes                       | Yes               |
+| Use Margin Balancer             | Yes   | Yes (within owner floors) | No                |
+| Set margin floors and tax pack  | Yes   | No                        | No                |
+| Generate and download quote PDF | Yes   | Yes                       | No                |
+| Reports                         | Yes   | Limited                   | No                |
 
 Rule: cost data is filtered on the server. The UI never receives fields the user may not see.
 
@@ -118,17 +118,17 @@ Guardrails: owner-defined floor margin per line and for the whole project; Proje
 
 All values live in a versioned **Tax Pack** (rate, threshold, effective date, source, last verified). Every figure below must be verified by the owner or an accountant before first use. Sources disagree in places.
 
-| Item | Value found | Notes |
-| --- | --- | --- |
-| VAT | 15% standard | Proclamation 1341/2024; registration threshold ETB 2,000,000 over 12 months; exports of services zero-rated |
-| Corporate (profit) tax | 30% | Shown as an estimate in the owner's view |
-| Withholding on domestic services | 3% per one source; services threshold reported as ETB 10,000 in another | Conflicting; 30% if supplier has no TIN or business license per one source. Cash-flow line, not a cost |
-| Employer pension (POESSA) | 11% of basic salary | Ethiopian nationals; foreign nationals reported exempt |
-| Employee pension | 7% | Withheld from employee; not an employer cost |
-| Employee income tax (PAYE) | 0% to 35% | Reformed in 2025; sources conflict on brackets, so the tax-free floor reported is ETB 2,000 per month. Borne by employee, not added to cost |
-| Pension base and ceiling | Basic salary per PwC; some sources say gross, one mentions an ETB 15,000 ceiling | Make base and ceiling configurable |
-| Severance accrual | About 8.3% per one source | Optional provision, off by default |
-| Digital Services Tax | New, scope pending regulation | Watch item |
+| Item                             | Value found                                                                      | Notes                                                                                                                                       |
+| -------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| VAT                              | 15% standard                                                                     | Proclamation 1341/2024; registration threshold ETB 2,000,000 over 12 months; exports of services zero-rated                                 |
+| Corporate (profit) tax           | 30%                                                                              | Shown as an estimate in the owner's view                                                                                                    |
+| Withholding on domestic services | 3% per one source; services threshold reported as ETB 10,000 in another          | Conflicting; 30% if supplier has no TIN or business license per one source. Cash-flow line, not a cost                                      |
+| Employer pension (POESSA)        | 11% of basic salary                                                              | Ethiopian nationals; foreign nationals reported exempt                                                                                      |
+| Employee pension                 | 7%                                                                               | Withheld from employee; not an employer cost                                                                                                |
+| Employee income tax (PAYE)       | 0% to 35%                                                                        | Reformed in 2025; sources conflict on brackets, so the tax-free floor reported is ETB 2,000 per month. Borne by employee, not added to cost |
+| Pension base and ceiling         | Basic salary per PwC; some sources say gross, one mentions an ETB 15,000 ceiling | Make base and ceiling configurable                                                                                                          |
+| Severance accrual                | About 8.3% per one source                                                        | Optional provision, off by default                                                                                                          |
+| Digital Services Tax             | New, scope pending regulation                                                    | Watch item                                                                                                                                  |
 
 How Selet applies them:
 

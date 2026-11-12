@@ -27,34 +27,34 @@ CRM, sales pipeline, e-signature, Basic/Standard/Premium quote tiers, actual-hou
 
 ## 5. Users
 
-| Persona | Needs |
-| --- | --- |
-| Owner | Full visibility; sets margins, floors, taxes; approves low-margin quotes |
-| Project Manager | Builds estimates and quotes within owner limits |
-| Developer | Enters hours for features; sees no costs or margins |
+| Persona         | Needs                                                                    |
+| --------------- | ------------------------------------------------------------------------ |
+| Owner           | Full visibility; sets margins, floors, taxes; approves low-margin quotes |
+| Project Manager | Builds estimates and quotes within owner limits                          |
+| Developer       | Enters hours for features; sees no costs or margins                      |
 
 ## 6. Functional requirements
 
 Priority: P0 must have, P1 important, P2 later in v1.
 
-| ID | Requirement | Priority |
-| --- | --- | --- |
-| F1 | Accounts with roles Owner, PM, Developer; server-side field filtering of cost data | P0 |
-| F2 | People and roles with pay type (salary, hourly, per project, contractor), nationality flag, utilization; computed hourly cost including employer pension | P0 |
-| F3 | Cost catalog (hosting, CDN, licenses, gateway fees) with price, currency, source, last-verified date, payer (agency or client); stale-price notifications | P0 |
-| F4 | Estimate builder: project, modules, features, per-role hours; methods: three-point, single value, t-shirt size, story points, WBS | P0 |
-| F5 | Risk and complexity multipliers, contingency, overhead | P0 |
-| F6 | Scale estimator: users, traffic, storage produce suggested infrastructure and recurring costs | P1 |
-| F7 | Pricing engine: cost, margin on price, range (low, recommended, high), market range comparison | P0 |
-| F8 | Margin Balancer: lock blended margin, adjust one line, system recomputes others; target-price mode; what-if discount; floor guardrails | P0 |
-| F9 | Tax Pack: VAT, withholding, profit tax estimate, employer pension, as versioned editable data | P0 |
-| F10 | Currency: ETB base, USD and EUR conversion, automatic rates, manual override, rate snapshot per quote | P0 |
-| F11 | Quote builder with per-line visibility, flexible milestones with presets, validity date, terms | P0 |
-| F12 | PDF export, branded, English and Amharic, Gregorian and Ethiopian dates | P0 |
-| F13 | Reports: profit per project, client and team member | P1 |
-| F14 | Starter templates (e-commerce, SaaS, mobile, landing page, internal tool, maintenance), all removable | P1 |
-| F15 | Audit log of changes to rates, taxes, and quotes | P1 |
-| F16 | Docker Compose install, backup and restore, documentation | P0 |
+| ID  | Requirement                                                                                                                                               | Priority |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| F1  | Accounts with roles Owner, PM, Developer; server-side field filtering of cost data                                                                        | P0       |
+| F2  | People and roles with pay type (salary, hourly, per project, contractor), nationality flag, utilization; computed hourly cost including employer pension  | P0       |
+| F3  | Cost catalog (hosting, CDN, licenses, gateway fees) with price, currency, source, last-verified date, payer (agency or client); stale-price notifications | P0       |
+| F4  | Estimate builder: project, modules, features, per-role hours; methods: three-point, single value, t-shirt size, story points, WBS                         | P0       |
+| F5  | Risk and complexity multipliers, contingency, overhead                                                                                                    | P0       |
+| F6  | Scale estimator: users, traffic, storage produce suggested infrastructure and recurring costs                                                             | P1       |
+| F7  | Pricing engine: cost, margin on price, range (low, recommended, high), market range comparison                                                            | P0       |
+| F8  | Margin Balancer: lock blended margin, adjust one line, system recomputes others; target-price mode; what-if discount; floor guardrails                    | P0       |
+| F9  | Tax Pack: VAT, withholding, profit tax estimate, employer pension, as versioned editable data                                                             | P0       |
+| F10 | Currency: ETB base, USD and EUR conversion, automatic rates, manual override, rate snapshot per quote                                                     | P0       |
+| F11 | Quote builder with per-line visibility, flexible milestones with presets, validity date, terms                                                            | P0       |
+| F12 | PDF export, branded, English and Amharic, Gregorian and Ethiopian dates                                                                                   | P0       |
+| F13 | Reports: profit per project, client and team member                                                                                                       | P1       |
+| F14 | Starter templates (e-commerce, SaaS, mobile, landing page, internal tool, maintenance), all removable                                                     | P1       |
+| F15 | Audit log of changes to rates, taxes, and quotes                                                                                                          | P1       |
+| F16 | Docker Compose install, backup and restore, documentation                                                                                                 | P0       |
 
 ## 7. Key calculation rules
 
@@ -84,12 +84,12 @@ Priority: P0 must have, P1 important, P2 later in v1.
 
 ## 10. Risks and assumptions
 
-| Risk | Mitigation |
-| --- | --- |
+| Risk                                 | Mitigation                                                                     |
+| ------------------------------------ | ------------------------------------------------------------------------------ |
 | Tax rules change or sources disagree | Tax Pack as data, source and verified date shown, accountant review before use |
-| Wrong default hours in templates | Mark as examples; owner edits; removable |
-| Scope too large for one developer | Strict prompt-by-prompt order; each stage shippable |
-| Exchange rate source unavailable | Fallback source plus manual override |
+| Wrong default hours in templates     | Mark as examples; owner edits; removable                                       |
+| Scope too large for one developer    | Strict prompt-by-prompt order; each stage shippable                            |
+| Exchange rate source unavailable     | Fallback source plus manual override                                           |
 
 ## 11. Release plan
 
