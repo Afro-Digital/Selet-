@@ -36,6 +36,7 @@ import { CommercialFloorGuard } from '../components/pricing/CommercialFloorGuard
 import { PricingScenariosCard } from '../components/pricing/PricingScenariosCard';
 import { MarginBalancer, ModuleLineItem } from '../components/pricing/MarginBalancer';
 import { QuoteBuilder } from '../components/quotes/QuoteBuilder';
+import { ReportsDashboard } from '../components/reports/ReportsDashboard';
 import {
   Users,
   Briefcase,
@@ -52,6 +53,7 @@ import {
   Tag,
   FileText,
   Calendar,
+  BarChart3,
 } from 'lucide-react';
 
 export default function Home() {
@@ -59,7 +61,7 @@ export default function Home() {
   const [calendarPreference, setCalendarPreference] = useState<'ETHIOPIAN' | 'GREGORIAN'>('ETHIOPIAN');
   const [userRole, setUserRole] = useState<UserRole>('OWNER');
   const [activeTab, setActiveTab] = useState<
-    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates' | 'scale' | 'pricing' | 'quotes'
+    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates' | 'scale' | 'pricing' | 'quotes' | 'reports'
   >('people');
 
   const [people, setPeople] = useState<Person[]>(INITIAL_PEOPLE);
@@ -611,6 +613,18 @@ export default function Home() {
             <FileText className="w-4 h-4" />
             <span>{t.quotesAndPdf}</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('reports')}
+            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap transition-colors ${
+              activeTab === 'reports'
+                ? 'border-emerald-600 text-emerald-600'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span>{t.reports}</span>
+          </button>
         </div>
 
         {/* Active Tab Views */}
@@ -874,6 +888,10 @@ export default function Home() {
             }))}
             clientMonthlyRecurringMinor={clientMonthlyRecurringMinor}
           />
+        )}
+
+        {activeTab === 'reports' && (
+          <ReportsDashboard t={t} locale={locale} userRole={userRole} />
         )}
       </div>
 

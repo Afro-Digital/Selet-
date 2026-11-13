@@ -191,6 +191,28 @@ export interface TranslationDictionary {
   ethiopianLeapYearNotice: string;
   pagumeThirteenthMonth: string;
   dualDateDisplay: string;
+  // Stage 12: Reports
+  reports: string;
+  reportsTagline: string;
+  profitPerProject: string;
+  profitPerClient: string;
+  profitPerTeamMember: string;
+  totalRevenue: string;
+  totalGrossProfit: string;
+  reconciledWithQuotes: string;
+  exportCsv: string;
+  filterByStatus: string;
+  allQuotes: string;
+  issuedOnly: string;
+  draftOnly: string;
+  dateRange: string;
+  startDate: string;
+  endDate: string;
+  allocatedHours: string;
+  laborCost: string;
+  attributedRevenue: string;
+  profitContribution: string;
+  developerRestrictedReports: string;
 }
 
 export const translations: Record<Locale, TranslationDictionary> = {
@@ -388,6 +410,29 @@ export const translations: Record<Locale, TranslationDictionary> = {
     ethiopianLeapYearNotice: 'Ethiopian Leap Year (Pagumē 6 days)',
     pagumeThirteenthMonth: '13th Month (Pagumē)',
     dualDateDisplay: 'Dual Calendar Date',
+    // Stage 12: Reports
+    reports: 'Financial Reports',
+    reportsTagline: 'Executive profit analytics per project, client, and team member',
+    profitPerProject: 'Profit per Project',
+    profitPerClient: 'Profit per Client',
+    profitPerTeamMember: 'Profit per Team Member',
+    totalRevenue: 'Total Portfolio Revenue',
+    totalGrossProfit: 'Total Gross Profit',
+    reconciledWithQuotes: 'Reconciled with Stored Quotes (100% Match)',
+    exportCsv: 'Export to CSV',
+    filterByStatus: 'Filter by Status',
+    allQuotes: 'All Proposals & Quotes',
+    issuedOnly: 'Issued (Locked Quotes Only)',
+    draftOnly: 'Draft Proposals Only',
+    dateRange: 'Select Period',
+    startDate: 'From Date',
+    endDate: 'To Date',
+    allocatedHours: 'Allocated Hours',
+    laborCost: 'Direct Labor Cost',
+    attributedRevenue: 'Attributed Revenue',
+    profitContribution: 'Gross Profit Contribution',
+    developerRestrictedReports:
+      'Executive financial reports, profit margins, and commercial reconciliations are restricted to Owners and Project Managers.',
   },
   am: {
     appName: 'ስሌት (Selet)',
@@ -581,5 +626,28 @@ export const translations: Record<Locale, TranslationDictionary> = {
     ethiopianLeapYearNotice: 'የኢትዮጵያ ዘመነ ዮሐንስ / ጳጉሜ 6 ቀናት',
     pagumeThirteenthMonth: '13ኛው ወር (ጳጉሜ)',
     dualDateDisplay: 'ሁለቱ የቀን መቁጠሪያዎች',
+    // Stage 12: Reports
+    reports: 'የፋይናንስ ሪፖርቶች',
+    reportsTagline: 'የትርፍ መጠን ትንተና በፕሮጀክት፣ በደንበኛ እና በቡድን አባላት',
+    profitPerProject: 'የትርፍ መጠን በፕሮጀክት',
+    profitPerClient: 'የትርፍ መጠን በደንበኛ',
+    profitPerTeamMember: 'የትርፍ አስተዋጽኦ በቡድን አባል',
+    totalRevenue: 'አጠቃላይ የፖርትፎሊዮ ገቢ',
+    totalGrossProfit: 'አጠቃላይ የተጣራ ትርፍ',
+    reconciledWithQuotes: 'ከተመዘገቡ የዋጋ ማቅረቢያዎች ጋር የተጣጣመ (100% ሙሉ ተዛምዶ)',
+    exportCsv: 'በCSV አውርድ (Excel)',
+    filterByStatus: 'በሁኔታ አጣራ',
+    allQuotes: 'ሁሉም የዋጋ አቅርቦቶች',
+    issuedOnly: 'የተሰጡ (የተቆለፉ) ብቻ',
+    draftOnly: 'ረቂቆች ብቻ',
+    dateRange: 'የጊዜ ገደብ መምረጫ',
+    startDate: 'የመጀመሪያ ቀን',
+    endDate: 'የመጨረሻ ቀን',
+    allocatedHours: 'የተመደቡ ሰዓታት',
+    laborCost: 'የቀጥታ የሰው ኃይል ወጪ',
+    attributedRevenue: 'የተደለደለ ገቢ',
+    profitContribution: 'የትርፍ አስተዋጽኦ',
+    developerRestrictedReports:
+      'የድርጅቱ የፋይናንስ እና የትርፍ ትንተና ሪፖርቶች ሚስጥራዊ ስለሆኑ ለባለቤቶች እና ለፕሮጀክት አስተዳዳሪዎች ብቻ የተፈቀዱ ናቸው።',
   },
 };

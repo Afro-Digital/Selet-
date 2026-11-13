@@ -541,4 +541,98 @@ describe('Stage 6: Cost Catalog, Currency Service & Notifications (UI)', () => {
       expect(screen.getAllByText(/1341\/2016/i).length).toBeGreaterThan(0);
     });
   });
+
+  describe('Stage 12: Executive Reports, Reconciliation & CSV Export (UI)', () => {
+    it('renders Reports tab with portfolio totals and quote reconciliation badge for OWNER', () => {
+      render(<Home />);
+
+      // Navigate to Reports tab
+      const reportsTabButton = screen.getByRole('button', { name: /Financial Reports/i });
+      fireEvent.click(reportsTabButton);
+
+      // Verify Reports Dashboard header & Reconciliation Badge
+      expect(screen.getByText(/Reconciled with Stored Quotes \(100% Match\)/i)).toBeDefined();
+      expect(screen.getByRole('button', { name: /Export to CSV/i })).toBeDefined();
+
+      // Verify Executive KPI Summary Cards
+      expect(screen.getByText(/Total Portfolio Revenue/i)).toBeDefined();
+      expect(screen.getByText(/Total Gross Profit/i)).toBeDefined();
+      expect(screen.getByText(/Weighted Portfolio Blended Margin/i)).toBeDefined();
+
+      // Verify default sub-tab: Profit per Project
+      expect(screen.getByText('Telebirr SuperApp Mini-App & Core Billing')).toBeDefined();
+      expect(screen.getAllByText('Ethio Telecom').length).toBeGreaterThan(0);
+      expect(screen.getByText('QT-2026-0001')).toBeDefined();
+    });
+
+    it('allows switching between Project, Client, and Team Member profit reports', () => {
+      render(<Home />);
+
+      // Navigate to Reports tab
+      fireEvent.click(screen.getByRole('button', { name: /Financial Reports/i }));
+
+      // Switch to Profit per Client
+      const clientSubTab = screen.getByRole('button', { name: /Profit per Client/i });
+      fireEvent.click(clientSubTab);
+
+      // Verify Client table content
+      expect(screen.getAllByText('Ethio Telecom').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Ethiopian Airlines Enterprise').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Commercial Bank of Ethiopia').length).toBeGreaterThan(0);
+
+      // Switch to Profit per Team Member
+      const teamSubTab = screen.getByRole('button', { name: /Profit per Team Member/i });
+      fireEvent.click(teamSubTab);
+
+      // Verify Team table content
+      expect(screen.getByText('Dagmawi Tesfaye (Alex)')).toBeDefined();
+      expect(screen.getAllByText('Lead Architect / Backend Lead').length).toBeGreaterThan(0);
+      expect(screen.getByText('Selamawit Kebede (Betty)')).toBeDefined();
+      expect(screen.getAllByText('Frontend Engineer').length).toBeGreaterThan(0);
+    });
+
+    it('filters project reports by status and client', () => {
+      render(<Home />);
+
+      // Navigate to Reports tab
+      fireEvent.click(screen.getByRole('button', { name: /Financial Reports/i }));
+
+      // Find status filter select and change to ISSUED
+      const statusSelect = screen.getAllByRole('combobox').find((select) => {
+        const sel = select as HTMLSelectElement;
+        return Array.from(sel.options).some((o) => o.value === 'ISSUED');
+      });
+      expect(statusSelect).toBeDefined();
+      if (statusSelect) {
+        fireEvent.change(statusSelect, { target: { value: 'ISSUED' } });
+      }
+
+      // Projects should only show issued quotes
+      expect(screen.getByText('Telebirr SuperApp Mini-App & Core Billing')).toBeDefined();
+      expect(screen.getByText('Ethiopian Airlines Cargo Tracking System')).toBeDefined();
+      // CBE Birr proposal is DRAFT, so it should not appear in filtered list
+      expect(screen.queryByText('CBE Birr Agent Management Portal')).toBeNull();
+    });
+
+    it('restricts Developer role from accessing executive reports', () => {
+      render(<Home />);
+
+      // Switch role to DEVELOPER using header role select
+      const roleSelect = screen.getAllByRole('combobox')[0]!;
+      fireEvent.change(roleSelect, { target: { value: 'DEVELOPER' } });
+
+      // Navigate to Reports tab
+      fireEvent.click(screen.getByRole('button', { name: /Financial Reports/i }));
+
+      // Should display confidential/restricted access banner
+      expect(screen.getByText(/Access Restricted/i)).toBeDefined();
+      expect(
+        screen.getByText(/Executive financial reports, profit margins, and commercial reconciliations are restricted/i),
+      ).toBeDefined();
+
+      // Confidential KPI numbers and financial tables must NOT be rendered
+      expect(screen.queryByText(/Total Portfolio Revenue/i)).toBeNull();
+      expect(screen.queryByText(/QT-2026-0001/i)).toBeNull();
+    });
+  });
 });
