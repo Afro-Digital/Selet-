@@ -39,6 +39,7 @@ interface WBSTask {
 
 export default function PageDesignDemo() {
   const [lang, setLang] = useState<'en' | 'am'>('en');
+  const [darkMode, setDarkMode] = useState(false);
   const toggleDarkMode = () => {
     const next = !darkMode;
     setDarkMode(next);
