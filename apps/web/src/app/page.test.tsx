@@ -166,4 +166,112 @@ describe('Stage 6: Cost Catalog, Currency Service & Notifications (UI)', () => {
       ).toBeGreaterThan(0);
     });
   });
+
+  describe('Stage 8: Risk, Overhead & Scale Estimator (UI)', () => {
+    it('navigates to Risk & Scale Estimator tab and displays all panels', () => {
+      render(<Home />);
+      const scaleTab = screen.getByRole('button', { name: /Risk & Scale/i });
+      fireEvent.click(scaleTab);
+
+      expect(screen.getByText('Full Project Cost Breakdown')).toBeDefined();
+      expect(screen.getByText('Risk Multipliers & Uncertainty Factors')).toBeDefined();
+      expect(screen.getByText('Scale Estimator')).toBeDefined();
+    });
+
+    it('entering 5,000 monthly users suggests infrastructure with visible assumptions and payer tags', () => {
+      render(<Home />);
+      const scaleTab = screen.getByRole('button', { name: /Risk & Scale/i });
+      fireEvent.click(scaleTab);
+
+      // Verify suggested items for 5,000 users & 500k payment volume
+      expect(screen.getByText('AWS EC2 t4g.medium (2 vCPU, 4GB RAM)')).toBeDefined();
+      expect(screen.getByText('Cloudflare Pro CDN & Web Application Firewall (WAF)')).toBeDefined();
+      expect(screen.getByText('.et Country Code Domain (.et Registrar)')).toBeDefined();
+      expect(
+        screen.getByText('Telebirr & Chapa Payment Gateway Processing Fee (3.5%)'),
+      ).toBeDefined();
+      expect(screen.getByText('Sentry Performance Monitoring & Error Tracking')).toBeDefined();
+
+      // Verify visible assumptions
+      expect(
+        screen.getByText(
+          /Recommended for 1,000–10,000 monthly users \(current: 5,000\) with moderate database queries/i,
+        ),
+      ).toBeDefined();
+      expect(
+        screen.getByText(/Estimated 3\.5% transaction fee on monthly payment processing volume/i),
+      ).toBeDefined();
+
+      // Verify payer dropdown options
+      const payerSelects = screen.getAllByRole('combobox');
+      expect(payerSelects.length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/Client \(Pass-Through\)/i).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/Agency \(Internal\)/i).length).toBeGreaterThan(0);
+    });
+
+    it('updating scale inputs recalculates infrastructure suggestions and costs', () => {
+      render(<Home />);
+      const scaleTab = screen.getByRole('button', { name: /Risk & Scale/i });
+      fireEvent.click(scaleTab);
+
+      // Change users to 60,000
+      const usersInput = screen.getByLabelText(/Monthly Active Users/i);
+      fireEvent.change(usersInput, { target: { value: '60000' } });
+
+      // Click recalculate suggestions
+      const recalculateBtn = screen.getByRole('button', {
+        name: /Suggest Infrastructure & Recurring Costs/i,
+      });
+      fireEvent.click(recalculateBtn);
+
+      // Should now suggest Cluster setup
+      expect(
+        screen.getByText('Auto-scaling Container Cluster (ECS / Kubernetes + RDS Multi-AZ)'),
+      ).toBeDefined();
+      expect(
+        screen.getByText(
+          /Enterprise auto-scaling cluster with high concurrency handling for >50,000 monthly active users/i,
+        ),
+      ).toBeDefined();
+    });
+
+    it('toggling risk factors updates the total risk multiplier', () => {
+      render(<Home />);
+      const scaleTab = screen.getByRole('button', { name: /Risk & Scale/i });
+      fireEvent.click(scaleTab);
+
+      // Check initial total risk multiplier badge (23.0%)
+      expect(screen.getByText('23.0%')).toBeDefined();
+
+      // Toggle tight deadline factor (+5%)
+      const tightDeadlineCheckbox = screen.getByLabelText(/Tight Deadline \/ Urgent Delivery/i);
+      fireEvent.click(tightDeadlineCheckbox);
+
+      // Total risk multiplier should now be 28.0% (10% contingency + 5% reqs + 8% tech + 5% deadline)
+      expect(screen.getByText('28.0%')).toBeDefined();
+    });
+
+    it('Developer view redacts costs and rates in Project Cost Summary, Risk Manager, and Scale Estimator', () => {
+      render(<Home />);
+      // Switch simulated role to Developer
+      const roleSelect = screen.getByRole('combobox');
+      fireEvent.change(roleSelect, { target: { value: 'DEVELOPER' } });
+
+      const scaleTab = screen.getByRole('button', { name: /Risk & Scale/i });
+      fireEvent.click(scaleTab);
+
+      // Check Developer privacy notices in Summary and Scale estimator
+      expect(
+        screen.getAllByText(/Financial costs and rate cards are hidden in Developer mode/i).length,
+      ).toBeGreaterThan(0);
+
+      // Recurring costs column shows Confidential (Hidden)
+      expect(screen.getAllByText('Confidential (Hidden)').length).toBeGreaterThan(0);
+
+      // Sliders & multiplier inputs should be disabled
+      const sliders = screen.getAllByRole('slider');
+      expect(sliders.length).toBeGreaterThan(0);
+      expect((sliders[0] as HTMLInputElement).disabled).toBe(true);
+    });
+  });
 });

@@ -256,7 +256,9 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
   const [newModuleName, setNewModuleName] = useState('');
 
   const activeProject =
-    projects.find((p) => p.id === activeProjectId) || (projects[0] as ProjectItem) || defaultInitialProject;
+    projects.find((p) => p.id === activeProjectId) ||
+    (projects[0] as ProjectItem) ||
+    defaultInitialProject;
 
   // Handle Loading a Template
   const handleSelectTemplate = (templateId: string) => {

@@ -110,6 +110,34 @@ export interface TranslationDictionary {
   projectName: string;
   projectDescription: string;
   selectProject: string;
+  // Stage 8 additions
+  scaleEstimator: string;
+  scaleAndRisk: string;
+  monthlyUsers: string;
+  peakConcurrency: string;
+  storageGb: string;
+  trafficGb: string;
+  paymentVolume: string;
+  calculateSuggestions: string;
+  suggestedInfrastructure: string;
+  assumptions: string;
+  contingencyRate: string;
+  overheadRate: string;
+  riskFactors: string;
+  totalRiskRate: string;
+  clientMonthlyRecurring: string;
+  agencyMonthlyRecurring: string;
+  totalMonthlyRecurring: string;
+  costBreakdown: string;
+  directCost: string;
+  riskContingencyCost: string;
+  overheadCost: string;
+  totalProjectCost: string;
+  unclearRequirements: string;
+  frequentChanges: string;
+  newTechnology: string;
+  tightDeadline: string;
+  overrideItem: string;
 }
 
 export const translations: Record<Locale, TranslationDictionary> = {
@@ -224,6 +252,34 @@ export const translations: Record<Locale, TranslationDictionary> = {
     projectName: 'Project Name',
     projectDescription: 'Project Description',
     selectProject: 'Select Project',
+    // Stage 8
+    scaleEstimator: 'Scale Estimator',
+    scaleAndRisk: 'Risk & Scale Estimator',
+    monthlyUsers: 'Monthly Active Users (MAU)',
+    peakConcurrency: 'Peak Concurrency',
+    storageGb: 'Storage (GB)',
+    trafficGb: 'Bandwidth (GB/mo)',
+    paymentVolume: 'Monthly Payment Volume (ETB)',
+    calculateSuggestions: 'Suggest Infrastructure & Recurring Costs',
+    suggestedInfrastructure: 'Suggested Recurring Infrastructure & Services',
+    assumptions: 'Assumptions & Sizing Rationale',
+    contingencyRate: 'Contingency Rate (%)',
+    overheadRate: 'Overhead Rate (%)',
+    riskFactors: 'Risk Multipliers & Uncertainty Factors',
+    totalRiskRate: 'Total Risk Multiplier',
+    clientMonthlyRecurring: 'Client Pass-Through Recurring',
+    agencyMonthlyRecurring: 'Agency Internal Recurring',
+    totalMonthlyRecurring: 'Total Recurring Monthly Cost',
+    costBreakdown: 'Full Project Cost Breakdown',
+    directCost: 'Direct Project Cost',
+    riskContingencyCost: 'Risk & Contingency Allowance',
+    overheadCost: 'Overhead Allocation',
+    totalProjectCost: 'Total Project Cost (Direct + Risk + Overhead)',
+    unclearRequirements: 'Unclear or Evolving Requirements',
+    frequentChanges: 'Frequent Scope Changes Expected',
+    newTechnology: 'New / Unfamiliar Technology Stack',
+    tightDeadline: 'Tight Deadline / Urgent Delivery',
+    overrideItem: 'Override Sizing / Cost',
   },
   am: {
     appName: 'ስሌት (Selet)',
@@ -335,5 +391,33 @@ export const translations: Record<Locale, TranslationDictionary> = {
     projectName: 'የፕሮጀክት ስም',
     projectDescription: 'የፕሮጀክት መግለጫ',
     selectProject: 'ፕሮጀክት ይምረጡ',
+    // Stage 8
+    scaleEstimator: 'የስኬል እና የተጠቃሚዎች መጠን ግምት',
+    scaleAndRisk: 'አደጋ፣ ተጓዳኝ ወጪ እና ስኬል ማስያ',
+    monthlyUsers: 'ወርሃዊ ንቁ ተጠቃሚዎች (MAU)',
+    peakConcurrency: 'ከፍተኛ የአንድ ጊዜ ተጠቃሚዎች',
+    storageGb: 'የማከማቻ መጠን (GB)',
+    trafficGb: 'ወርሃዊ የዳታ ዝውውር (GB)',
+    paymentVolume: 'ወርሃዊ የክፍያ መጠን (በብር)',
+    calculateSuggestions: 'ተስማሚ መሠረተ-ልማት እና ተደጋጋሚ ወጪዎችን አስላ',
+    suggestedInfrastructure: 'የተጠቆሙ ተደጋጋሚ የመሠረተ-ልማት አገልግሎቶች',
+    assumptions: 'የግምት መነሻዎች እና ማብራሪያ',
+    contingencyRate: 'ያልተጠበቁ ክስተቶች መጠባበቂያ (%)',
+    overheadRate: 'አጠቃላይ የድርጅት አስተዳደራዊ ወጪ (%)',
+    riskFactors: 'የአደጋ እና ውስብስብነት ማባዣዎች',
+    totalRiskRate: 'አጠቃላይ የአደጋ ማባዣ ድምር',
+    clientMonthlyRecurring: 'የደንበኛ ቀጥተኛ ወርሃዊ ወጪ',
+    agencyMonthlyRecurring: 'የኤጀንሲ የውስጥ ወርሃዊ ወጪ',
+    totalMonthlyRecurring: 'አጠቃላይ ወርሃዊ ተደጋጋሚ ወጪ',
+    costBreakdown: 'ሙሉ የፕሮጀክት ወጪ ዝርዝር',
+    directCost: 'ቀጥተኛ የፕሮጀክት ወጪ',
+    riskContingencyCost: 'የአደጋ እና የመጠባበቂያ ወጪ',
+    overheadCost: 'የአስተዳደራዊ ወጪ ድርሻ',
+    totalProjectCost: 'አጠቃላይ የፕሮጀክቱ ወጪ (ቀጥተኛ + አደጋ + አስተዳደራዊ)',
+    unclearRequirements: 'ግልጽ ያልሆኑ ወይም ተለዋዋጭ ፍላጎቶች',
+    frequentChanges: 'ተደጋጋሚ የሥራ ወሰን ለውጦች',
+    newTechnology: 'አዲስ ወይም ያልተለመደ የቴክኖሎጂ ቁልል',
+    tightDeadline: 'አስቸኳይ ወይም አጭር የማስረከቢያ ጊዜ',
+    overrideItem: 'የእቃውን መጠን/ዋጋ ቀይር',
   },
 };

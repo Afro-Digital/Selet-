@@ -9,6 +9,8 @@ import {
   Param,
   Query,
   UseInterceptors,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
@@ -20,6 +22,9 @@ import { UpdateModuleDto } from './dto/update-module.dto';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { UpdateFeatureDto } from './dto/update-feature.dto';
 import { UpdateFeatureHoursDto } from './dto/update-feature-hours.dto';
+import { ScaleEstimateInputDto } from './dto/scale-estimate.dto';
+import { UpdateRiskDto } from './dto/update-risk.dto';
+import { UpdateScaleItemsDto } from './dto/update-scale-items.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser, AuthenticatedUser } from '../common/decorators/current-user.decorator';
 import { RoleSerializerInterceptor } from '../common/interceptors/role-serializer.interceptor';
@@ -222,5 +227,104 @@ export class EstimatesController {
   @ApiResponse({ status: 200, description: 'Project estimate rollup' })
   async getRollup(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
     return this.estimatesService.getRollup(id, user);
+  }
+
+  // ==========================================
+  // RISK & OVERHEAD
+  // ==========================================
+
+  @Get(':id/risk')
+  @ApiOperation({ summary: 'Get risk factors, contingency, and overhead rates' })
+  @ApiResponse({ status: 200, description: 'Risk and overhead configuration' })
+  async getRisk(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
+    return this.estimatesService.getRiskAndOverhead(id, undefined, user);
+  }
+
+  @Get(':id/versions/:versionId/risk')
+  @ApiOperation({ summary: 'Get risk factors and overhead for a specific estimate version' })
+  @ApiResponse({ status: 200, description: 'Risk and overhead configuration' })
+  async getVersionRisk(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.getRiskAndOverhead(id, versionId, user);
+  }
+
+  @Put(':id/versions/:versionId/risk')
+  @Roles(UserRole.OWNER, UserRole.PM)
+  @ApiOperation({ summary: 'Update risk factors, contingency rate, and overhead rate' })
+  @ApiResponse({ status: 200, description: 'Risk configuration updated' })
+  async updateRisk(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @Body() dto: UpdateRiskDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.updateRiskAndOverhead(id, versionId, dto, user);
+  }
+
+  // ==========================================
+  // SCALE ESTIMATOR
+  // ==========================================
+
+  @Post(':id/versions/:versionId/scale/estimate')
+  @HttpCode(HttpStatus.OK)
+  @Roles(UserRole.OWNER, UserRole.PM)
+  @ApiOperation({
+    summary:
+      'Generate suggested infrastructure, gateway percentage fees, and recurring costs based on user scale',
+  })
+  @ApiResponse({ status: 200, description: 'Scale suggestions generated with assumptions' })
+  async estimateScale(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @Body() dto: ScaleEstimateInputDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.estimateScale(id, versionId, dto, user);
+  }
+
+  @Put(':id/versions/:versionId/scale/items')
+  @Roles(UserRole.OWNER, UserRole.PM)
+  @ApiOperation({
+    summary:
+      'Update or override recurring scale items (toggle inclusion, edit amount, change payer)',
+  })
+  @ApiResponse({ status: 200, description: 'Scale items updated' })
+  async updateScaleItems(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @Body() dto: UpdateScaleItemsDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.updateScaleItems(id, versionId, dto, user);
+  }
+
+  // ==========================================
+  // FULL COST BREAKDOWN SUMMARY
+  // ==========================================
+
+  @Get(':id/cost-summary')
+  @ApiOperation({
+    summary:
+      'Get complete cost breakdown: labor + tools + agency infra + third-party + risk + overhead + client recurring (costs stripped for Developer)',
+  })
+  @ApiResponse({ status: 200, description: 'Complete project cost summary' })
+  async getCostSummary(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
+    return this.estimatesService.getCostSummary(id, undefined, user);
+  }
+
+  @Get(':id/versions/:versionId/cost-summary')
+  @ApiOperation({
+    summary: 'Get complete cost breakdown for a specific version (costs stripped for Developer)',
+  })
+  @ApiResponse({ status: 200, description: 'Complete project cost summary' })
+  async getVersionCostSummary(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.getCostSummary(id, versionId, user);
   }
 }

@@ -29,6 +29,9 @@ import { CatalogList } from '../components/catalog/CatalogList';
 import { CurrencyWidget } from '../components/currency/CurrencyWidget';
 import { NotificationBell } from '../components/notifications/NotificationBell';
 import { EstimateBuilder } from '../components/estimates/EstimateBuilder';
+import { ScaleEstimator } from '../components/scale/ScaleEstimator';
+import { RiskManager, RiskFactorUi } from '../components/risk/RiskManager';
+import { ProjectCostSummaryCard } from '../components/cost/ProjectCostSummaryCard';
 import {
   Users,
   Briefcase,
@@ -41,13 +44,14 @@ import {
   CheckCircle2,
   Lock,
   Layers,
+  TrendingUp,
 } from 'lucide-react';
 
 export default function Home() {
   const [locale, setLocale] = useState<Locale>('en');
   const [userRole, setUserRole] = useState<UserRole>('OWNER');
   const [activeTab, setActiveTab] = useState<
-    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates'
+    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates' | 'scale'
   >('people');
 
   const [people, setPeople] = useState<Person[]>(INITIAL_PEOPLE);
@@ -77,6 +81,38 @@ export default function Home() {
   ]);
   const [notifications, setNotifications] = useState<InAppNotification[]>(INITIAL_NOTIFICATIONS);
   const [isAddPersonModalOpen, setIsAddPersonModalOpen] = useState(false);
+
+  // Stage 8 Risk & Scale State
+  const [contingencyRate, setContingencyRate] = useState<number>(0.1);
+  const [overheadRate, setOverheadRate] = useState<number>(0.1);
+  const [riskFactors, setRiskFactors] = useState<RiskFactorUi[]>([
+    {
+      id: 'unclear_reqs',
+      name: 'Unclear or Evolving Requirements',
+      multiplier: 0.05,
+      isEnabled: true,
+    },
+    {
+      id: 'frequent_changes',
+      name: 'Frequent Scope Changes Expected',
+      multiplier: 0.05,
+      isEnabled: false,
+    },
+    {
+      id: 'new_technology',
+      name: 'New / Unfamiliar Technology Stack',
+      multiplier: 0.08,
+      isEnabled: true,
+    },
+    {
+      id: 'tight_deadline',
+      name: 'Tight Deadline / Urgent Delivery',
+      multiplier: 0.05,
+      isEnabled: false,
+    },
+  ]);
+  const [clientMonthlyRecurringMinor, setClientMonthlyRecurringMinor] = useState<number>(2212250);
+  const [agencyMonthlyRecurringMinor, setAgencyMonthlyRecurringMinor] = useState<number>(334100);
 
   const t = translations[locale];
   const isOwner = userRole === 'OWNER';
@@ -259,7 +295,7 @@ export default function Home() {
                   Selet (ስሌት)
                 </span>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
-                  v0.1.0 Stage 7
+                  v0.1.0 Stage 8
                 </span>
               </div>
               <p className="text-xs text-slate-500 hidden sm:block">{t.tagline}</p>
@@ -479,6 +515,18 @@ export default function Home() {
             <Layers className="w-4 h-4" />
             <span>{t.estimates}</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('scale')}
+            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap transition-colors ${
+              activeTab === 'scale'
+                ? 'border-indigo-600 text-indigo-600'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <TrendingUp className="w-4 h-4" />
+            <span>{t.scaleAndRisk}</span>
+          </button>
         </div>
 
         {/* Active Tab Views */}
@@ -561,6 +609,110 @@ export default function Home() {
               },
             ]}
           />
+        )}
+
+        {activeTab === 'scale' && (
+          <div className="space-y-8">
+            <ProjectCostSummaryCard
+              t={t}
+              userRole={userRole}
+              data={{
+                currency: 'ETB',
+                totalHours: 120,
+                laborCostMinor: 5000000,
+                toolsCostMinor: 0,
+                agencyInfrastructureCostMinor: agencyMonthlyRecurringMinor,
+                thirdPartyCostMinor: 0,
+                directCostMinor: 5000000 + agencyMonthlyRecurringMinor,
+                totalRiskRate:
+                  contingencyRate +
+                  riskFactors
+                    .filter((rf) => rf.isEnabled)
+                    .reduce((sum, rf) => sum + rf.multiplier, 0),
+                riskCostMinor: Math.round(
+                  (5000000 + agencyMonthlyRecurringMinor) *
+                    (contingencyRate +
+                      riskFactors
+                        .filter((rf) => rf.isEnabled)
+                        .reduce((sum, rf) => sum + rf.multiplier, 0)),
+                ),
+                subtotalWithRiskMinor:
+                  5000000 +
+                  agencyMonthlyRecurringMinor +
+                  Math.round(
+                    (5000000 + agencyMonthlyRecurringMinor) *
+                      (contingencyRate +
+                        riskFactors
+                          .filter((rf) => rf.isEnabled)
+                          .reduce((sum, rf) => sum + rf.multiplier, 0)),
+                  ),
+                overheadRate,
+                overheadCostMinor: Math.round(
+                  (5000000 +
+                    agencyMonthlyRecurringMinor +
+                    Math.round(
+                      (5000000 + agencyMonthlyRecurringMinor) *
+                        (contingencyRate +
+                          riskFactors
+                            .filter((rf) => rf.isEnabled)
+                            .reduce((sum, rf) => sum + rf.multiplier, 0)),
+                    )) *
+                    overheadRate,
+                ),
+                totalCostMinor:
+                  5000000 +
+                  agencyMonthlyRecurringMinor +
+                  Math.round(
+                    (5000000 + agencyMonthlyRecurringMinor) *
+                      (contingencyRate +
+                        riskFactors
+                          .filter((rf) => rf.isEnabled)
+                          .reduce((sum, rf) => sum + rf.multiplier, 0)),
+                  ) +
+                  Math.round(
+                    (5000000 +
+                      agencyMonthlyRecurringMinor +
+                      Math.round(
+                        (5000000 + agencyMonthlyRecurringMinor) *
+                          (contingencyRate +
+                            riskFactors
+                              .filter((rf) => rf.isEnabled)
+                              .reduce((sum, rf) => sum + rf.multiplier, 0)),
+                      )) *
+                      overheadRate,
+                  ),
+                clientRecurringMonthlyMinor: clientMonthlyRecurringMinor,
+              }}
+            />
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-1">
+                <RiskManager
+                  t={t}
+                  userRole={userRole}
+                  contingencyRate={contingencyRate}
+                  overheadRate={overheadRate}
+                  riskFactors={riskFactors}
+                  onContingencyChange={setContingencyRate}
+                  onOverheadChange={setOverheadRate}
+                  onRiskFactorsChange={setRiskFactors}
+                />
+              </div>
+
+              <div className="lg:col-span-2">
+                <ScaleEstimator
+                  t={t}
+                  userRole={userRole}
+                  currency="ETB"
+                  usdRate={usdRate}
+                  onMonthlyRecurringChange={(clientMinor, agencyMinor) => {
+                    setClientMonthlyRecurringMinor(clientMinor);
+                    setAgencyMonthlyRecurringMinor(agencyMinor);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
         )}
       </div>
 

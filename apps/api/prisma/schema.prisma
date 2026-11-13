@@ -363,6 +363,11 @@ model EstimateVersion {
   status             EstimateStatus @default(DRAFT)
   pointsToHoursRatio Float          @default(8.0) // 1 story point = 8h
   tshirtSizeConfig   Json?          // custom { XS: 4, S: 8, M: 16, L: 40, XL: 80 }
+  contingencyRate    Float          @default(0.10) // default 10%
+  overheadRate       Float?         // falls back to organization.defaultOverheadRate
+  riskFactors        Json?          // [{ id, name, multiplier, isEnabled }]
+  scaleInputs        Json?          // { monthlyUsers, peakConcurrency, storageGb, trafficGb, monthlyPaymentVolumeMinor }
+  scaleItems         Json?          // [{ id, name, category, amountMinor, currency, payer, isIncluded, assumption, isUserOverridden }]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 

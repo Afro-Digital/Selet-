@@ -15,7 +15,38 @@ import { UpdateModuleDto } from './dto/update-module.dto';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { UpdateFeatureDto } from './dto/update-feature.dto';
 import { UpdateFeatureHoursDto, RoleHoursEntryDto } from './dto/update-feature-hours.dto';
-import { threePointHours } from '@selet/pricing-engine';
+import { ScaleEstimateInputDto } from './dto/scale-estimate.dto';
+import { UpdateRiskDto, RiskFactorEntryDto } from './dto/update-risk.dto';
+import { UpdateScaleItemsDto, ScaleItemEntryDto } from './dto/update-scale-items.dto';
+import { ScaleService } from './scale.service';
+import { threePointHours, calculateProjectCost, money } from '@selet/pricing-engine';
+
+export const DEFAULT_RISK_FACTORS: RiskFactorEntryDto[] = [
+  {
+    id: 'unclear_reqs',
+    name: 'Unclear or Evolving Requirements',
+    multiplier: 0.05,
+    isEnabled: false,
+  },
+  {
+    id: 'frequent_changes',
+    name: 'Frequent Scope Changes Expected',
+    multiplier: 0.05,
+    isEnabled: false,
+  },
+  {
+    id: 'new_technology',
+    name: 'New / Unfamiliar Technology Stack',
+    multiplier: 0.08,
+    isEnabled: false,
+  },
+  {
+    id: 'tight_deadline',
+    name: 'Tight Deadline / Urgent Delivery',
+    multiplier: 0.05,
+    isEnabled: false,
+  },
+];
 
 export interface ModuleRollup {
   moduleId: string;
@@ -55,6 +86,7 @@ export class EstimatesService {
   constructor(
     private prisma: PrismaService,
     private auditService: AuditService,
+    private scaleService: ScaleService,
   ) {}
 
   /**
@@ -1006,9 +1038,15 @@ export class EstimatesService {
               rh.p !== undefined
             ) {
               expectedHours = Math.round(((rh.o + 4 * rh.l + rh.p) / 6) * 100) / 100;
-            } else if (featData.method === EstimationMethod.SINGLE_VALUE && rh.single !== undefined) {
+            } else if (
+              featData.method === EstimationMethod.SINGLE_VALUE &&
+              rh.single !== undefined
+            ) {
               expectedHours = rh.single;
-            } else if (featData.method === EstimationMethod.STORY_POINTS && rh.points !== undefined) {
+            } else if (
+              featData.method === EstimationMethod.STORY_POINTS &&
+              rh.points !== undefined
+            ) {
               expectedHours = rh.points * 8.0;
             } else if (featData.method === EstimationMethod.T_SHIRT && rh.size !== undefined) {
               expectedHours = DEFAULT_TSHIRT_MAP[rh.size];
@@ -1184,5 +1222,304 @@ export class EstimatesService {
     });
 
     return { success: true, message: `Template ${templateId} removed` };
+  }
+
+  // ==========================================
+  // STAGE 8: RISK, OVERHEAD & SCALE ESTIMATOR
+  // ==========================================
+
+  async getRiskAndOverhead(
+    projectId: string,
+    versionId: string | undefined,
+    user: AuthenticatedUser,
+  ) {
+    const project = await this.findOneProject(projectId, user);
+    const org = await this.prisma.organization.findUnique({
+      where: { id: user.organizationId },
+    });
+
+    const version = versionId
+      ? project.versions.find((v) => v.id === versionId)
+      : project.versions[0];
+
+    if (!version) {
+      throw new NotFoundException('Estimate version not found for this project');
+    }
+
+    const contingencyRate = version.contingencyRate ?? 0.1;
+    const overheadRate = version.overheadRate ?? org?.defaultOverheadRate ?? 0.1;
+
+    let riskFactors: RiskFactorEntryDto[] = DEFAULT_RISK_FACTORS;
+    if (
+      version.riskFactors &&
+      Array.isArray(version.riskFactors) &&
+      version.riskFactors.length > 0
+    ) {
+      riskFactors = version.riskFactors as any;
+    }
+
+    const activeMultipliersSum = riskFactors
+      .filter((rf) => rf.isEnabled)
+      .reduce((sum, rf) => sum + rf.multiplier, 0);
+
+    const totalRiskRate = Math.round((contingencyRate + activeMultipliersSum) * 1000) / 1000;
+
+    return {
+      projectId: project.id,
+      versionId: version.id,
+      versionName: version.name,
+      contingencyRate,
+      overheadRate,
+      riskFactors,
+      activeMultipliersSum,
+      totalRiskRate,
+    };
+  }
+
+  async updateRiskAndOverhead(
+    projectId: string,
+    versionId: string,
+    dto: UpdateRiskDto,
+    user: AuthenticatedUser,
+  ) {
+    await this.findOneProject(projectId, user);
+
+    const version = await this.prisma.estimateVersion.findFirst({
+      where: { id: versionId, projectId },
+    });
+
+    if (!version) {
+      throw new NotFoundException(`Estimate version '${versionId}' not found`);
+    }
+
+    const updated = await this.prisma.estimateVersion.update({
+      where: { id: versionId },
+      data: {
+        contingencyRate:
+          dto.contingencyRate !== undefined ? dto.contingencyRate : version.contingencyRate,
+        overheadRate: dto.overheadRate !== undefined ? dto.overheadRate : version.overheadRate,
+        riskFactors: dto.riskFactors !== undefined ? (dto.riskFactors as any) : version.riskFactors,
+      },
+    });
+
+    await this.auditService.log({
+      organizationId: user.organizationId,
+      userId: user.id,
+      action: 'UPDATE',
+      entityType: 'EstimateVersionRisk',
+      entityId: versionId,
+      newValue: dto,
+    });
+
+    return updated;
+  }
+
+  async estimateScale(
+    projectId: string,
+    versionId: string,
+    dto: ScaleEstimateInputDto,
+    user: AuthenticatedUser,
+  ) {
+    const project = await this.findOneProject(projectId, user);
+
+    const version = await this.prisma.estimateVersion.findFirst({
+      where: { id: versionId, projectId },
+    });
+
+    if (!version) {
+      throw new NotFoundException(`Estimate version '${versionId}' not found`);
+    }
+
+    const result = await this.scaleService.estimateScale(
+      dto,
+      user.organizationId,
+      project.currency,
+    );
+
+    await this.prisma.estimateVersion.update({
+      where: { id: versionId },
+      data: {
+        scaleInputs: dto as any,
+        scaleItems: result.items as any,
+      },
+    });
+
+    await this.auditService.log({
+      organizationId: user.organizationId,
+      userId: user.id,
+      action: 'UPDATE',
+      entityType: 'EstimateVersionScale',
+      entityId: versionId,
+      newValue: { inputs: dto, itemsCount: result.items.length },
+    });
+
+    return result;
+  }
+
+  async updateScaleItems(
+    projectId: string,
+    versionId: string,
+    dto: UpdateScaleItemsDto,
+    user: AuthenticatedUser,
+  ) {
+    await this.findOneProject(projectId, user);
+
+    const version = await this.prisma.estimateVersion.findFirst({
+      where: { id: versionId, projectId },
+    });
+
+    if (!version) {
+      throw new NotFoundException(`Estimate version '${versionId}' not found`);
+    }
+
+    await this.prisma.estimateVersion.update({
+      where: { id: versionId },
+      data: {
+        scaleItems: dto.items as any,
+      },
+    });
+
+    let totalClientMonthlyMinor = 0;
+    let totalAgencyMonthlyMinor = 0;
+
+    for (const it of dto.items) {
+      if (it.isIncluded) {
+        if (it.payer === 'CLIENT') {
+          totalClientMonthlyMinor += it.amountMinor;
+        } else {
+          totalAgencyMonthlyMinor += it.amountMinor;
+        }
+      }
+    }
+
+    await this.auditService.log({
+      organizationId: user.organizationId,
+      userId: user.id,
+      action: 'UPDATE',
+      entityType: 'EstimateVersionScaleItems',
+      entityId: versionId,
+      newValue: { count: dto.items.length, totalClientMonthlyMinor, totalAgencyMonthlyMinor },
+    });
+
+    return {
+      versionId,
+      items: dto.items,
+      totalClientMonthlyMinor,
+      totalAgencyMonthlyMinor,
+      totalRecurringMonthlyMinor: totalClientMonthlyMinor + totalAgencyMonthlyMinor,
+    };
+  }
+
+  async getCostSummary(projectId: string, versionId: string | undefined, user: AuthenticatedUser) {
+    const isDeveloper = user.role === UserRole.DEVELOPER;
+    const project = await this.findOneProject(projectId, user);
+    const org = await this.prisma.organization.findUnique({
+      where: { id: user.organizationId },
+    });
+
+    const version = versionId
+      ? project.versions.find((v) => v.id === versionId)
+      : project.versions[0];
+
+    if (!version) {
+      throw new NotFoundException('Estimate version not found for this project');
+    }
+
+    // 1. Rollup for labor
+    const rollup = await this.getRollup(projectId, user);
+    const laborCostMinor = BigInt(rollup.totalLaborCost || 0);
+
+    // 2. Scale recurring items breakdown
+    let toolsMonthlyMinor = 0n;
+    let agencyInfraMonthlyMinor = 0n;
+    let thirdPartyMonthlyMinor = 0n;
+    let clientRecurringMonthlyMinor = 0n;
+
+    const scaleItems: ScaleItemEntryDto[] = (version.scaleItems as any) || [];
+
+    for (const it of scaleItems) {
+      if (it.isIncluded) {
+        const amt = BigInt(Math.round(it.amountMinor));
+        if (it.payer === 'AGENCY') {
+          if (it.category === 'TOOL' || it.category === 'LICENSE') {
+            toolsMonthlyMinor += amt;
+          } else if (it.category === 'HOSTING' || it.category === 'CDN') {
+            agencyInfraMonthlyMinor += amt;
+          } else {
+            thirdPartyMonthlyMinor += amt;
+          }
+        } else {
+          clientRecurringMonthlyMinor += amt;
+        }
+      }
+    }
+
+    // 3. Risk & Overhead rates
+    const contingencyRate = version.contingencyRate ?? 0.1;
+    const overheadRate = version.overheadRate ?? org?.defaultOverheadRate ?? 0.1;
+
+    const riskFactors: RiskFactorEntryDto[] = (version.riskFactors as any) || DEFAULT_RISK_FACTORS;
+    const enabledMultipliers = riskFactors.filter((rf) => rf.isEnabled).map((rf) => rf.multiplier);
+
+    // 4. Calculate project cost via @selet/pricing-engine
+    const costBreakdown = calculateProjectCost(
+      {
+        currency: project.currency,
+        directLaborCost: money(laborCostMinor, project.currency),
+        toolsCost: money(toolsMonthlyMinor, project.currency),
+        agencyInfrastructureCost: money(agencyInfraMonthlyMinor, project.currency),
+        thirdPartyCost: money(thirdPartyMonthlyMinor, project.currency),
+      },
+      {
+        contingencyRate,
+        riskMultipliers: enabledMultipliers,
+        overheadRate,
+      },
+    );
+
+    if (isDeveloper) {
+      // Developer sees hours, scale item names, and payer tags only. Zero financial cost figures.
+      return {
+        projectId: project.id,
+        versionId: version.id,
+        totalHours: rollup.totalHours,
+        currency: project.currency,
+        scaleItems: scaleItems.map((it) => ({
+          id: it.id,
+          name: it.name,
+          category: it.category,
+          payer: it.payer,
+          isIncluded: it.isIncluded,
+          assumption: it.assumption,
+        })),
+        riskFactors: riskFactors.map((rf) => ({
+          id: rf.id,
+          name: rf.name,
+          isEnabled: rf.isEnabled,
+        })),
+      };
+    }
+
+    return {
+      projectId: project.id,
+      versionId: version.id,
+      currency: project.currency,
+      totalHours: rollup.totalHours,
+      laborCostMinor: Number(costBreakdown.laborCost.amount),
+      toolsCostMinor: Number(costBreakdown.toolsCost.amount),
+      agencyInfrastructureCostMinor: Number(costBreakdown.agencyInfrastructureCost.amount),
+      thirdPartyCostMinor: Number(costBreakdown.thirdPartyCost.amount),
+      directCostMinor: Number(costBreakdown.directCost.amount),
+      riskCostMinor: Number(costBreakdown.riskCost.amount),
+      subtotalWithRiskMinor: Number(costBreakdown.subtotalWithRisk.amount),
+      overheadCostMinor: Number(costBreakdown.overheadCost.amount),
+      totalCostMinor: Number(costBreakdown.totalCost.amount),
+      clientRecurringMonthlyMinor: Number(clientRecurringMonthlyMinor),
+      contingencyRate,
+      overheadRate,
+      totalRiskRate: contingencyRate + enabledMultipliers.reduce((a, b) => a + b, 0),
+      riskFactors,
+      scaleItems,
+    };
   }
 }
