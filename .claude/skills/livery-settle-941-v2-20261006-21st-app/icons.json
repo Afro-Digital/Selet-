@@ -1,0 +1,44 @@
+{
+  "library": {
+    "name": "Lucide",
+    "package": "lucide-react",
+    "licence": "free",
+    "licenceName": "ISC",
+    "alternative": null
+  },
+  "detectedBy": "class-names",
+  "iconsUsed": [
+    "layout-dashboard",
+    "arrow-left-right",
+    "check-check",
+    "banknote",
+    "shield-alert",
+    "building-complex",
+    "file-text",
+    "sliders-horizontal",
+    "chevrons-up-down",
+    "chevron-right",
+    "search",
+    "moon",
+    "bell",
+    "download",
+    "plus",
+    "triangle-alert",
+    "arrow-up-right",
+    "clock",
+    "arrow-down-right",
+    "ellipsis",
+    "check",
+    "credit-card",
+    "landmark"
+  ],
+  "style": {
+    "sizePx": 14,
+    "strokeWidth": 2,
+    "linecap": "round",
+    "filled": false,
+    "grid": "0 0 24 24",
+    "colour": "currentColor"
+  },
+  "customIcons": null
+}

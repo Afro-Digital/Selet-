@@ -4,13 +4,222 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --accent: #007a55;
+  --accent-on: #ffffff;
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-strong: rgba(0, 0, 0, 0.12);
+  --shadow-soft: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --accent: #5ee9b5;
+  --accent-on: #0a0a0a;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --shadow-soft: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Noto Sans Ethiopic', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Noto Sans Ethiopic', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Settle-941 / Livery Design Kit Tokens & Classes */
+.t-display {
+  font-size: 28px;
+  line-height: 1.08;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.t-figure {
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.t-h1 {
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.t-h2 {
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.011em;
+}
+
+.t-h3 {
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: -0.006em;
+}
+
+.t-row {
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: -0.004em;
+}
+
+.t-body {
+  font-size: 12.5px;
+  line-height: 1.5;
+  letter-spacing: -0.002em;
+}
+
+.t-body-em {
+  font-size: 12.5px;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: -0.002em;
+}
+
+.t-meta {
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.t-micro {
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.t-label {
+  font-size: 11.5px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.btn {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.ibtn {
+  height: 32px;
+  width: 32px;
+  display: grid;
+  place-items: center;
+  color: #737373;
+  border-radius: 9px;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+.ibtn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #171717;
+}
+
+.ibtn-sm {
+  height: 24px;
+  width: 24px;
+  display: grid;
+  place-items: center;
+  color: #a1a1a1;
+  border-radius: 7px;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+.ibtn-sm:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #171717;
+}
+
+.badge {
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #737373;
+  border-radius: 10px;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nav-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #171717;
+}
+.nav-item[data-on="1"] {
+  background-color: rgba(0, 0, 0, 0.06);
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
+.seg {
+  height: 24px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #737373;
+  border-radius: 7px;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.seg-on {
+  background-color: #ffffff;
+  color: #0a0a0a;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.crumb-link {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #737373;
+  transition: color 0.15s;
+}
+.crumb-link:hover {
+  color: #0a0a0a;
+}
+.crumb-current {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #0a0a0a;
+}
+
