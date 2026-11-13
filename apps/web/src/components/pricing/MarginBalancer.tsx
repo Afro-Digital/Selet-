@@ -149,14 +149,14 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
   const isFloorBreached = blendedMargin < floorMargin;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
+    <div className="bg-white dark:bg-[#141414] rounded-[14px] border border-black/[0.06] dark:border-white/[0.08] shadow-sm p-6 mb-8 text-neutral-900 dark:text-neutral-100">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-slate-200">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-black/[0.06] dark:border-white/[0.08]">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
             <span>⚖️</span> {t.marginBalancer}
           </h2>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
             Dynamic margin redistribution engine. Lock project margin, model client budgets, and
             test what-if discounts without margin leakage.
           </p>
@@ -165,19 +165,19 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
         {/* Live Blended Margin Badge */}
         {!isDeveloper && (
           <div
-            className={`border rounded-xl px-4 py-2 text-right ${
+            className={`border rounded-[10px] px-4 py-2 text-right font-mono ${
               isFloorBreached
-                ? 'bg-rose-50 border-rose-300 text-rose-950'
-                : 'bg-indigo-50 border-indigo-200 text-indigo-950'
+                ? 'bg-rose-500/[0.08] border-rose-500/30 text-rose-700 dark:text-rose-400'
+                : 'bg-black/[0.03] dark:bg-white/[0.04] border-black/[0.08] dark:border-white/[0.1] text-neutral-900 dark:text-neutral-100'
             }`}
           >
-            <span className="text-[11px] font-semibold uppercase tracking-wider block">
+            <span className="text-[10px] font-semibold uppercase tracking-wider block">
               {t.blendedMargin}
             </span>
-            <span className="text-2xl font-black font-mono">
+            <span className="text-2xl font-semibold tracking-tight">
               {(blendedMargin * 100).toFixed(1)}%
             </span>
-            <span className="text-[10px] text-slate-500 block mt-0.5">
+            <span className="text-[10px] text-neutral-500 dark:text-neutral-400 block mt-0.5">
               Floor: {(floorMargin * 100).toFixed(0)}%
             </span>
           </div>
@@ -187,52 +187,52 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
       {!isDeveloper ? (
         <div className="mt-6 space-y-6">
           {/* Mode Tabs */}
-          <div className="flex border-b border-slate-200 gap-3">
+          <div className="flex border-b border-black/[0.06] dark:border-white/[0.08] gap-3">
             <button
               onClick={() => setBalancerMode('LOCK_BLENDED')}
-              className={`pb-2.5 px-3 text-xs font-bold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+              className={`pb-2.5 px-3 text-xs font-semibold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
                 balancerMode === 'LOCK_BLENDED'
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-neutral-900 text-neutral-900 dark:border-white dark:text-neutral-100'
+                  : 'border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200'
               }`}
             >
-              <Sliders className="w-4 h-4" />
+              <Sliders className="w-3.5 h-3.5" />
               <span>{t.lockBlendedMargin}</span>
             </button>
 
             <button
               onClick={() => setBalancerMode('TARGET_PRICE')}
-              className={`pb-2.5 px-3 text-xs font-bold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+              className={`pb-2.5 px-3 text-xs font-semibold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
                 balancerMode === 'TARGET_PRICE'
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-neutral-900 text-neutral-900 dark:border-white dark:text-neutral-100'
+                  : 'border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200'
               }`}
             >
-              <Target className="w-4 h-4" />
+              <Target className="w-3.5 h-3.5" />
               <span>{t.targetPriceMode}</span>
             </button>
 
             <button
               onClick={() => setBalancerMode('DISCOUNT')}
-              className={`pb-2.5 px-3 text-xs font-bold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+              className={`pb-2.5 px-3 text-xs font-semibold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
                 balancerMode === 'DISCOUNT'
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-neutral-900 text-neutral-900 dark:border-white dark:text-neutral-100'
+                  : 'border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200'
               }`}
             >
-              <Percent className="w-4 h-4" />
+              <Percent className="w-3.5 h-3.5" />
               <span>{t.whatIfDiscount}</span>
             </button>
           </div>
 
           {/* Mode 1: Lock Blended Controls */}
           {balancerMode === 'LOCK_BLENDED' && (
-            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
+            <div className="bg-black/[0.015] dark:bg-white/[0.02] rounded-[10px] p-4 border border-black/[0.06] dark:border-white/[0.08]">
               <div className="flex items-center justify-between mb-2">
-                <label htmlFor="target-blended-slider" className="text-xs font-bold text-slate-800">
+                <label htmlFor="target-blended-slider" className="text-xs font-semibold text-neutral-800 dark:text-neutral-200">
                   Target Blended Margin: {(lockedBlendedMargin * 100).toFixed(0)}%
                 </label>
-                <span className="text-xs font-bold text-indigo-600 font-mono">
+                <span className="text-xs font-mono font-semibold text-neutral-900 dark:text-neutral-100">
                   Locked Total: {formatMoney(totalPriceMinor)} {currency}
                 </span>
               </div>
@@ -244,9 +244,9 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
                 step="0.01"
                 value={lockedBlendedMargin}
                 onChange={(e) => handleTargetBlendedChange(parseFloat(e.target.value))}
-                className="w-full accent-indigo-600 cursor-pointer"
+                className="w-full accent-neutral-900 dark:accent-white cursor-pointer"
               />
-              <span className="text-[11px] text-slate-500 mt-1 block">
+              <span className="text-[11px] text-neutral-400 dark:text-neutral-500 mt-1 block">
                 Adjust any module margin below. The other modules will automatically flex to
                 maintain this blended margin.
               </span>
@@ -255,12 +255,12 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
 
           {/* Mode 2: Target Price (Client Budget) Controls */}
           {balancerMode === 'TARGET_PRICE' && (
-            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/80 space-y-3">
+            <div className="bg-black/[0.015] dark:bg-white/[0.02] rounded-[10px] p-4 border border-black/[0.06] dark:border-white/[0.08] space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label
                     htmlFor="client-budget-input"
-                    className="text-xs font-bold text-slate-800 block mb-1"
+                    className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 block mb-1"
                   >
                     Client Fixed Budget ({currency})
                   </label>
@@ -271,15 +271,15 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
                     step="5000"
                     value={targetBudget}
                     onChange={(e) => setTargetBudget(parseFloat(e.target.value) || 0)}
-                    className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-sm font-mono font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500"
+                    className="w-full bg-white dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.08] rounded-[7px] px-3 py-1.5 text-xs font-mono font-semibold text-neutral-900 dark:text-neutral-100 focus:border-neutral-900 dark:focus:border-white focus:outline-none"
                   />
                 </div>
                 <div className="flex items-end">
                   <button
                     onClick={handleApplyBudget}
-                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow-xs transition-all cursor-pointer flex items-center gap-1.5"
+                    className="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-900 font-semibold text-xs rounded-[7px] shadow-sm transition-all cursor-pointer flex items-center gap-1.5"
                   >
-                    <Target className="w-4 h-4" />
+                    <Target className="w-3.5 h-3.5" />
                     <span>Calculate Line Distribution</span>
                   </button>
                 </div>
@@ -289,11 +289,11 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
 
           {/* Mode 3: What-If Discount Controls */}
           {balancerMode === 'DISCOUNT' && (
-            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/80 space-y-3">
+            <div className="bg-black/[0.015] dark:bg-white/[0.02] rounded-[10px] p-4 border border-black/[0.06] dark:border-white/[0.08] space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <div className="flex justify-between mb-1">
-                    <label htmlFor="discount-slider" className="text-xs font-bold text-slate-800">
+                    <label htmlFor="discount-slider" className="text-xs font-semibold text-neutral-800 dark:text-neutral-200">
                       Discount: {(discountPercent * 100).toFixed(0)}%
                     </label>
                   </div>
@@ -305,14 +305,14 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
                     step="0.01"
                     value={discountPercent}
                     onChange={(e) => setDiscountPercent(parseFloat(e.target.value))}
-                    className="w-full accent-indigo-600 cursor-pointer"
+                    className="w-full accent-neutral-900 dark:accent-white cursor-pointer"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="discount-target-select"
-                    className="text-xs font-bold text-slate-800 block mb-1"
+                    className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 block mb-1"
                   >
                     Apply Discount To
                   </label>
@@ -320,7 +320,7 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
                     id="discount-target-select"
                     value={discountTargetLineId}
                     onChange={(e) => setDiscountTargetLineId(e.target.value)}
-                    className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+                    className="w-full bg-white dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.08] rounded-[7px] px-2.5 py-1.5 text-xs font-medium text-neutral-900 dark:text-neutral-100 focus:border-neutral-900 dark:focus:border-white focus:outline-none cursor-pointer"
                   >
                     <option value="ALL">Entire Project</option>
                     {lines.map((l) => (
@@ -334,9 +334,9 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
                 <div className="flex items-end">
                   <button
                     onClick={handleApplyDiscount}
-                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow-xs transition-all cursor-pointer flex items-center gap-1.5"
+                    className="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-900 font-semibold text-xs rounded-[7px] shadow-sm transition-all cursor-pointer flex items-center gap-1.5"
                   >
-                    <Percent className="w-4 h-4" />
+                    <Percent className="w-3.5 h-3.5" />
                     <span>Apply What-If Discount</span>
                   </button>
                 </div>
@@ -346,24 +346,24 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
 
           {/* Explanation Callout Banner */}
           {explanation && (
-            <div className="bg-indigo-50/70 border border-indigo-200 rounded-xl p-3.5 text-xs text-indigo-900 flex items-start gap-2">
-              <ArrowRight className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+            <div className="bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08] rounded-[10px] p-3.5 text-xs text-neutral-700 dark:text-neutral-300 flex items-start gap-2 font-mono">
+              <ArrowRight className="w-4 h-4 text-neutral-500 shrink-0 mt-0.5" />
               <span>{explanation}</span>
             </div>
           )}
 
           {/* Infeasibility / Guardrail Warning */}
           {balancerResult && !balancerResult.isFeasible && (
-            <div className="bg-rose-50 border border-rose-300 rounded-xl p-4 text-xs text-rose-950 flex items-start gap-2.5">
-              <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+            <div className="bg-rose-500/[0.08] border border-rose-500/30 rounded-[10px] p-4 text-xs text-rose-950 dark:text-rose-200 flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
               <div>
-                <span className="font-bold block text-sm">{t.infeasibleMarginGap}</span>
-                <p className="mt-0.5 text-rose-800">
+                <span className="font-semibold block text-xs">{t.infeasibleMarginGap}</span>
+                <p className="mt-0.5 text-rose-800 dark:text-rose-300">
                   {balancerResult.infeasibilityReason ||
                     'One or more balancing lines breached commercial margin floors or ceilings.'}
                 </p>
                 {balancerResult.gapPrice && (
-                  <span className="font-mono font-bold mt-1 block">
+                  <span className="font-mono font-semibold mt-1 block">
                     Unabsorbed Margin Gap: {formatMoney(Number(balancerResult.gapPrice.amount))}{' '}
                     {currency}
                   </span>
@@ -373,37 +373,37 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
           )}
 
           {/* Module Lines Balancer Table */}
-          <div className="overflow-x-auto rounded-xl border border-slate-200">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+          <div className="overflow-x-auto rounded-[10px] border border-black/[0.06] dark:border-white/[0.08]">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-black/[0.02] dark:bg-white/[0.02] text-[10px] font-mono font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 border-b border-black/[0.06] dark:border-white/[0.08]">
                 <tr>
-                  <th className="py-3 px-4">Module / Line Item</th>
-                  <th className="py-3 px-4 text-right">Cost Basis</th>
-                  <th className="py-3 px-4 text-center">Margin</th>
-                  <th className="py-3 px-4 text-right">Selling Price</th>
-                  <th className="py-3 px-4 text-right">Profit</th>
+                  <th className="py-2.5 px-3.5">Module / Line Item</th>
+                  <th className="py-2.5 px-3.5 text-right">Cost Basis</th>
+                  <th className="py-2.5 px-3.5 text-center">Margin</th>
+                  <th className="py-2.5 px-3.5 text-right">Selling Price</th>
+                  <th className="py-2.5 px-3.5 text-right">Profit</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
+              <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.06] bg-white dark:bg-[#141414]">
                 {lines.map((line) => {
                   const lineCostMinor = Number(line.cost.amount);
                   const linePriceMinor = Number(line.price.amount);
                   const lineProfitMinor = linePriceMinor - lineCostMinor;
 
                   return (
-                    <tr key={line.id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="py-3.5 px-4 font-semibold text-slate-900">
+                    <tr key={line.id} className="hover:bg-black/[0.015] dark:hover:bg-white/[0.02] transition-colors">
+                      <td className="py-3 px-3.5 font-medium text-neutral-900 dark:text-neutral-100">
                         {line.name}
                         {activeChangedLineId === line.id && (
-                          <span className="ml-2 text-[10px] font-bold uppercase px-1.5 py-0.5 bg-indigo-100 text-indigo-700 rounded">
+                          <span className="ml-2 text-[10px] font-mono font-semibold uppercase px-1.5 py-0.5 bg-black/[0.06] dark:bg-white/[0.08] text-neutral-800 dark:text-neutral-200 rounded-[5px]">
                             Active
                           </span>
                         )}
                       </td>
-                      <td className="py-3.5 px-4 text-right font-mono text-slate-600 text-xs">
+                      <td className="py-3 px-3.5 text-right font-mono text-neutral-500 dark:text-neutral-400 text-xs">
                         {formatMoney(lineCostMinor)} {currency}
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-3 px-3.5">
                         <div className="flex items-center gap-2 max-w-xs mx-auto">
                           <input
                             aria-label={`${line.name} Margin`}
@@ -415,36 +415,36 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
                             onChange={(e) =>
                               handleLineMarginChange(line.id, parseFloat(e.target.value))
                             }
-                            className="w-full accent-indigo-600 cursor-pointer"
+                            className="w-full accent-neutral-900 dark:accent-white cursor-pointer"
                           />
-                          <span className="w-12 text-right font-mono font-bold text-xs text-indigo-600">
+                          <span className="w-12 text-right font-mono font-semibold text-xs text-neutral-900 dark:text-neutral-100">
                             {(line.margin * 100).toFixed(1)}%
                           </span>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 text-right font-mono font-bold text-slate-900 text-xs">
+                      <td className="py-3 px-3.5 text-right font-mono font-semibold text-neutral-900 dark:text-neutral-100 text-xs">
                         {formatMoney(linePriceMinor)} {currency}
                       </td>
-                      <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-700 text-xs">
+                      <td className="py-3 px-3.5 text-right font-mono font-semibold text-emerald-600 dark:text-emerald-400 text-xs">
                         +{formatMoney(lineProfitMinor)} {currency}
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
-              <tfoot className="bg-slate-50/80 font-bold border-t border-slate-200">
+              <tfoot className="bg-black/[0.02] dark:bg-white/[0.02] font-semibold border-t border-black/[0.06] dark:border-white/[0.08]">
                 <tr>
-                  <td className="py-3 px-4 text-slate-800">Total Project</td>
-                  <td className="py-3 px-4 text-right font-mono text-slate-800 text-xs">
+                  <td className="py-3 px-3.5 text-neutral-900 dark:text-neutral-100">Total Project</td>
+                  <td className="py-3 px-3.5 text-right font-mono text-neutral-700 dark:text-neutral-300 text-xs">
                     {formatMoney(totalCostMinor)} {currency}
                   </td>
-                  <td className="py-3 px-4 text-center font-mono text-indigo-700 text-xs">
+                  <td className="py-3 px-3.5 text-center font-mono text-neutral-900 dark:text-neutral-100 text-xs">
                     {(blendedMargin * 100).toFixed(1)}% Blended
                   </td>
-                  <td className="py-3 px-4 text-right font-mono text-indigo-900 text-sm">
+                  <td className="py-3 px-3.5 text-right font-mono text-neutral-900 dark:text-neutral-50 text-xs font-semibold">
                     {formatMoney(totalPriceMinor)} {currency}
                   </td>
-                  <td className="py-3 px-4 text-right font-mono text-emerald-700 text-xs">
+                  <td className="py-3 px-3.5 text-right font-mono text-emerald-600 dark:text-emerald-400 text-xs">
                     +{formatMoney(totalPriceMinor - totalCostMinor)} {currency}
                   </td>
                 </tr>
@@ -453,8 +453,8 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
           </div>
         </div>
       ) : (
-        <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 flex items-center gap-2">
-          <Lock className="w-4 h-4 text-amber-700" />
+        <div className="mt-6 bg-amber-500/10 border border-amber-500/20 rounded-[7px] p-4 text-xs font-mono text-amber-700 dark:text-amber-400 flex items-center gap-2">
+          <Lock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
           <span>Margin Balancer and financial levers are hidden in Developer mode.</span>
         </div>
       )}
