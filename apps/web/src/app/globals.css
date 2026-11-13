@@ -164,26 +164,26 @@ body {
   flex-shrink: 0;
 }
 
+/* Active and Hover states for navigation */
 .nav-item {
   width: 100%;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px;
+  padding: 8px 10px;
   font-size: 12.5px;
   font-weight: 500;
-  color: #737373;
   border-radius: 10px;
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
 }
 .nav-item:hover {
   background-color: rgba(0, 0, 0, 0.04);
-  color: #171717;
-}
-.nav-item[data-on="1"] {
-  background-color: rgba(0, 0, 0, 0.06);
   color: #0a0a0a;
-  font-weight: 600;
+}
+.dark .nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #fafafa;
 }
 
 .seg {
@@ -196,10 +196,18 @@ body {
   border-radius: 7px;
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.dark .seg {
+  color: #a1a1a1;
+}
 .seg-on {
   background-color: #ffffff;
   color: #0a0a0a;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+.dark .seg-on {
+  background-color: #262626;
+  color: #fafafa;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .crumb-link {
@@ -211,9 +219,15 @@ body {
 .crumb-link:hover {
   color: #0a0a0a;
 }
+.dark .crumb-link:hover {
+  color: #fafafa;
+}
 .crumb-current {
   font-size: 12.5px;
   font-weight: 600;
   color: #0a0a0a;
+}
+.dark .crumb-current {
+  color: #fafafa;
 }
 
