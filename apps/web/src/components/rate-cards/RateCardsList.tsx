@@ -59,17 +59,17 @@ export function RateCardsList({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="rounded-[14px] bg-white dark:bg-[#141414] border border-black/[0.06] dark:border-white/[0.08] shadow-[0_1px_2px_rgba(0,0,0,0.05)] overflow-hidden transition-colors">
+      <div className="p-5 border-b border-black/[0.06] dark:border-white/[0.08] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <CreditCard className="w-5 h-5 text-emerald-600" />
-            <h2 className="text-xl font-bold text-slate-800">{t.rateCards}</h2>
-            <span className="px-2.5 py-0.5 text-xs font-semibold bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">
+            <CreditCard className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <h2 className="text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">{t.rateCards}</h2>
+            <span className="px-2 py-0.5 text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-[5px] border border-emerald-500/20">
               {rateCards.length} {locale === 'am' ? 'ካርዶች' : 'Cards'}
             </span>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
             {locale === 'am'
               ? 'ለደንበኞች የሚቀርብ የሰዓት ክፍያ ተመን ማውጫ'
               : 'Client-facing hourly billing rate cards used in project pricing & quotes.'}
@@ -79,9 +79,9 @@ export function RateCardsList({
         {userRole !== 'DEVELOPER' && (
           <button
             onClick={() => setIsAdding(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-neutral-950 text-xs font-semibold rounded-[7px] transition-colors shadow-xs"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-3.5 h-3.5" />
             <span>{t.addRateCard}</span>
           </button>
         )}
@@ -90,12 +90,12 @@ export function RateCardsList({
       {isAdding && (
         <form
           onSubmit={handleCreate}
-          className="p-6 bg-emerald-50/50 border-b border-emerald-100 space-y-4"
+          className="p-5 bg-black/[0.02] dark:bg-white/[0.02] border-b border-black/[0.06] dark:border-white/[0.08] space-y-4"
         >
-          <h4 className="text-sm font-bold text-emerald-900">{t.addRateCard}</h4>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <h4 className="text-xs font-bold text-neutral-900 dark:text-neutral-100 uppercase tracking-wider">{t.addRateCard}</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+              <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                 {t.name} *
               </label>
               <input
@@ -104,22 +104,22 @@ export function RateCardsList({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Government & Enterprise Card"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+                className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-1 focus:ring-neutral-400"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+              <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                 {t.effectiveFrom}
               </label>
               <input
                 type="date"
                 value={effectiveFrom}
                 onChange={(e) => setEffectiveFrom(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+                className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-1 focus:ring-neutral-400"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+              <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                 Base Hourly Billing Rate (ETB / hr)
               </label>
               <input
@@ -127,7 +127,7 @@ export function RateCardsList({
                 min="0"
                 value={defaultRateMajor}
                 onChange={(e) => setDefaultRateMajor(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-mono text-right"
+                className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-mono text-right focus:ring-1 focus:ring-neutral-400"
               />
             </div>
           </div>
@@ -135,13 +135,13 @@ export function RateCardsList({
             <button
               type="button"
               onClick={() => setIsAdding(false)}
-              className="px-3 py-1.5 border border-slate-300 text-slate-600 text-xs font-medium rounded-md hover:bg-white"
+              className="px-3 py-1.5 border border-black/[0.08] dark:border-white/[0.12] text-neutral-600 dark:text-neutral-400 text-xs font-medium rounded-[6px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06]"
             >
               {t.cancel}
             </button>
             <button
               type="submit"
-              className="px-3 py-1.5 bg-emerald-600 text-white text-xs font-medium rounded-md hover:bg-emerald-700"
+              className="px-3 py-1.5 bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 text-xs font-semibold rounded-[6px]"
             >
               {t.save}
             </button>
@@ -149,33 +149,32 @@ export function RateCardsList({
         </form>
       )}
 
-      <div className="p-6 space-y-6">
+      <div className="p-5 space-y-4">
         {rateCards.map((card) => (
           <div
             key={card.id}
-            className="border border-slate-200 rounded-xl p-5 hover:border-slate-300 transition-colors bg-white shadow-xs"
+            className="border border-black/[0.06] dark:border-white/[0.08] rounded-[12px] p-4 bg-white dark:bg-[#141414] hover:border-black/[0.12] dark:hover:border-white/[0.16] transition-colors shadow-xs"
           >
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-black/[0.06] dark:border-white/[0.08] gap-2">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-bold text-slate-900 text-base">{card.name}</h3>
+                  <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 text-sm">{card.name}</h3>
                   {card.isDefault && (
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded-[5px] border border-emerald-500/20">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                       <span>{t.defaultCard}</span>
                     </span>
                   )}
                 </div>
-                <div className="text-xs text-slate-400 mt-0.5">
-                  {t.effectiveFrom}: {card.effectiveFrom.slice(0, 10)} &bull; Currency:{' '}
-                  {card.currency}
+                <div className="text-[11px] text-neutral-400 mt-0.5 font-mono">
+                  {t.effectiveFrom}: {card.effectiveFrom.slice(0, 10)} &bull; Currency: {card.currency}
                 </div>
               </div>
 
               {!card.isDefault && userRole === 'OWNER' && (
                 <button
                   onClick={() => onSetDefault(card.id)}
-                  className="text-xs text-emerald-700 hover:text-emerald-900 font-semibold underline underline-offset-2"
+                  className="text-xs text-emerald-700 dark:text-emerald-400 hover:underline font-semibold underline-offset-2"
                 >
                   {t.setDefault}
                 </button>
@@ -183,21 +182,21 @@ export function RateCardsList({
             </div>
 
             {/* Role Billing Rates Grid */}
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="mt-3.5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
               {card.items.map((item) => {
                 const roleName =
                   item.role?.name || roles.find((r) => r.id === item.roleId)?.name || 'Role';
                 return (
                   <div
                     key={item.id}
-                    className="p-3 bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-between"
+                    className="p-2.5 bg-black/[0.02] dark:bg-white/[0.03] rounded-[8px] border border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between"
                   >
-                    <span className="text-xs font-medium text-slate-700 truncate max-w-[160px]">
+                    <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300 truncate max-w-[160px]">
                       {roleName}
                     </span>
-                    <span className="font-mono text-xs font-bold text-slate-900">
+                    <span className="font-mono text-xs font-bold text-neutral-900 dark:text-neutral-100">
                       {formatCurrencyMinor(item.hourlyRateMinor, item.currency)}
-                      <span className="text-[10px] font-normal text-slate-400 ml-0.5">/hr</span>
+                      <span className="text-[10px] font-normal text-neutral-400 ml-0.5">/hr</span>
                     </span>
                   </div>
                 );
