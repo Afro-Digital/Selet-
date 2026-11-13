@@ -72,6 +72,44 @@ export interface TranslationDictionary {
   exchangeRateSnapshots: string;
   noNotifications: string;
   markAllRead: string;
+  // Stage 7 additions
+  estimates: string;
+  estimateBuilder: string;
+  wbsHierarchy: string;
+  modules: string;
+  addModule: string;
+  moduleName: string;
+  addSubmodule: string;
+  features: string;
+  addFeature: string;
+  featureName: string;
+  estimationMethod: string;
+  threePoint: string;
+  singleValue: string;
+  tshirtSize: string;
+  storyPoints: string;
+  optimisticO: string;
+  likelyL: string;
+  pessimisticP: string;
+  singleHours: string;
+  points: string;
+  expectedHours: string;
+  assignedDeveloper: string;
+  unassigned: string;
+  onlyAssignedCanEdit: string;
+  developerHoursOnlyNotice: string;
+  starterTemplates: string;
+  loadTemplate: string;
+  seedTemplates: string;
+  deleteTemplate: string;
+  exampleHoursDisclaimer: string;
+  totalEstimateHours: string;
+  roleBreakdown: string;
+  estimatedLaborCost: string;
+  createProject: string;
+  projectName: string;
+  projectDescription: string;
+  selectProject: string;
 }
 
 export const translations: Record<Locale, TranslationDictionary> = {
@@ -148,6 +186,44 @@ export const translations: Record<Locale, TranslationDictionary> = {
     exchangeRateSnapshots: 'Exchange Rate Snapshots',
     noNotifications: 'No unread notifications.',
     markAllRead: 'Mark All Read',
+    // Stage 7
+    estimates: 'Estimates',
+    estimateBuilder: 'Estimate Builder',
+    wbsHierarchy: 'Work Breakdown Structure (WBS)',
+    modules: 'Modules & Epics',
+    addModule: 'Add Module',
+    moduleName: 'Module Name',
+    addSubmodule: 'Add Submodule',
+    features: 'Features & Tasks',
+    addFeature: 'Add Feature',
+    featureName: 'Feature Name',
+    estimationMethod: 'Estimation Method',
+    threePoint: 'PERT Three-Point (O/L/P)',
+    singleValue: 'Single Value (Hours)',
+    tshirtSize: 'T-Shirt Sizing (XS-XL)',
+    storyPoints: 'Story Points (1pt = 8h)',
+    optimisticO: 'Optimistic (O)',
+    likelyL: 'Likely (L)',
+    pessimisticP: 'Pessimistic (P)',
+    singleHours: 'Hours',
+    points: 'Points',
+    expectedHours: 'Expected Hours',
+    assignedDeveloper: 'Assigned Developer',
+    unassigned: 'Unassigned',
+    onlyAssignedCanEdit: 'Developers can only enter hours for tasks assigned to them.',
+    developerHoursOnlyNotice: 'Financial costs and rate cards are hidden in Developer mode.',
+    starterTemplates: 'Starter Templates',
+    loadTemplate: 'Load Starter Template',
+    seedTemplates: 'Seed Starter Templates',
+    deleteTemplate: 'Delete Template',
+    exampleHoursDisclaimer: 'Example hours provided for reference. Adjust to your project scope.',
+    totalEstimateHours: 'Total Project Hours',
+    roleBreakdown: 'Hours by Role',
+    estimatedLaborCost: 'Estimated Labor Cost',
+    createProject: 'New Project',
+    projectName: 'Project Name',
+    projectDescription: 'Project Description',
+    selectProject: 'Select Project',
   },
   am: {
     appName: 'ስሌት (Selet)',
@@ -221,5 +297,43 @@ export const translations: Record<Locale, TranslationDictionary> = {
     exchangeRateSnapshots: 'የምንዛሬ ታሪክ ቅጽበቶች',
     noNotifications: 'ምንም ያልተነበበ ማሳወቂያ የለም።',
     markAllRead: 'ሁሉንም እንደተነበበ ምልክት አድርግ',
+    // Stage 7
+    estimates: 'ስሌቶች',
+    estimateBuilder: 'የግምት እና የሰዓት ማስያ',
+    wbsHierarchy: 'የሥራ ክፍፍል መዋቅር (WBS)',
+    modules: 'ሞጁሎች እና ዋና ክፍሎች',
+    addModule: 'አዲስ ሞጁል ጨምር',
+    moduleName: 'የሞጁል ስም',
+    addSubmodule: 'ንዑስ ሞጁል ጨምር',
+    features: 'ተግባራት እና ዝርዝሮች',
+    addFeature: 'አዲስ ተግባር ጨምር',
+    featureName: 'የተግባሩ ስም',
+    estimationMethod: 'የግምት ስልት',
+    threePoint: 'ባለሶስት-ነጥብ ግምት PERT (O/L/P)',
+    singleValue: 'ቀጥተኛ የሰዓት መጠን',
+    tshirtSize: 'የቲሸርት ልኬት (XS-XL)',
+    storyPoints: 'የታሪክ ነጥቦች (1pt = 8h)',
+    optimisticO: 'ምርጥ ግምት (O)',
+    likelyL: 'እውነተኛ ግምት (L)',
+    pessimisticP: 'አስቸጋሪ ግምት (P)',
+    singleHours: 'ሰዓታት',
+    points: 'ነጥቦች',
+    expectedHours: 'የሚጠበቅ የሰዓት ድምር',
+    assignedDeveloper: 'የተመደበለት አበልጻጊ',
+    unassigned: 'ያልተመደበ',
+    onlyAssignedCanEdit: 'አበልጻጊዎች ለእነሱ የተመደቡትን ተግባራት ብቻ መቀየር ይችላሉ።',
+    developerHoursOnlyNotice: 'የፋይናንስ ወጪዎች እና ተመኖች በአበልጻጊ እይታ ውስጥ ተደብቀዋል።',
+    starterTemplates: 'የመነሻ ቴምፕሌቶች',
+    loadTemplate: 'ቴምፕሌት ጫን',
+    seedTemplates: 'መደበኛ ቴምፕሌቶችን ጫን',
+    deleteTemplate: 'ቴምፕሌት ሰርዝ',
+    exampleHoursDisclaimer: 'የተሰጡት ሰዓታት ለማሳያነት ብቻ ናቸው። እንደ ፕሮጀክትዎ መጠን ያስተካክሉ።',
+    totalEstimateHours: 'አጠቃላይ የፕሮጀክት ሰዓታት',
+    roleBreakdown: 'ሰዓታት በሥራ መደብ',
+    estimatedLaborCost: 'የሰው ኃይል ወጪ ግምት',
+    createProject: 'አዲስ ፕሮጀክት',
+    projectName: 'የፕሮጀክት ስም',
+    projectDescription: 'የፕሮጀክት መግለጫ',
+    selectProject: 'ፕሮጀክት ይምረጡ',
   },
 };

@@ -47,6 +47,7 @@ model Organization {
   exchangeRates         ExchangeRate[]
   exchangeRateHistories ExchangeRateHistory[]
   notifications         Notification[]
+  projects              Project[]
 
   @@map("organizations")
 }
@@ -64,6 +65,7 @@ model User {
 
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   auditLogs      AuditLog[]
+  assignedFeatures Feature[]
 
   @@index([organizationId])
   @@map("users")
@@ -82,6 +84,7 @@ model Role {
   organization          Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   people                Person[]
   rateCardItems         RateCardItem[]
+  featureRoleHours      FeatureRoleHours[]
 
   @@unique([organizationId, name])
   @@index([organizationId])
@@ -163,6 +166,7 @@ model Client {
   updatedAt      DateTime     @updatedAt
 
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  projects       Project[]
 
   @@index([organizationId])
   @@map("clients")
@@ -305,4 +309,129 @@ model Notification {
   @@index([isRead])
   @@index([type])
   @@map("notifications")
+}
+
+enum EstimateStatus {
+  DRAFT
+  ISSUED
+  APPROVED
+  ARCHIVED
+}
+
+enum EstimationMethod {
+  THREE_POINT
+  SINGLE_VALUE
+  T_SHIRT
+  STORY_POINTS
+}
+
+enum TShirtSize {
+  XS
+  S
+  M
+  L
+  XL
+}
+
+model Project {
+  id               String            @id @default(uuid())
+  organizationId   String
+  name             String
+  description      String?
+  clientId         String?
+  currency         String            @default("ETB")
+  isTemplate       Boolean           @default(false)
+  templateCategory String?           // "E_COMMERCE", "SAAS", "MOBILE_APP", "LANDING_PAGE", "INTERNAL_TOOL", "MAINTENANCE"
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client           Client?           @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  versions         EstimateVersion[]
+  modules          Module[]
+
+  @@index([organizationId])
+  @@index([clientId])
+  @@map("projects")
+}
+
+model EstimateVersion {
+  id                 String         @id @default(uuid())
+  projectId          String
+  versionNumber      Int            @default(1)
+  name               String         @default("Initial Draft")
+  status             EstimateStatus @default(DRAFT)
+  pointsToHoursRatio Float          @default(8.0) // 1 story point = 8h
+  tshirtSizeConfig   Json?          // custom { XS: 4, S: 8, M: 16, L: 40, XL: 80 }
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  project            Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, versionNumber])
+  @@index([projectId])
+  @@map("estimate_versions")
+}
+
+model Module {
+  id          String    @id @default(uuid())
+  projectId   String
+  parentId    String?   // For WBS nesting
+  name        String
+  description String?
+  orderIndex  Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  parent      Module?   @relation("ModuleNesting", fields: [parentId], references: [id], onDelete: Cascade)
+  children    Module[]  @relation("ModuleNesting")
+  features    Feature[]
+
+  @@index([projectId])
+  @@index([parentId])
+  @@map("modules")
+}
+
+model Feature {
+  id             String             @id @default(uuid())
+  moduleId       String
+  name           String
+  description    String?
+  method         EstimationMethod   @default(THREE_POINT)
+  assignedUserId String?
+  orderIndex     Int                @default(0)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  module         Module             @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  assignedUser   User?              @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
+  roleHours      FeatureRoleHours[]
+
+  @@index([moduleId])
+  @@index([assignedUserId])
+  @@map("features")
+}
+
+model FeatureRoleHours {
+  id               String      @id @default(uuid())
+  featureId        String
+  roleId           String
+  optimisticHours  Float?
+  likelyHours      Float?
+  pessimisticHours Float?
+  singleHours      Float?
+  tshirtSize       TShirtSize?
+  storyPoints      Float?
+  expectedHours    Float       @default(0)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  feature          Feature     @relation(fields: [featureId], references: [id], onDelete: Cascade)
+  role             Role        @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([featureId, roleId])
+  @@index([featureId])
+  @@index([roleId])
+  @@map("feature_role_hours")
 }

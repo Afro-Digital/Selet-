@@ -28,6 +28,7 @@ import { RateCardsList } from '../components/rate-cards/RateCardsList';
 import { CatalogList } from '../components/catalog/CatalogList';
 import { CurrencyWidget } from '../components/currency/CurrencyWidget';
 import { NotificationBell } from '../components/notifications/NotificationBell';
+import { EstimateBuilder } from '../components/estimates/EstimateBuilder';
 import {
   Users,
   Briefcase,
@@ -39,13 +40,14 @@ import {
   Coins,
   CheckCircle2,
   Lock,
+  Layers,
 } from 'lucide-react';
 
 export default function Home() {
   const [locale, setLocale] = useState<Locale>('en');
   const [userRole, setUserRole] = useState<UserRole>('OWNER');
   const [activeTab, setActiveTab] = useState<
-    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency'
+    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates'
   >('people');
 
   const [people, setPeople] = useState<Person[]>(INITIAL_PEOPLE);
@@ -257,7 +259,7 @@ export default function Home() {
                   Selet (ስሌት)
                 </span>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
-                  v0.1.0 Stage 6
+                  v0.1.0 Stage 7
                 </span>
               </div>
               <p className="text-xs text-slate-500 hidden sm:block">{t.tagline}</p>
@@ -465,6 +467,18 @@ export default function Home() {
             <Coins className="w-4 h-4" />
             <span>{t.currencyService}</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('estimates')}
+            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap transition-colors ${
+              activeTab === 'estimates'
+                ? 'border-indigo-600 text-indigo-600'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <Layers className="w-4 h-4" />
+            <span>{t.estimates}</span>
+          </button>
         </div>
 
         {/* Active Tab Views */}
@@ -517,6 +531,35 @@ export default function Home() {
             onSetOverride={handleSetManualOverride}
             onClearOverride={handleClearOverride}
             onRefreshFeed={handleRefreshFeed}
+          />
+        )}
+
+        {activeTab === 'estimates' && (
+          <EstimateBuilder
+            t={t}
+            simulatedRole={userRole}
+            currentUserId="user-dev-1"
+            roles={roles.map((r) => ({
+              id: r.id,
+              name: r.name,
+              defaultHourlyCostMinor: Number(r.defaultHourlyCostMinor || 0),
+            }))}
+            users={[
+              { id: 'user-owner', name: 'Alazar Owner', email: 'owner@addis.dev', role: 'OWNER' },
+              { id: 'user-pm', name: 'Bethel PM', email: 'pm@addis.dev', role: 'PM' },
+              {
+                id: 'user-dev-1',
+                name: 'Dawit Developer',
+                email: 'dawit@addis.dev',
+                role: 'DEVELOPER',
+              },
+              {
+                id: 'user-dev-2',
+                name: 'Hiwot Developer',
+                email: 'hiwot@addis.dev',
+                role: 'DEVELOPER',
+              },
+            ]}
           />
         )}
       </div>

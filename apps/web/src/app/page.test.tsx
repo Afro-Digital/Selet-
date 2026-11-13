@@ -87,4 +87,83 @@ describe('Stage 6: Cost Catalog, Currency Service & Notifications (UI)', () => {
     fireEvent.click(enBtn);
     expect(screen.getAllByText('Cost Catalog').length).toBeGreaterThan(0);
   });
+
+  describe('Stage 7: Estimate Builder, WBS Hierarchy & Multi-Method Estimation (UI)', () => {
+    it('navigates to Estimates tab and displays Estimate Builder & WBS summary bar', () => {
+      render(<Home />);
+      const estimatesTab = screen.getByRole('button', { name: /Estimates/i });
+      fireEvent.click(estimatesTab);
+
+      expect(screen.getByText('Estimate Builder')).toBeDefined();
+      expect(screen.getByText('Work Breakdown Structure (WBS)')).toBeDefined();
+      expect(screen.getByText('Total Project Hours')).toBeDefined();
+      expect(screen.getByText('Storefront & Product Catalog')).toBeDefined();
+    });
+
+    it('Owner view shows live estimated labor costs in WBS summary bar', () => {
+      render(<Home />);
+      const estimatesTab = screen.getByRole('button', { name: /Estimates/i });
+      fireEvent.click(estimatesTab);
+
+      expect(screen.getByText('Estimated Labor Cost')).toBeDefined();
+      expect(screen.getAllByText(/ETB/i).length).toBeGreaterThan(0);
+    });
+
+    it('opens Starter Templates modal and loads a template', () => {
+      render(<Home />);
+      const estimatesTab = screen.getByRole('button', { name: /Estimates/i });
+      fireEvent.click(estimatesTab);
+
+      // Click Starter Templates button
+      const templatesBtn = screen.getByRole('button', { name: /Starter Templates/i });
+      fireEvent.click(templatesBtn);
+
+      // Verify modal content
+      expect(screen.getByText(/Example hours provided for reference/i)).toBeDefined();
+      expect(screen.getByText('B2B SaaS Application')).toBeDefined();
+
+      // Click Load Template for B2B SaaS
+      const loadButtons = screen.getAllByRole('button', { name: /Load Starter Template/i });
+      expect(loadButtons.length).toBeGreaterThan(0);
+      fireEvent.click(loadButtons[1]!); // Second template is SaaS
+
+      // Verify template project loaded
+      expect(screen.getByText(/B2B SaaS Application \(Copy\)/i)).toBeDefined();
+    });
+
+    it('switches estimation method on a feature and updates hours', () => {
+      render(<Home />);
+      const estimatesTab = screen.getByRole('button', { name: /Estimates/i });
+      fireEvent.click(estimatesTab);
+
+      // Locate method select dropdown
+      const methodSelects = screen.getAllByLabelText('Estimation Method');
+      expect(methodSelects.length).toBeGreaterThan(0);
+
+      // Switch first feature method to T-Shirt Size
+      fireEvent.change(methodSelects[0]!, { target: { value: 'T_SHIRT' } });
+      expect(screen.getAllByText(/T-Shirt Sizing/i).length).toBeGreaterThan(0);
+    });
+
+    it('Developer view hides financial labor costs and enforces assignment restrictions', () => {
+      render(<Home />);
+      // Switch simulated role to Developer
+      const roleSelect = screen.getByRole('combobox');
+      fireEvent.change(roleSelect, { target: { value: 'DEVELOPER' } });
+
+      const estimatesTab = screen.getByRole('button', { name: /Estimates/i });
+      fireEvent.click(estimatesTab);
+
+      // Verify cost is hidden
+      expect(screen.queryByText('Estimated Labor Cost')).toBeNull();
+      expect(
+        screen.getByText(/Financial costs and rate cards are hidden in Developer mode/i),
+      ).toBeDefined();
+
+      // Verify assignment restriction notice is displayed for unassigned / non-Dawit features
+      expect(
+        screen.getAllByText(/Developers can only enter hours for tasks assigned to them/i).length,
+      ).toBeGreaterThan(0);
+    });
+  });
 });
