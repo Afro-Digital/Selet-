@@ -7,9 +7,13 @@ export interface TranslationDictionary {
   teamMembers: string;
   jobRoles: string;
   rateCards: string;
+  costCatalog: string;
+  currencyService: string;
+  notifications: string;
   addMember: string;
   addRole: string;
   addRateCard: string;
+  addItem: string;
   name: string;
   role: string;
   payType: string;
@@ -49,6 +53,25 @@ export interface TranslationDictionary {
   rolePm: string;
   roleDeveloper: string;
   simulatedRole: string;
+  // Stage 6 additions
+  category: string;
+  priceModel: string;
+  payer: string;
+  agencyPayer: string;
+  clientPayer: string;
+  staleAfterDays: string;
+  verifiedAt: string;
+  verifyNow: string;
+  staleNotice: string;
+  seedExamples: string;
+  removeExamples: string;
+  manualOverride: string;
+  setOverride: string;
+  clearOverride: string;
+  refreshFeed: string;
+  exchangeRateSnapshots: string;
+  noNotifications: string;
+  markAllRead: string;
 }
 
 export const translations: Record<Locale, TranslationDictionary> = {
@@ -59,9 +82,13 @@ export const translations: Record<Locale, TranslationDictionary> = {
     teamMembers: 'Team Members',
     jobRoles: 'Job Roles',
     rateCards: 'Rate Cards',
+    costCatalog: 'Cost Catalog',
+    currencyService: 'Currency & Exchange Rates',
+    notifications: 'Notifications',
     addMember: 'Add Team Member',
     addRole: 'Add Job Role',
     addRateCard: 'Add Rate Card',
+    addItem: 'Add Catalog Item',
     name: 'Full Name',
     role: 'Job Role',
     payType: 'Pay Type',
@@ -102,6 +129,25 @@ export const translations: Record<Locale, TranslationDictionary> = {
     rolePm: 'Project Manager (Hours & Rates)',
     roleDeveloper: 'Developer (Costs Redacted)',
     simulatedRole: 'Simulate User Role',
+    // Stage 6
+    category: 'Category',
+    priceModel: 'Pricing Model',
+    payer: 'Payer Responsibility',
+    agencyPayer: 'Agency Internal (Overhead)',
+    clientPayer: 'Client Direct (Pass-Through)',
+    staleAfterDays: 'Stale After (Days)',
+    verifiedAt: 'Last Verified',
+    verifyNow: 'Verify Price',
+    staleNotice: 'Price verification overdue',
+    seedExamples: 'Seed Starter Examples',
+    removeExamples: 'Remove Example Items',
+    manualOverride: 'Manual Rate Override',
+    setOverride: 'Apply Override',
+    clearOverride: 'Clear Override',
+    refreshFeed: 'Refresh NBE Feed',
+    exchangeRateSnapshots: 'Exchange Rate Snapshots',
+    noNotifications: 'No unread notifications.',
+    markAllRead: 'Mark All Read',
   },
   am: {
     appName: 'ስሌት (Selet)',
@@ -110,9 +156,13 @@ export const translations: Record<Locale, TranslationDictionary> = {
     teamMembers: 'የቡድን አባላት',
     jobRoles: 'የሥራ መደቦች',
     rateCards: 'የክፍያ ተመን ካርዶች',
+    costCatalog: 'የወጪ ካታሎግ (እቃዎችና አገልግሎቶች)',
+    currencyService: 'የምንዛሬ ተመን እና ልውውጥ',
+    notifications: 'ማሳወቂያዎች',
     addMember: 'አዲስ አባል ጨምር',
     addRole: 'አዲስ መደብ ጨምር',
     addRateCard: 'አዲስ ተመን ካርድ ጨምር',
+    addItem: 'አዲስ የወጪ እቃ ጨምር',
     name: 'ሙሉ ስም',
     role: 'የሥራ መደብ',
     payType: 'የክፍያ ዓይነት',
@@ -152,5 +202,24 @@ export const translations: Record<Locale, TranslationDictionary> = {
     rolePm: 'የፕሮጀክት መሪ (ሰዓታት እና ተመኖች)',
     roleDeveloper: 'አበልጻጊ (ወጪዎች የተደበቁ)',
     simulatedRole: 'የተጠቃሚ ሚና አስመስል',
+    // Stage 6
+    category: 'ምድብ',
+    priceModel: 'የዋጋ አከፋፈል ሞዴል',
+    payer: 'ከፋይ',
+    agencyPayer: 'ኤጀንሲ (የቤት ውስጥ ወጪ)',
+    clientPayer: 'ደንበኛ (ቀጥተኛ ወጪ)',
+    staleAfterDays: 'የሚያረጅበት ጊዜ (ቀናት)',
+    verifiedAt: 'የተረጋገጠበት ቀን',
+    verifyNow: 'ዋጋውን አረጋግጥ',
+    staleNotice: 'የዋጋ ማረጋገጫ ጊዜው አልፏል',
+    seedExamples: 'የናሙና እቃዎችን ጫን',
+    removeExamples: 'የናሙና እቃዎችን አስወግድ',
+    manualOverride: 'የእጅ ምንዛሬ ተመን መተኪያ',
+    setOverride: 'ተመኑን ተግብር',
+    clearOverride: 'ተመኑን መልስ',
+    refreshFeed: 'ከብሔራዊ ባንክ አድስ',
+    exchangeRateSnapshots: 'የምንዛሬ ታሪክ ቅጽበቶች',
+    noNotifications: 'ምንም ያልተነበበ ማሳወቂያ የለም።',
+    markAllRead: 'ሁሉንም እንደተነበበ ምልክት አድርግ',
   },
 };

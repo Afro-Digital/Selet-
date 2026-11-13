@@ -57,3 +57,66 @@ export interface RateCard {
   isDefault: boolean;
   items: RateCardItem[];
 }
+
+export type CatalogCategory =
+  'HOSTING' | 'CDN' | 'DOMAIN' | 'SSL' | 'PAYMENT_GATEWAY' | 'LICENSE' | 'TOOL' | 'OTHER';
+
+export type PriceModel = 'FIXED' | 'PER_MONTH' | 'PER_USER' | 'PERCENTAGE';
+
+export type Payer = 'AGENCY' | 'CLIENT';
+
+export interface CatalogItem {
+  id: string;
+  name: string;
+  category: CatalogCategory;
+  priceModel: PriceModel;
+  amountMinor: string;
+  percentageRate?: number;
+  currency: string;
+  sourceUrl?: string;
+  verifiedAt: string;
+  payer: Payer;
+  staleAfterDays: number;
+  isExample: boolean;
+  isStale?: boolean;
+  daysSinceVerification?: number;
+}
+
+export interface ExchangeRate {
+  id: string;
+  fromCurrency: string;
+  toCurrency: string;
+  rate: number;
+  source: string;
+  isManualOverride: boolean;
+  effectiveAt: string;
+  isStale?: boolean;
+  daysOld?: number;
+}
+
+export interface ExchangeRateHistory {
+  id: string;
+  fromCurrency: string;
+  toCurrency: string;
+  rate: number;
+  source: string;
+  isManualOverride: boolean;
+  capturedAt: string;
+}
+
+export type NotificationType =
+  'STALE_CATALOG_PRICE' | 'STALE_EXCHANGE_RATE' | 'UNVERIFIED_TAX_RULE' | 'SYSTEM';
+
+export type NotificationSeverity = 'INFO' | 'WARNING' | 'ERROR';
+
+export interface InAppNotification {
+  id: string;
+  type: NotificationType;
+  severity: NotificationSeverity;
+  title: string;
+  message: string;
+  entityType?: string;
+  entityId?: string;
+  isRead: boolean;
+  createdAt: string;
+}

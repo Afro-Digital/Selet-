@@ -1,18 +1,38 @@
 'use client';
 
 import React, { useState } from 'react';
-import { UserRole, Person, Role, RateCard } from '../types';
+import {
+  UserRole,
+  Person,
+  Role,
+  RateCard,
+  CatalogItem,
+  ExchangeRate,
+  ExchangeRateHistory,
+  InAppNotification,
+} from '../types';
 import { Locale, translations } from '../lib/i18n';
-import { INITIAL_PEOPLE, INITIAL_ROLES, INITIAL_RATE_CARDS } from '../lib/mock-data';
+import {
+  INITIAL_PEOPLE,
+  INITIAL_ROLES,
+  INITIAL_RATE_CARDS,
+  INITIAL_CATALOG_ITEMS,
+  INITIAL_EXCHANGE_RATES,
+  INITIAL_NOTIFICATIONS,
+} from '../lib/mock-data';
 import { formatCurrencyMinor } from '../lib/person-cost';
 import { PeopleTable } from '../components/people/PeopleTable';
 import { AddPersonModal } from '../components/people/AddPersonModal';
 import { RolesList } from '../components/roles/RolesList';
 import { RateCardsList } from '../components/rate-cards/RateCardsList';
+import { CatalogList } from '../components/catalog/CatalogList';
+import { CurrencyWidget } from '../components/currency/CurrencyWidget';
+import { NotificationBell } from '../components/notifications/NotificationBell';
 import {
   Users,
   Briefcase,
   CreditCard,
+  Package,
   Languages,
   Shield,
   Clock,
@@ -24,11 +44,36 @@ import {
 export default function Home() {
   const [locale, setLocale] = useState<Locale>('en');
   const [userRole, setUserRole] = useState<UserRole>('OWNER');
-  const [activeTab, setActiveTab] = useState<'people' | 'roles' | 'rate-cards'>('people');
+  const [activeTab, setActiveTab] = useState<
+    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency'
+  >('people');
 
   const [people, setPeople] = useState<Person[]>(INITIAL_PEOPLE);
   const [roles, setRoles] = useState<Role[]>(INITIAL_ROLES);
   const [rateCards, setRateCards] = useState<RateCard[]>(INITIAL_RATE_CARDS);
+  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(INITIAL_CATALOG_ITEMS);
+  const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>(INITIAL_EXCHANGE_RATES);
+  const [exchangeHistory, setExchangeHistory] = useState<ExchangeRateHistory[]>([
+    {
+      id: 'h-1',
+      fromCurrency: 'USD',
+      toCurrency: 'ETB',
+      rate: 128.5,
+      source: 'National Bank of Ethiopia (NBE)',
+      isManualOverride: false,
+      capturedAt: new Date(Date.now() - 3600000).toISOString(),
+    },
+    {
+      id: 'h-2',
+      fromCurrency: 'EUR',
+      toCurrency: 'ETB',
+      rate: 138.2,
+      source: 'National Bank of Ethiopia (NBE)',
+      isManualOverride: false,
+      capturedAt: new Date(Date.now() - 3600000).toISOString(),
+    },
+  ]);
+  const [notifications, setNotifications] = useState<InAppNotification[]>(INITIAL_NOTIFICATIONS);
   const [isAddPersonModalOpen, setIsAddPersonModalOpen] = useState(false);
 
   const t = translations[locale];
@@ -50,9 +95,9 @@ export default function Home() {
       ? (totalMonthlyCostMinor / BigInt(totalProductiveHours)).toString()
       : '0';
 
-  const defaultCard = rateCards.find((rc) => rc.isDefault) || rateCards[0];
+  const usdRate = exchangeRates.find((r) => r.fromCurrency === 'USD')?.rate || 128.5;
 
-  // Actions
+  // Actions: People & Roles
   const handleUpdatePerson = (updated: Person) => {
     setPeople((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
   };
@@ -82,6 +127,121 @@ export default function Home() {
     );
   };
 
+  // Actions: Cost Catalog
+  const handleAddCatalogItem = (item: CatalogItem) => {
+    setCatalogItems((prev) => [item, ...prev]);
+  };
+
+  const handleVerifyCatalogItem = (id: string) => {
+    setCatalogItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, verifiedAt: new Date().toISOString(), isStale: false } : item,
+      ),
+    );
+    // Dismiss corresponding stale notification
+    setNotifications((prev) =>
+      prev.filter((n) => !(n.type === 'STALE_CATALOG_PRICE' && n.entityId === id)),
+    );
+  };
+
+  const handleDeleteCatalogItem = (id: string) => {
+    setCatalogItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const handleSeedExamples = () => {
+    setCatalogItems(INITIAL_CATALOG_ITEMS);
+  };
+
+  const handleRemoveExamples = () => {
+    setCatalogItems((prev) => prev.filter((item) => !item.isExample));
+  };
+
+  // Actions: Currency Service
+  const handleSetManualOverride = (fromCurrency: string, rate: number) => {
+    setExchangeRates((prev) =>
+      prev.map((r) =>
+        r.fromCurrency === fromCurrency
+          ? {
+              ...r,
+              rate,
+              source: 'MANUAL_OVERRIDE',
+              isManualOverride: true,
+              effectiveAt: new Date().toISOString(),
+            }
+          : r,
+      ),
+    );
+
+    setExchangeHistory((prev) => [
+      {
+        id: `h-${Date.now()}`,
+        fromCurrency,
+        toCurrency: 'ETB',
+        rate,
+        source: 'MANUAL_OVERRIDE',
+        isManualOverride: true,
+        capturedAt: new Date().toISOString(),
+      },
+      ...prev,
+    ]);
+  };
+
+  const handleClearOverride = (fromCurrency: string) => {
+    const baseline = fromCurrency === 'USD' ? 128.5 : 138.2;
+    setExchangeRates((prev) =>
+      prev.map((r) =>
+        r.fromCurrency === fromCurrency
+          ? {
+              ...r,
+              rate: baseline,
+              source: 'National Bank of Ethiopia (NBE)',
+              isManualOverride: false,
+              effectiveAt: new Date().toISOString(),
+            }
+          : r,
+      ),
+    );
+
+    setExchangeHistory((prev) => [
+      {
+        id: `h-${Date.now()}`,
+        fromCurrency,
+        toCurrency: 'ETB',
+        rate: baseline,
+        source: 'NBE_AUTOMATIC',
+        isManualOverride: false,
+        capturedAt: new Date().toISOString(),
+      },
+      ...prev,
+    ]);
+  };
+
+  const handleRefreshFeed = () => {
+    // Refresh automated feeds (keeps manual overrides untouched)
+    setExchangeRates((prev) =>
+      prev.map((r) => {
+        if (r.isManualOverride) return r;
+        const base = r.fromCurrency === 'USD' ? 128.5 : 138.2;
+        const newRate = Math.round((base + (Math.random() * 0.4 - 0.2)) * 100) / 100;
+        return {
+          ...r,
+          rate: newRate,
+          source: 'National Bank of Ethiopia (NBE)',
+          effectiveAt: new Date().toISOString(),
+        };
+      }),
+    );
+  };
+
+  // Actions: Notifications
+  const handleMarkAsRead = (id: string) => {
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)));
+  };
+
+  const handleMarkAllAsRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+  };
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900 pb-16">
       {/* Top Navigation */}
@@ -97,7 +257,7 @@ export default function Home() {
                   Selet (ስሌት)
                 </span>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
-                  v0.1.0 Stage 5
+                  v0.1.0 Stage 6
                 </span>
               </div>
               <p className="text-xs text-slate-500 hidden sm:block">{t.tagline}</p>
@@ -105,6 +265,14 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Notification Bell */}
+            <NotificationBell
+              notifications={notifications}
+              locale={locale}
+              onMarkAsRead={handleMarkAsRead}
+              onMarkAllAsRead={handleMarkAllAsRead}
+            />
+
             {/* Language Switcher */}
             <div className="flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200">
               <Languages className="w-3.5 h-3.5 text-slate-400 ml-1.5 mr-1" />
@@ -171,7 +339,7 @@ export default function Home() {
             <div>
               <p className="text-xs font-semibold uppercase text-slate-500">{t.productiveHours}</p>
               <p className="text-2xl font-bold text-slate-900 mt-1">{totalProductiveHours} hrs</p>
-              <p className="text-xs text-slate-400 mt-0.5">Based on utilization rates</p>
+              <p className="text-xs text-slate-400 mt-0.5">Monthly productive capacity</p>
             </div>
             <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
               <Clock className="w-5 h-5" />
@@ -206,29 +374,29 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Card 4: Default Billing Card */}
+          {/* Card 4: Live USD/ETB Exchange Rate */}
           <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase text-slate-500">{t.defaultCard}</p>
-              <p className="text-sm font-bold text-slate-900 mt-1 truncate max-w-[150px]">
-                {defaultCard?.name || 'Standard'}
+              <p className="text-xs font-semibold uppercase text-slate-500">USD / ETB Rate</p>
+              <p className="text-2xl font-bold text-slate-900 mt-1 font-mono">
+                {usdRate.toFixed(2)} ETB
               </p>
               <p className="text-xs text-emerald-600 mt-0.5 flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Active for new quotes</span>
+                <span>NBE / Effective</span>
               </p>
             </div>
             <div className="w-11 h-11 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
-              <CreditCard className="w-5 h-5" />
+              <Coins className="w-5 h-5" />
             </div>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-slate-200 gap-4">
+        <div className="flex border-b border-slate-200 gap-2 sm:gap-4 overflow-x-auto">
           <button
             onClick={() => setActiveTab('people')}
-            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'people'
                 ? 'border-emerald-600 text-emerald-600'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
@@ -243,7 +411,7 @@ export default function Home() {
 
           <button
             onClick={() => setActiveTab('roles')}
-            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'roles'
                 ? 'border-indigo-600 text-indigo-600'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
@@ -258,7 +426,7 @@ export default function Home() {
 
           <button
             onClick={() => setActiveTab('rate-cards')}
-            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'rate-cards'
                 ? 'border-emerald-600 text-emerald-600'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
@@ -269,6 +437,33 @@ export default function Home() {
             <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
               {rateCards.length}
             </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('catalog')}
+            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap transition-colors ${
+              activeTab === 'catalog'
+                ? 'border-emerald-600 text-emerald-600'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <Package className="w-4 h-4" />
+            <span>{t.costCatalog}</span>
+            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+              {catalogItems.length}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('currency')}
+            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap transition-colors ${
+              activeTab === 'currency'
+                ? 'border-emerald-600 text-emerald-600'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <Coins className="w-4 h-4" />
+            <span>{t.currencyService}</span>
           </button>
         </div>
 
@@ -297,6 +492,31 @@ export default function Home() {
             locale={locale}
             onAddRateCard={handleAddRateCard}
             onSetDefault={handleSetDefaultRateCard}
+          />
+        )}
+
+        {activeTab === 'catalog' && (
+          <CatalogList
+            items={catalogItems}
+            userRole={userRole}
+            locale={locale}
+            onAddItem={handleAddCatalogItem}
+            onVerifyItem={handleVerifyCatalogItem}
+            onDeleteItem={handleDeleteCatalogItem}
+            onSeedExamples={handleSeedExamples}
+            onRemoveExamples={handleRemoveExamples}
+          />
+        )}
+
+        {activeTab === 'currency' && (
+          <CurrencyWidget
+            rates={exchangeRates}
+            history={exchangeHistory}
+            userRole={userRole}
+            locale={locale}
+            onSetOverride={handleSetManualOverride}
+            onClearOverride={handleClearOverride}
+            onRefreshFeed={handleRefreshFeed}
           />
         )}
       </div>

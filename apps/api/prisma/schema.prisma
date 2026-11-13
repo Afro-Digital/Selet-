@@ -43,6 +43,10 @@ model Organization {
   rateCards             RateCard[]
   clients               Client[]
   auditLogs             AuditLog[]
+  catalogItems          CatalogItem[]
+  exchangeRates         ExchangeRate[]
+  exchangeRateHistories ExchangeRateHistory[]
+  notifications         Notification[]
 
   @@map("organizations")
 }
@@ -184,4 +188,121 @@ model AuditLog {
   @@index([userId])
   @@index([entityType, entityId])
   @@map("audit_logs")
+}
+
+enum CatalogCategory {
+  HOSTING
+  CDN
+  DOMAIN
+  SSL
+  PAYMENT_GATEWAY
+  LICENSE
+  TOOL
+  OTHER
+}
+
+enum PriceModel {
+  FIXED
+  PER_MONTH
+  PER_USER
+  PERCENTAGE
+}
+
+enum Payer {
+  AGENCY
+  CLIENT
+}
+
+enum NotificationType {
+  STALE_CATALOG_PRICE
+  STALE_EXCHANGE_RATE
+  UNVERIFIED_TAX_RULE
+  SYSTEM
+}
+
+enum NotificationSeverity {
+  INFO
+  WARNING
+  ERROR
+}
+
+model CatalogItem {
+  id             String          @id @default(uuid())
+  organizationId String
+  name           String
+  category       CatalogCategory @default(TOOL)
+  priceModel     PriceModel      @default(PER_MONTH)
+  amountMinor    BigInt          @default(0) // Integer minor units (santim/cents)
+  percentageRate Float?          // e.g. 0.035 for 3.5%
+  currency       String          @default("ETB")
+  sourceUrl      String?
+  verifiedAt     DateTime        @default(now())
+  payer          Payer           @default(CLIENT)
+  staleAfterDays Int             @default(90)
+  isExample      Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([category])
+  @@map("catalog_items")
+}
+
+model ExchangeRate {
+  id               String       @id @default(uuid())
+  organizationId   String
+  fromCurrency     String       // e.g. "USD", "EUR"
+  toCurrency       String       @default("ETB")
+  rate             Float        // ETB per 1 unit of fromCurrency
+  source           String       // "NBE", "CBE", "MANUAL_OVERRIDE", "FALLBACK"
+  isManualOverride Boolean      @default(false)
+  effectiveAt      DateTime     @default(now())
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, fromCurrency, toCurrency])
+  @@index([organizationId])
+  @@map("exchange_rates")
+}
+
+model ExchangeRateHistory {
+  id               String       @id @default(uuid())
+  organizationId   String
+  fromCurrency     String
+  toCurrency       String       @default("ETB")
+  rate             Float
+  source           String
+  isManualOverride Boolean
+  capturedAt       DateTime     @default(now())
+
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([fromCurrency, toCurrency])
+  @@map("exchange_rate_histories")
+}
+
+model Notification {
+  id             String               @id @default(uuid())
+  organizationId String
+  type           NotificationType     @default(SYSTEM)
+  severity       NotificationSeverity @default(INFO)
+  title          String
+  message        String
+  entityType     String?              // "CatalogItem", "ExchangeRate", "TaxPack"
+  entityId       String?
+  isRead         Boolean              @default(false)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  organization   Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([isRead])
+  @@index([type])
+  @@map("notifications")
 }

@@ -201,3 +201,157 @@ export const INITIAL_RATE_CARDS: RateCard[] = [
     ],
   },
 ];
+
+export const INITIAL_CATALOG_ITEMS = [
+  {
+    id: 'cat-1',
+    name: '[Example] AWS EC2 t4g.medium',
+    category: 'HOSTING' as const,
+    priceModel: 'PER_MONTH' as const,
+    amountMinor: '3500', // $35.00
+    currency: 'USD',
+    sourceUrl: 'https://aws.amazon.com/ec2/pricing/',
+    verifiedAt: new Date(Date.now() - 15 * 86400000).toISOString(),
+    payer: 'CLIENT' as const,
+    staleAfterDays: 60,
+    isExample: true,
+  },
+  {
+    id: 'cat-2',
+    name: '[Example] DigitalOcean Basic Droplet (2GB)',
+    category: 'HOSTING' as const,
+    priceModel: 'PER_MONTH' as const,
+    amountMinor: '1200', // $12.00
+    currency: 'USD',
+    sourceUrl: 'https://www.digitalocean.com/pricing/droplets',
+    verifiedAt: new Date(Date.now() - 75 * 86400000).toISOString(), // STALE (>60 days)
+    payer: 'CLIENT' as const,
+    staleAfterDays: 60,
+    isExample: true,
+  },
+  {
+    id: 'cat-3',
+    name: '[Example] Cloudflare Pro WAF & CDN',
+    category: 'CDN' as const,
+    priceModel: 'PER_MONTH' as const,
+    amountMinor: '2000', // $20.00
+    currency: 'USD',
+    sourceUrl: 'https://www.cloudflare.com/plans/',
+    verifiedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
+    payer: 'AGENCY' as const,
+    staleAfterDays: 90,
+    isExample: true,
+  },
+  {
+    id: 'cat-4',
+    name: '[Example] .et Domain Annual Registration',
+    category: 'DOMAIN' as const,
+    priceModel: 'FIXED' as const,
+    amountMinor: '120000', // 1,200 ETB
+    currency: 'ETB',
+    sourceUrl: 'https://telecom.et/',
+    verifiedAt: new Date(Date.now() - 40 * 86400000).toISOString(),
+    payer: 'CLIENT' as const,
+    staleAfterDays: 180,
+    isExample: true,
+  },
+  {
+    id: 'cat-5',
+    name: '[Example] Wildcard SSL Certificate (Annual)',
+    category: 'SSL' as const,
+    priceModel: 'FIXED' as const,
+    amountMinor: '250000', // 2,500 ETB
+    currency: 'ETB',
+    sourceUrl: 'https://www.ssls.com/',
+    verifiedAt: new Date(Date.now() - 40 * 86400000).toISOString(),
+    payer: 'CLIENT' as const,
+    staleAfterDays: 180,
+    isExample: true,
+  },
+  {
+    id: 'cat-6',
+    name: '[Example] Telebirr & Chapa Payment Gateway Fee',
+    category: 'PAYMENT_GATEWAY' as const,
+    priceModel: 'PERCENTAGE' as const,
+    amountMinor: '0',
+    percentageRate: 0.035, // 3.5%
+    currency: 'ETB',
+    sourceUrl: 'https://chapa.co/pricing',
+    verifiedAt: new Date(Date.now() - 20 * 86400000).toISOString(),
+    payer: 'CLIENT' as const,
+    staleAfterDays: 90,
+    isExample: true,
+  },
+  {
+    id: 'cat-7',
+    name: '[Example] GitHub Team Seat',
+    category: 'TOOL' as const,
+    priceModel: 'PER_USER' as const,
+    amountMinor: '400', // $4.00
+    currency: 'USD',
+    sourceUrl: 'https://github.com/pricing',
+    verifiedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
+    payer: 'AGENCY' as const,
+    staleAfterDays: 90,
+    isExample: true,
+  },
+  {
+    id: 'cat-8',
+    name: '[Example] Sentry Performance Monitoring',
+    category: 'TOOL' as const,
+    priceModel: 'PER_MONTH' as const,
+    amountMinor: '2600', // $26.00
+    currency: 'USD',
+    sourceUrl: 'https://sentry.io/pricing/',
+    verifiedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
+    payer: 'AGENCY' as const,
+    staleAfterDays: 90,
+    isExample: true,
+  },
+];
+
+export const INITIAL_EXCHANGE_RATES = [
+  {
+    id: 'rate-usd',
+    fromCurrency: 'USD',
+    toCurrency: 'ETB',
+    rate: 128.5,
+    source: 'National Bank of Ethiopia (NBE)',
+    isManualOverride: false,
+    effectiveAt: new Date().toISOString(),
+  },
+  {
+    id: 'rate-eur',
+    fromCurrency: 'EUR',
+    toCurrency: 'ETB',
+    rate: 138.2,
+    source: 'National Bank of Ethiopia (NBE)',
+    isManualOverride: false,
+    effectiveAt: new Date().toISOString(),
+  },
+];
+
+export const INITIAL_NOTIFICATIONS = [
+  {
+    id: 'notif-1',
+    type: 'STALE_CATALOG_PRICE' as const,
+    severity: 'WARNING' as const,
+    title: 'Stale Price: DigitalOcean Basic Droplet',
+    message: 'Price was last verified 75 days ago (configured threshold: 60 days).',
+    entityType: 'CatalogItem',
+    entityId: 'cat-2',
+    isRead: false,
+    createdAt: new Date(Date.now() - 2 * 3600000).toISOString(),
+  },
+  {
+    id: 'notif-2',
+    type: 'UNVERIFIED_TAX_RULE' as const,
+    severity: 'INFO' as const,
+    title: 'Unverified Tax Rule: Digital Services Tax (DST)',
+    message: 'Ethiopian DST 5% rule requires verification with an accredited tax accountant.',
+    entityType: 'TaxPack',
+    entityId: 'dst-rule',
+    isRead: false,
+    createdAt: new Date(Date.now() - 24 * 3600000).toISOString(),
+  },
+];
