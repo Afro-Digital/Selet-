@@ -99,18 +99,18 @@ export function CatalogList({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div className="rounded-[14px] bg-white dark:bg-[#141414] border border-black/[0.06] dark:border-white/[0.08] shadow-[0_1px_2px_rgba(0,0,0,0.05)] overflow-hidden transition-colors">
       {/* Header */}
-      <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-5 border-b border-black/[0.06] dark:border-white/[0.08] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Package className="w-5 h-5 text-emerald-600" />
-            <h2 className="text-xl font-bold text-slate-800">{t.costCatalog}</h2>
-            <span className="px-2.5 py-0.5 text-xs font-semibold bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">
+            <Package className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <h2 className="text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">{t.costCatalog}</h2>
+            <span className="px-2 py-0.5 text-[11px] font-mono font-medium bg-black/[0.04] dark:bg-white/[0.06] text-neutral-700 dark:text-neutral-300 rounded-[5px]">
               {items.length} {locale === 'am' ? 'እቃዎች' : 'Items'}
             </span>
             {staleItemsCount > 0 && (
-              <span className="px-2.5 py-0.5 text-xs font-bold bg-amber-50 text-amber-700 rounded-full border border-amber-200 flex items-center gap-1">
+              <span className="px-2 py-0.5 text-[11px] font-semibold bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-[5px] border border-amber-500/20 flex items-center gap-1">
                 <ShieldAlert className="w-3 h-3" />
                 <span>
                   {staleItemsCount} {t.staleNotice}
@@ -118,7 +118,7 @@ export function CatalogList({
               </span>
             )}
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
             {locale === 'am'
               ? 'የደመና፣ የሰርቨር፣ የዶሜይን እና የሶፍትዌር መሣሪያዎች ወጪ ካታሎግ'
               : 'Pass-through infrastructure, licenses, and tooling costs with stale price tracking.'}
@@ -130,14 +130,14 @@ export function CatalogList({
             <>
               <button
                 onClick={onSeedExamples}
-                className="inline-flex items-center gap-1 px-3 py-1.5 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-50 transition-colors"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-black/[0.08] dark:border-white/[0.12] text-neutral-700 dark:text-neutral-300 text-xs font-semibold rounded-[7px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                 <span>{t.seedExamples}</span>
               </button>
               <button
                 onClick={onRemoveExamples}
-                className="inline-flex items-center gap-1 px-3 py-1.5 border border-slate-200 text-slate-500 hover:text-rose-600 text-xs font-semibold rounded-lg hover:bg-rose-50 transition-colors"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-black/[0.08] dark:border-white/[0.12] text-neutral-500 hover:text-rose-600 dark:hover:text-rose-400 text-xs font-semibold rounded-[7px] hover:bg-rose-500/10 transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>{t.removeExamples}</span>
@@ -148,9 +148,9 @@ export function CatalogList({
           {isAuthorized && (
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-neutral-950 text-xs font-semibold rounded-[7px] transition-colors shadow-xs"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-3.5 h-3.5" />
               <span>{t.addItem}</span>
             </button>
           )}
@@ -158,54 +158,54 @@ export function CatalogList({
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-slate-50 px-6 py-3 border-b border-slate-200 flex flex-wrap items-center gap-4 text-xs">
+      <div className="bg-black/[0.02] dark:bg-white/[0.02] px-5 py-2.5 border-b border-black/[0.06] dark:border-white/[0.08] flex flex-wrap items-center gap-4 text-xs">
         <div className="flex items-center gap-2">
-          <Filter className="w-3.5 h-3.5 text-slate-400" />
-          <span className="font-semibold text-slate-600">{t.category}:</span>
+          <Filter className="w-3.5 h-3.5 text-neutral-400" />
+          <span className="font-semibold text-neutral-600 dark:text-neutral-400">{t.category}:</span>
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="border border-slate-300 rounded px-2 py-1 bg-white text-slate-700 focus:outline-none"
+            className="border border-black/[0.08] dark:border-white/[0.12] rounded-[6px] px-2 py-1 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 focus:outline-none text-xs"
           >
-            <option value="ALL">All Categories</option>
-            <option value="HOSTING">Hosting</option>
-            <option value="CDN">CDN</option>
-            <option value="DOMAIN">Domain</option>
-            <option value="SSL">SSL</option>
-            <option value="PAYMENT_GATEWAY">Payment Gateway</option>
-            <option value="TOOL">Tool & License</option>
+            <option value="ALL" className="dark:bg-neutral-900">All Categories</option>
+            <option value="HOSTING" className="dark:bg-neutral-900">Hosting</option>
+            <option value="CDN" className="dark:bg-neutral-900">CDN</option>
+            <option value="DOMAIN" className="dark:bg-neutral-900">Domain</option>
+            <option value="SSL" className="dark:bg-neutral-900">SSL</option>
+            <option value="PAYMENT_GATEWAY" className="dark:bg-neutral-900">Payment Gateway</option>
+            <option value="TOOL" className="dark:bg-neutral-900">Tool & License</option>
           </select>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-slate-600">{t.payer}:</span>
+          <span className="font-semibold text-neutral-600 dark:text-neutral-400">{t.payer}:</span>
           <select
             value={payerFilter}
             onChange={(e) => setPayerFilter(e.target.value)}
-            className="border border-slate-300 rounded px-2 py-1 bg-white text-slate-700 focus:outline-none"
+            className="border border-black/[0.08] dark:border-white/[0.12] rounded-[6px] px-2 py-1 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 focus:outline-none text-xs"
           >
-            <option value="ALL">All Payers</option>
-            <option value="CLIENT">Client Direct</option>
-            <option value="AGENCY">Agency Internal</option>
+            <option value="ALL" className="dark:bg-neutral-900">All Payers</option>
+            <option value="CLIENT" className="dark:bg-neutral-900">Client Direct</option>
+            <option value="AGENCY" className="dark:bg-neutral-900">Agency Internal</option>
           </select>
         </div>
       </div>
 
       {/* Items Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse text-sm">
+        <table className="w-full text-left border-collapse text-xs">
           <thead>
-            <tr className="bg-slate-50/50 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
-              <th className="py-3 px-4">{t.name}</th>
-              <th className="py-3 px-4">{t.category}</th>
-              <th className="py-3 px-4">{t.priceModel}</th>
-              <th className="py-3 px-4 text-right">Cost / Rate</th>
-              <th className="py-3 px-4">{t.payer}</th>
-              <th className="py-3 px-4">{t.verifiedAt}</th>
-              {isAuthorized && <th className="py-3 px-4 text-center">{t.actions}</th>}
+            <tr className="bg-black/[0.02] dark:bg-white/[0.02] border-b border-black/[0.06] dark:border-white/[0.08] text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+              <th className="py-2.5 px-3.5">{t.name}</th>
+              <th className="py-2.5 px-3.5">{t.category}</th>
+              <th className="py-2.5 px-3.5">{t.priceModel}</th>
+              <th className="py-2.5 px-3.5 text-right">Cost / Rate</th>
+              <th className="py-2.5 px-3.5">{t.payer}</th>
+              <th className="py-2.5 px-3.5">{t.verifiedAt}</th>
+              {isAuthorized && <th className="py-2.5 px-3.5 text-center">{t.actions}</th>}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 text-slate-700">
+          <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.06] text-neutral-700 dark:text-neutral-300">
             {filteredItems.map((item) => {
               const diffDays = Math.floor(
                 (Date.now() - new Date(item.verifiedAt).getTime()) / (1000 * 60 * 60 * 24),
@@ -215,12 +215,12 @@ export function CatalogList({
               return (
                 <tr
                   key={item.id}
-                  className={`hover:bg-slate-50 transition-colors ${
-                    isStale ? 'bg-amber-50/30' : ''
+                  className={`hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors ${
+                    isStale ? 'bg-amber-500/[0.04] dark:bg-amber-500/[0.06]' : ''
                   }`}
                 >
-                  <td className="py-3 px-4 font-medium text-slate-900">
-                    <div className="flex items-center gap-2">
+                  <td className="py-2.5 px-3.5 font-medium text-neutral-900 dark:text-neutral-100">
+                    <div className="flex items-center gap-1.5">
                       <span>{item.name}</span>
                       {item.sourceUrl && (
                         <a
@@ -228,7 +228,7 @@ export function CatalogList({
                           target="_blank"
                           rel="noreferrer"
                           title="View source pricing"
-                          className="text-slate-400 hover:text-emerald-600"
+                          className="text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
                         >
                           <ExternalLink className="w-3 h-3" />
                         </a>
@@ -236,62 +236,62 @@ export function CatalogList({
                     </div>
                   </td>
 
-                  <td className="py-3 px-4">
-                    <span className="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-medium">
+                  <td className="py-2.5 px-3.5">
+                    <span className="text-[11px] bg-black/[0.04] dark:bg-white/[0.06] text-neutral-700 dark:text-neutral-300 px-2 py-0.5 rounded-[5px] font-medium">
                       {item.category}
                     </span>
                   </td>
 
-                  <td className="py-3 px-4 text-xs text-slate-500">
+                  <td className="py-2.5 px-3.5 text-neutral-500 dark:text-neutral-400">
                     {item.priceModel.replace('_', ' ')}
                   </td>
 
-                  <td className="py-3 px-4 text-right font-mono font-semibold text-slate-800">
+                  <td className="py-2.5 px-3.5 text-right font-mono font-semibold text-neutral-800 dark:text-neutral-200">
                     {item.priceModel === 'PERCENTAGE'
                       ? `${((item.percentageRate || 0) * 100).toFixed(1)}%`
                       : formatCurrencyMinor(item.amountMinor, item.currency)}
                   </td>
 
-                  <td className="py-3 px-4">
+                  <td className="py-2.5 px-3.5">
                     {item.payer === 'CLIENT' ? (
-                      <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-200">
+                      <span className="text-[11px] bg-sky-500/10 text-sky-700 dark:text-sky-400 px-2 py-0.5 rounded-[5px] border border-sky-500/20 font-medium">
                         {t.clientPayer}
                       </span>
                     ) : (
-                      <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                      <span className="text-[11px] bg-black/[0.04] dark:bg-white/[0.06] text-neutral-600 dark:text-neutral-400 px-2 py-0.5 rounded-[5px] font-medium">
                         {t.agencyPayer}
                       </span>
                     )}
                   </td>
 
-                  <td className="py-3 px-4 text-xs">
+                  <td className="py-2.5 px-3.5">
                     {isStale ? (
-                      <span className="inline-flex items-center gap-1 text-amber-700 font-semibold bg-amber-100 px-2 py-0.5 rounded">
-                        <ShieldAlert className="w-3 h-3 text-amber-600" />
+                      <span className="inline-flex items-center gap-1 text-amber-700 dark:text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded-[5px] border border-amber-500/20 text-[11px]">
+                        <ShieldAlert className="w-3 h-3" />
                         <span>Stale ({diffDays}d ago)</span>
                       </span>
                     ) : (
-                      <span className="text-slate-500 flex items-center gap-1">
-                        <CheckCircle className="w-3 h-3 text-emerald-600" />
+                      <span className="text-neutral-400 flex items-center gap-1 font-mono text-[11px]">
+                        <CheckCircle className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                         <span>{new Date(item.verifiedAt).toLocaleDateString()}</span>
                       </span>
                     )}
                   </td>
 
                   {isAuthorized && (
-                    <td className="py-3 px-4 text-center">
+                    <td className="py-2.5 px-3.5 text-center">
                       <div className="flex items-center justify-center gap-2">
                         {isStale && (
                           <button
                             onClick={() => onVerifyItem(item.id)}
-                            className="text-xs text-emerald-700 hover:text-emerald-800 font-semibold underline underline-offset-2"
+                            className="text-xs text-emerald-700 dark:text-emerald-400 hover:underline font-semibold underline-offset-2"
                           >
                             {t.verifyNow}
                           </button>
                         )}
                         <button
                           onClick={() => onDeleteItem(item.id)}
-                          className="p-1 text-slate-400 hover:text-rose-600 rounded"
+                          className="p-1 text-neutral-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-[5px]"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -307,21 +307,21 @@ export function CatalogList({
 
       {/* Add Item Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 border border-slate-100">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="font-bold text-slate-800 text-base">{t.addItem}</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-[#141414] rounded-[14px] shadow-xl max-w-lg w-full p-5 border border-black/[0.08] dark:border-white/[0.12] text-neutral-900 dark:text-neutral-100">
+            <div className="flex items-center justify-between pb-3 border-b border-black/[0.06] dark:border-white/[0.08]">
+              <h3 className="font-semibold text-neutral-900 dark:text-white text-sm">{t.addItem}</h3>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600"
+                className="text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateItem} className="mt-4 space-y-4">
+            <form onSubmit={handleCreateItem} className="mt-4 space-y-3.5">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                   Item Name *
                 </label>
                 <input
@@ -330,50 +330,50 @@ export function CatalogList({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Supabase Pro Database"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+                  className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-1 focus:ring-neutral-400"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                  <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                     {t.category}
                   </label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as CatalogCategory)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+                    className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-1 focus:ring-neutral-400"
                   >
-                    <option value="HOSTING">Hosting</option>
-                    <option value="CDN">CDN</option>
-                    <option value="DOMAIN">Domain</option>
-                    <option value="SSL">SSL</option>
-                    <option value="PAYMENT_GATEWAY">Payment Gateway</option>
-                    <option value="LICENSE">License</option>
-                    <option value="TOOL">Tool</option>
+                    <option value="HOSTING" className="dark:bg-neutral-900">Hosting</option>
+                    <option value="CDN" className="dark:bg-neutral-900">CDN</option>
+                    <option value="DOMAIN" className="dark:bg-neutral-900">Domain</option>
+                    <option value="SSL" className="dark:bg-neutral-900">SSL</option>
+                    <option value="PAYMENT_GATEWAY" className="dark:bg-neutral-900">Payment Gateway</option>
+                    <option value="LICENSE" className="dark:bg-neutral-900">License</option>
+                    <option value="TOOL" className="dark:bg-neutral-900">Tool</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                  <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                     {t.priceModel}
                   </label>
                   <select
                     value={priceModel}
                     onChange={(e) => setPriceModel(e.target.value as PriceModel)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+                    className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-1 focus:ring-neutral-400"
                   >
-                    <option value="PER_MONTH">Per Month</option>
-                    <option value="FIXED">Fixed (One-Off)</option>
-                    <option value="PER_USER">Per User / Mo</option>
-                    <option value="PERCENTAGE">Percentage Fee</option>
+                    <option value="PER_MONTH" className="dark:bg-neutral-900">Per Month</option>
+                    <option value="FIXED" className="dark:bg-neutral-900">Fixed (One-Off)</option>
+                    <option value="PER_USER" className="dark:bg-neutral-900">Per User / Mo</option>
+                    <option value="PERCENTAGE" className="dark:bg-neutral-900">Percentage Fee</option>
                   </select>
                 </div>
               </div>
 
               {priceModel === 'PERCENTAGE' ? (
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                  <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                     Fee Percentage (%)
                   </label>
                   <input
@@ -382,13 +382,13 @@ export function CatalogList({
                     min="0"
                     value={percentageRate}
                     onChange={(e) => setPercentageRate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-mono text-right"
+                    className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-mono text-right focus:ring-1 focus:ring-neutral-400"
                   />
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                    <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                       Price Amount
                     </label>
                     <input
@@ -397,42 +397,42 @@ export function CatalogList({
                       min="0"
                       value={amountMajor}
                       onChange={(e) => setAmountMajor(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-mono text-right"
+                      className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-mono text-right focus:ring-1 focus:ring-neutral-400"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                    <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                       {t.currency}
                     </label>
                     <select
                       value={currency}
                       onChange={(e) => setCurrency(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+                      className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-1 focus:ring-neutral-400"
                     >
-                      <option value="USD">USD ($)</option>
-                      <option value="ETB">ETB (ብር)</option>
-                      <option value="EUR">EUR (€)</option>
+                      <option value="USD" className="dark:bg-neutral-900">USD ($)</option>
+                      <option value="ETB" className="dark:bg-neutral-900">ETB (ብር)</option>
+                      <option value="EUR" className="dark:bg-neutral-900">EUR (€)</option>
                     </select>
                   </div>
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                  <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                     {t.payer}
                   </label>
                   <select
                     value={payer}
                     onChange={(e) => setPayer(e.target.value as Payer)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+                    className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-1 focus:ring-neutral-400"
                   >
-                    <option value="CLIENT">Client (Pass-Through)</option>
-                    <option value="AGENCY">Agency (Overhead)</option>
+                    <option value="CLIENT" className="dark:bg-neutral-900">Client (Pass-Through)</option>
+                    <option value="AGENCY" className="dark:bg-neutral-900">Agency (Overhead)</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                  <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                     {t.staleAfterDays}
                   </label>
                   <input
@@ -440,13 +440,13 @@ export function CatalogList({
                     min="1"
                     value={staleAfterDays}
                     onChange={(e) => setStaleAfterDays(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-mono text-right"
+                    className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-mono text-right focus:ring-1 focus:ring-neutral-400"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                <label className="block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase mb-1">
                   Pricing Source URL
                 </label>
                 <input
@@ -454,21 +454,21 @@ export function CatalogList({
                   value={sourceUrl}
                   onChange={(e) => setSourceUrl(e.target.value)}
                   placeholder="https://..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  className="w-full px-2.5 py-1.5 border border-black/[0.12] dark:border-white/[0.16] rounded-[6px] text-xs bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-1 focus:ring-neutral-400"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+              <div className="flex justify-end gap-2 pt-3 border-t border-black/[0.06] dark:border-white/[0.08]">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 border border-slate-300 text-slate-600 text-sm font-medium rounded-lg"
+                  className="px-3 py-1.5 border border-black/[0.08] dark:border-white/[0.12] text-neutral-600 dark:text-neutral-400 text-xs font-medium rounded-[6px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06]"
                 >
                   {t.cancel}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg shadow-xs"
+                  className="px-3 py-1.5 bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 text-xs font-semibold rounded-[6px]"
                 >
                   {t.save}
                 </button>

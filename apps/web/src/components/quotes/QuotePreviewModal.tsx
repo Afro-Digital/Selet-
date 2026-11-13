@@ -158,51 +158,51 @@ export const QuotePreviewModal: React.FC<QuotePreviewModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-label="Quote Preview Modal"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 p-4 backdrop-blur-sm overflow-y-auto font-sans"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-[6px] overflow-y-auto font-sans"
     >
-      <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden my-8 max-h-[92vh] flex flex-col">
+      <div className="relative w-full max-w-4xl bg-white dark:bg-[#141414] rounded-[14px] shadow-2xl border border-black/[0.08] dark:border-white/[0.1] overflow-hidden my-8 max-h-[92vh] flex flex-col">
         {/* Modal Controls Toolbar */}
-        <div className="flex items-center justify-between px-6 py-4 bg-slate-900 text-white border-b border-slate-800">
+        <div className="flex items-center justify-between px-6 py-3.5 bg-neutral-900 text-white border-b border-white/[0.08]">
           <div className="flex items-center gap-3">
-            <span className="p-1.5 rounded-lg bg-emerald-600/30 text-emerald-400 border border-emerald-500/30">
-              <FileText className="w-5 h-5" />
+            <span className="p-1.5 rounded-[7px] bg-white/[0.08] text-white border border-white/[0.1]">
+              <FileText className="w-4 h-4" />
             </span>
             <div>
-              <div className="font-bold text-sm tracking-tight flex items-center gap-2">
+              <div className="font-semibold text-xs tracking-tight flex items-center gap-2">
                 <span>{isAmharic ? 'የአፍሮ ዲጂታል ኦፊሴላዊ የዋጋ ማቅረቢያ' : 'Afro Digital Branded Quote'}</span>
-                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <span className="px-2 py-0.5 rounded-[7px] text-[10px] font-mono font-semibold bg-white/[0.1] text-white border border-white/[0.15]">
                   {quote.quoteNumber}
                 </span>
                 {isAmharic && (
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  <span className="px-2 py-0.5 rounded-[7px] text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                     አማርኛ (Amharic)
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400">Playwright-Ready High Fidelity Document</p>
+              <p className="text-[10px] font-mono text-neutral-400">Playwright-Ready High Fidelity Document</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[7px] bg-white/[0.08] hover:bg-white/[0.12] text-neutral-200 text-xs font-semibold transition-colors border border-white/[0.08] cursor-pointer"
             >
-              <Printer className="w-4 h-4" />
+              <Printer className="w-3.5 h-3.5" />
               <span>{isAmharic ? 'አትም (Print)' : 'Print'}</span>
             </button>
             <button
               onClick={onDownloadPdf}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-colors shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[7px] bg-white hover:bg-neutral-200 text-neutral-900 text-xs font-semibold transition-colors shadow-sm cursor-pointer"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-3.5 h-3.5 text-neutral-900" />
               <span>{isAmharic ? 'ፒዲኤፍ አውርድ' : 'Download PDF'}</span>
             </button>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors ml-2"
+              className="p-1.5 rounded-[7px] text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-colors ml-2 cursor-pointer"
               aria-label="Close Preview"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>

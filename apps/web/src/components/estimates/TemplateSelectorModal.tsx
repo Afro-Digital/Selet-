@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Sparkles, Info, X } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 
 export interface TemplateCard {
@@ -33,40 +34,40 @@ export const TemplateSelectorModal: React.FC<TemplateSelectorModalProps> = ({
   const getCategoryBadgeColor = (category: string) => {
     switch (category) {
       case 'E_COMMERCE':
-        return 'bg-emerald-950/70 border-emerald-700/60 text-emerald-400';
+        return 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400';
       case 'SAAS':
-        return 'bg-indigo-950/70 border-indigo-700/60 text-indigo-400';
+        return 'bg-indigo-500/10 border-indigo-500/20 text-indigo-700 dark:text-indigo-400';
       case 'MOBILE_APP':
-        return 'bg-cyan-950/70 border-cyan-700/60 text-cyan-400';
+        return 'bg-cyan-500/10 border-cyan-500/20 text-cyan-700 dark:text-cyan-400';
       case 'LANDING_PAGE':
-        return 'bg-amber-950/70 border-amber-700/60 text-amber-400';
+        return 'bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-400';
       case 'INTERNAL_TOOL':
-        return 'bg-purple-950/70 border-purple-700/60 text-purple-400';
+        return 'bg-purple-500/10 border-purple-500/20 text-purple-700 dark:text-purple-400';
       case 'MAINTENANCE':
-        return 'bg-rose-950/70 border-rose-700/60 text-rose-400';
+        return 'bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400';
       default:
-        return 'bg-slate-800 border-slate-700 text-slate-300';
+        return 'bg-black/[0.04] dark:bg-white/[0.06] border-black/[0.06] dark:border-white/[0.08] text-neutral-700 dark:text-neutral-300';
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl p-6 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-[6px] animate-fadeIn">
+      <div className="bg-white dark:bg-[#141414] border border-black/[0.08] dark:border-white/[0.1] rounded-[14px] w-full max-w-4xl p-6 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-black/[0.06] dark:border-white/[0.08]">
           <div>
-            <h3 className="text-xl font-bold text-white flex items-center gap-2">
-              <span>🚀</span> {t.starterTemplates}
+            <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-500" /> {t.starterTemplates}
             </h3>
-            <p className="text-xs text-amber-400/90 mt-1 flex items-center gap-1.5">
-              <span>ℹ️</span> {t.exampleHoursDisclaimer}
+            <p className="text-xs font-mono text-amber-700 dark:text-amber-400 mt-1 flex items-center gap-1.5">
+              <Info className="w-3.5 h-3.5 shrink-0" /> {t.exampleHoursDisclaimer}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-2 text-xl leading-none rounded-lg hover:bg-slate-800"
+            className="text-neutral-400 hover:text-neutral-900 dark:hover:text-white p-1 text-sm rounded-[7px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
           >
-            ✕
+            <X className="w-4 h-4" />
           </button>
         </div>
 
@@ -75,31 +76,31 @@ export const TemplateSelectorModal: React.FC<TemplateSelectorModalProps> = ({
           {templates.map((tmpl) => (
             <div
               key={tmpl.id}
-              className="bg-slate-950/60 border border-slate-800 hover:border-indigo-500/50 rounded-xl p-4 transition-all duration-150 flex flex-col justify-between group"
+              className="bg-black/[0.015] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-black/[0.2] dark:hover:border-white/[0.2] rounded-[10px] p-4 transition-all duration-150 flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <span
-                    className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${getCategoryBadgeColor(
+                    className={`text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-0.5 rounded-[7px] border ${getCategoryBadgeColor(
                       tmpl.templateCategory,
                     )}`}
                   >
                     {tmpl.templateCategory.replace('_', ' ')}
                   </span>
-                  <span className="text-xs font-semibold text-indigo-400">
+                  <span className="text-xs font-semibold font-mono text-neutral-900 dark:text-neutral-100">
                     ~{tmpl.totalExampleHours} hrs
                   </span>
                 </div>
-                <h4 className="font-semibold text-white group-hover:text-indigo-300 transition-colors">
+                <h4 className="font-semibold text-neutral-900 dark:text-neutral-100 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors text-sm">
                   {tmpl.name}
                 </h4>
-                <p className="text-xs text-slate-400 mt-1 line-clamp-3 leading-relaxed">
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 line-clamp-3 leading-relaxed">
                   {tmpl.description}
                 </p>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
-                <span>
+              <div className="mt-4 pt-3 border-t border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between text-xs text-neutral-400 dark:text-neutral-500">
+                <span className="font-mono text-[11px]">
                   {tmpl.modulesCount} modules • {tmpl.featuresCount} features
                 </span>
                 <button
@@ -107,7 +108,7 @@ export const TemplateSelectorModal: React.FC<TemplateSelectorModalProps> = ({
                     onSelectTemplate(tmpl.id);
                     onClose();
                   }}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-3 py-1.5 rounded-lg text-xs shadow-sm transition-colors"
+                  className="bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-900 font-semibold px-3 py-1.5 rounded-[7px] text-xs shadow-sm transition-colors"
                 >
                   {t.loadTemplate}
                 </button>
@@ -117,10 +118,10 @@ export const TemplateSelectorModal: React.FC<TemplateSelectorModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="pt-3 border-t border-slate-800 flex justify-end">
+        <div className="pt-3 border-t border-black/[0.06] dark:border-white/[0.08] flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-xs text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800"
+            className="px-4 py-2 rounded-[7px] text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 border border-black/[0.08] dark:border-white/[0.08] hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
           >
             {t.cancel}
           </button>

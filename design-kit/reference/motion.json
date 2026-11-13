@@ -1,0 +1,194 @@
+{
+ "note": "CSS animations are in styles.css (their @keyframes are listed here too). `animations` says which element runs which; `scripted` are element.animate() calls with real keyframes; `players` are videos and Lottie/Rive players with the file they load; `recorded` are what the page's scripts wrote frame by frame while it loaded and was scrolled (one track per element and property, samples are [ms, value, scrollY]: replay them with the same timing); `classChanges` are classes scripts added or removed, with when and at what scroll; `films` are pictures of each moving thing over one cycle (look at them); `states` picture controls at rest, on hover and on focus; `scrollReveals` are elements the page's scripts watch as they scroll into view (their classes are as they ended up: write a small IntersectionObserver that adds the class the stylesheet keys on).",
+ "keyframes": [
+  {
+   "name": "pop",
+   "css": "@keyframes pop { \n  0% { opacity: 0; transform: translateY(-4px) scale(0.985); }\n  100% { opacity: 1; transform: none; }\n}"
+  },
+  {
+   "name": "rise",
+   "css": "@keyframes rise { \n  0% { opacity: 0; transform: translateY(8px); }\n  100% { opacity: 1; transform: none; }\n}"
+  },
+  {
+   "name": "shimmer",
+   "css": "@keyframes shimmer { \n  0% { background-position: -200% 0px; }\n  100% { background-position: 200% 0px; }\n}"
+  },
+  {
+   "name": "spin",
+   "css": "@keyframes spin { \n  100% { transform: rotate(360deg); }\n}"
+  }
+ ],
+ "animations": [],
+ "scripted": [],
+ "players": [],
+ "scrollReveals": [
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(1) > nav.flex.flex-1 > div.flex.flex-col:nth-of-type(1) > a.squircle.relative:nth-of-type(1)",
+   "classes": "squircle relative grid h-9 w-9 place-items-center rounded-[10px] transition-colors bg-black/[0.06] text-neutral-900 dark:bg-white/[0.09] dark:text-neutral-50",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 0
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(1) > nav.flex.flex-1 > div.flex.flex-col:nth-of-type(1) > a.squircle.relative:nth-of-type(2)",
+   "classes": "squircle relative grid h-9 w-9 place-items-center rounded-[10px] transition-colors text-neutral-500 hover:bg-black/[0.04] hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-white/[0.06] dark:hover:text-neutral-100",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 0
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(1) > nav.flex.flex-1 > div.flex.flex-col:nth-of-type(1) > a.squircle.relative:nth-of-type(3)",
+   "classes": "squircle relative grid h-9 w-9 place-items-center rounded-[10px] transition-colors text-neutral-500 hover:bg-black/[0.04] hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-white/[0.06] dark:hover:text-neutral-100",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 0
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(1) > nav.flex.flex-1 > div.flex.flex-col:nth-of-type(1) > a.squircle.relative:nth-of-type(4)",
+   "classes": "squircle relative grid h-9 w-9 place-items-center rounded-[10px] transition-colors text-neutral-500 hover:bg-black/[0.04] hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-white/[0.06] dark:hover:text-neutral-100",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 0
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(1) > nav.flex.flex-1 > div.flex.flex-col:nth-of-type(2) > a.squircle.relative:nth-of-type(1)",
+   "classes": "squircle relative grid h-9 w-9 place-items-center rounded-[10px] transition-colors text-neutral-500 hover:bg-black/[0.04] hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-white/[0.06] dark:hover:text-neutral-100",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 0
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(1) > nav.flex.flex-1 > div.flex.flex-col:nth-of-type(2) > a.squircle.relative:nth-of-type(2)",
+   "classes": "squircle relative grid h-9 w-9 place-items-center rounded-[10px] transition-colors text-neutral-500 hover:bg-black/[0.04] hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-white/[0.06] dark:hover:text-neutral-100",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 0
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(1) > nav.flex.flex-1 > div.flex.flex-col:nth-of-type(3) > a.squircle.relative:nth-of-type(1)",
+   "classes": "squircle relative grid h-9 w-9 place-items-center rounded-[10px] transition-colors text-neutral-500 hover:bg-black/[0.04] hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-white/[0.06] dark:hover:text-neutral-100",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 0
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(1) > nav.flex.flex-1 > div.flex.flex-col:nth-of-type(3) > a.squircle.relative:nth-of-type(2)",
+   "classes": "squircle relative grid h-9 w-9 place-items-center rounded-[10px] transition-colors text-neutral-500 hover:bg-black/[0.04] hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-white/[0.06] dark:hover:text-neutral-100",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 0
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(1) > div.shrink-0.pb-4:nth-of-type(3) > a.squircle.grid",
+   "classes": "squircle grid h-9 w-9 place-items-center rounded-[10px] border border-black/[0.06] bg-neutral-50 transition-colors hover:bg-black/[0.04] dark:border-white/[0.08] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 0
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(2) > nav.flex-1.overflow-y-auto > div:nth-of-type(1) > a.nav-item:nth-of-type(1)",
+   "classes": "nav-item",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 1
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(2) > nav.flex-1.overflow-y-auto > div:nth-of-type(1) > a.nav-item:nth-of-type(2)",
+   "classes": "nav-item",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 1
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(2) > nav.flex-1.overflow-y-auto > div:nth-of-type(1) > a.nav-item:nth-of-type(3)",
+   "classes": "nav-item",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 1
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(2) > nav.flex-1.overflow-y-auto > div:nth-of-type(1) > a.nav-item:nth-of-type(4)",
+   "classes": "nav-item",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 1
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(2) > nav.flex-1.overflow-y-auto > div:nth-of-type(2) > a.nav-item:nth-of-type(1)",
+   "classes": "nav-item",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 2
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(2) > nav.flex-1.overflow-y-auto > div:nth-of-type(2) > a.nav-item:nth-of-type(2)",
+   "classes": "nav-item",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 2
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(2) > nav.flex-1.overflow-y-auto > div:nth-of-type(3) > a.nav-item:nth-of-type(1)",
+   "classes": "nav-item",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 3
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(2) > nav.flex-1.overflow-y-auto > div:nth-of-type(3) > a.nav-item:nth-of-type(2)",
+   "classes": "nav-item",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 3
+  },
+  {
+   "path": "div.flex.min-h-screen:nth-of-type(2) > aside.fixed.inset-y-0:nth-of-type(2) > div.p-4.pt-0:nth-of-type(3) > a.squircle.block",
+   "classes": "squircle block w-full rounded-[12px] border border-black/[0.06] bg-neutral-50 p-4 text-left transition-colors hover:bg-black/[0.04] dark:border-white/[0.08] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 4
+  },
+  {
+   "path": "header.sticky.top-0 > nav.flex.min-w-0 > ol.m-0.flex > li.min-w-0.hidden:nth-of-type(1) > a.crumb-link.block",
+   "classes": "crumb-link block truncate",
+   "transition": "color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), fill 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-from 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-via 0.15s cubic-bezier(0.4, 0, 0.2, 1), --tw-gradient-to 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+   "section": 5
+  }
+ ],
+ "recorded": [],
+ "classChanges": [],
+ "films": [],
+ "states": [
+  {
+   "file": "reference/components/01-button.jpg",
+   "kind": "button",
+   "label": "button a.nav-item:nth-of-type(1)",
+   "section": "02-div"
+  },
+  {
+   "file": "reference/components/02-nav-link.jpg",
+   "kind": "nav-link",
+   "label": "nav-link a.nav-item:nth-of-type(2)",
+   "section": "02-div"
+  },
+  {
+   "file": "reference/components/03-nav-link.jpg",
+   "kind": "nav-link",
+   "label": "nav-link a.nav-item:nth-of-type(3)",
+   "section": "02-div"
+  },
+  {
+   "file": "reference/components/04-card.jpg",
+   "kind": "card",
+   "label": "card a.squircle.block",
+   "section": "05-div"
+  },
+  {
+   "file": "reference/components/05-input.jpg",
+   "kind": "input",
+   "label": "input input.field.h-8",
+   "section": "06-header"
+  },
+  {
+   "file": "reference/components/06-button.jpg",
+   "kind": "button",
+   "label": "button button.ibtn.relative:nth-of-type(2)",
+   "section": "06-header"
+  },
+  {
+   "file": "reference/components/07-card.jpg",
+   "kind": "card",
+   "label": "card div.squircle.border:nth-of-type(1)",
+   "section": "09-div"
+  },
+  {
+   "file": "reference/components/08-badge.jpg",
+   "kind": "badge",
+   "label": "badge span.badge.bg-amber-50",
+   "section": "11-div"
+  }
+ ],
+ "lottie": []
+}

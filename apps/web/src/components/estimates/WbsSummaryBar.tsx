@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Lock } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 import { ProjectItem, RoleOption } from './types';
 
@@ -68,26 +69,26 @@ export const WbsSummaryBar: React.FC<WbsSummaryBarProps> = ({
   const roleChips = Object.values(roleHoursMap).filter((r) => r.hours > 0);
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg mb-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="bg-white dark:bg-[#141414] border border-black/[0.06] dark:border-white/[0.08] rounded-[14px] p-5 shadow-sm mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-6">
         {/* Main Hour Total */}
         <div>
-          <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold block">
+          <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-400 dark:text-neutral-500 font-semibold block mb-1">
             {t.totalEstimateHours}
           </span>
-          <div className="text-3xl font-bold text-white tracking-tight flex items-baseline gap-2">
+          <div className="text-3xl font-semibold text-neutral-900 dark:text-neutral-50 font-mono tracking-tight flex items-baseline gap-2">
             <span>{Math.round(totalHours * 10) / 10}</span>
-            <span className="text-sm font-normal text-slate-400">hrs</span>
+            <span className="text-xs font-normal text-neutral-400 dark:text-neutral-500 font-sans">hrs</span>
           </div>
         </div>
 
         {/* Cost Summary (Owner/PM only) */}
         {!isDeveloper ? (
           <div>
-            <span className="text-xs uppercase tracking-wider text-emerald-400 font-semibold block">
+            <span className="text-[10px] uppercase font-mono tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold block mb-1">
               {t.estimatedLaborCost}
             </span>
-            <div className="text-2xl font-bold text-emerald-400 tracking-tight">
+            <div className="text-2xl font-semibold text-emerald-600 dark:text-emerald-400 font-mono tracking-tight">
               {(totalLaborCostMinor / 100).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
@@ -96,31 +97,31 @@ export const WbsSummaryBar: React.FC<WbsSummaryBarProps> = ({
             </div>
           </div>
         ) : (
-          <div className="bg-amber-950/40 border border-amber-800/60 rounded-lg px-3 py-2 text-xs text-amber-300">
-            🔒 {t.developerHoursOnlyNotice}
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-[7px] px-3 py-2 text-xs font-mono text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+            <Lock className="w-3.5 h-3.5 shrink-0" /> {t.developerHoursOnlyNotice}
           </div>
         )}
 
         {/* Role Breakdown Chips */}
         <div className="flex-1 min-w-[280px]">
-          <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold block mb-2">
+          <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-400 dark:text-neutral-500 font-semibold block mb-2">
             {t.roleBreakdown}
           </span>
           <div className="flex flex-wrap gap-2">
             {roleChips.length === 0 ? (
-              <span className="text-xs text-slate-500 italic">No hours estimated yet</span>
+              <span className="text-xs text-neutral-400 dark:text-neutral-500 italic">No hours estimated yet</span>
             ) : (
               roleChips.map((r, i) => (
                 <div
                   key={i}
-                  className="bg-slate-800/80 border border-slate-700/60 rounded-lg px-2.5 py-1 text-xs text-slate-200 flex items-center gap-1.5"
+                  className="bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] rounded-[7px] px-2.5 py-1 text-xs text-neutral-700 dark:text-neutral-300 flex items-center gap-1.5 font-mono"
                 >
-                  <span className="text-slate-400">{r.name}:</span>
-                  <span className="font-semibold text-indigo-300">
+                  <span className="text-neutral-400 dark:text-neutral-500 font-sans">{r.name}:</span>
+                  <span className="font-semibold text-neutral-900 dark:text-neutral-100">
                     {Math.round(r.hours * 10) / 10}h
                   </span>
                   {!isDeveloper && r.costMinor > 0 && (
-                    <span className="text-slate-500 text-[10px]">
+                    <span className="text-neutral-400 dark:text-neutral-500 text-[10px]">
                       ({Math.round((r.hours * r.costMinor) / 100).toLocaleString()}{' '}
                       {project.currency})
                     </span>

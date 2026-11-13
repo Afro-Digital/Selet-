@@ -315,24 +315,24 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-neutral-900 dark:text-neutral-100">
       {/* Header Banner */}
-      <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 rounded-[14px] bg-white dark:bg-[#141414] border border-black/[0.06] dark:border-white/[0.08] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200">
-              <FileText className="w-5 h-5" />
+            <span className="p-2 rounded-[7px] bg-black/[0.04] dark:bg-white/[0.06] text-neutral-700 dark:text-neutral-300 border border-black/[0.06] dark:border-white/[0.08]">
+              <FileText className="w-4 h-4" />
             </span>
-            <h2 className="text-lg font-bold text-slate-900 tracking-tight">{t.quoteBuilder}</h2>
+            <h2 className="text-base font-semibold tracking-tight">{t.quoteBuilder}</h2>
           </div>
-          <p className="text-xs text-slate-500 mt-1 max-w-xl">
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 max-w-xl">
             {t.quoteImmutabilityNotice}
           </p>
         </div>
 
         <button
           onClick={() => setIsCreating(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition-colors shadow-sm self-start md:self-auto"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-[7px] bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-900 font-semibold text-xs transition-colors shadow-sm self-start md:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>{t.createQuote}</span>
@@ -341,18 +341,18 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
 
       {/* Quote Creation Form Modal */}
       {isCreating && (
-        <div className="p-6 rounded-2xl bg-white border-2 border-emerald-500 shadow-xl space-y-6 animate-in fade-in duration-200">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200">
+        <div className="p-6 rounded-[14px] bg-white dark:bg-[#141414] border border-black/[0.08] dark:border-white/[0.1] shadow-xl space-y-6 animate-in fade-in duration-200">
+          <div className="flex items-center justify-between pb-4 border-b border-black/[0.06] dark:border-white/[0.08]">
             <div>
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-600" />
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Create New Commercial Quote</span>
               </h3>
-              <p className="text-xs text-slate-500">Configure client visibility, milestones, and statutory taxes.</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">Configure client visibility, milestones, and statutory taxes.</p>
             </div>
             <button
               onClick={() => setIsCreating(false)}
-              className="text-xs text-slate-500 hover:text-slate-800 font-semibold px-2 py-1 rounded-lg hover:bg-slate-100"
+              className="text-xs text-neutral-500 hover:text-neutral-900 dark:hover:text-white font-medium px-2.5 py-1 rounded-[7px] border border-black/[0.08] dark:border-white/[0.08] hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
             >
               Cancel
             </button>
@@ -361,92 +361,92 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
           {/* Client Details Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             <div>
-              <label htmlFor="quote-title-input" className="font-semibold text-slate-700 block mb-1">Quote Title</label>
+              <label htmlFor="quote-title-input" className="font-semibold text-neutral-800 dark:text-neutral-200 block mb-1">Quote Title</label>
               <input
                 id="quote-title-input"
                 type="text"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium"
+                className="w-full px-3 py-2 rounded-[7px] border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#121212] focus:outline-none focus:border-neutral-900 dark:focus:border-white text-xs font-medium text-neutral-900 dark:text-neutral-100"
               />
             </div>
             <div>
-              <label htmlFor="client-name-input" className="font-semibold text-slate-700 block mb-1">Client Name</label>
+              <label htmlFor="client-name-input" className="font-semibold text-neutral-800 dark:text-neutral-200 block mb-1">Client Name</label>
               <input
                 id="client-name-input"
                 type="text"
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium"
+                className="w-full px-3 py-2 rounded-[7px] border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#121212] focus:outline-none focus:border-neutral-900 dark:focus:border-white text-xs font-medium text-neutral-900 dark:text-neutral-100"
               />
             </div>
             <div>
-              <label htmlFor="client-tin-input" className="font-semibold text-slate-700 block mb-1">Client TIN</label>
+              <label htmlFor="client-tin-input" className="font-semibold text-neutral-800 dark:text-neutral-200 block mb-1">Client TIN</label>
               <input
                 id="client-tin-input"
                 type="text"
                 value={clientTin}
                 onChange={(e) => setClientTin(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium"
+                className="w-full px-3 py-2 rounded-[7px] border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#121212] focus:outline-none focus:border-neutral-900 dark:focus:border-white text-xs font-medium font-mono text-neutral-900 dark:text-neutral-100"
               />
             </div>
             <div>
-              <label htmlFor="contact-person-input" className="font-semibold text-slate-700 block mb-1">Contact Person</label>
+              <label htmlFor="contact-person-input" className="font-semibold text-neutral-800 dark:text-neutral-200 block mb-1">Contact Person</label>
               <input
                 id="contact-person-input"
                 type="text"
                 value={clientContact}
                 onChange={(e) => setClientContact(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium"
+                className="w-full px-3 py-2 rounded-[7px] border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#121212] focus:outline-none focus:border-neutral-900 dark:focus:border-white text-xs font-medium text-neutral-900 dark:text-neutral-100"
               />
             </div>
             <div>
-              <label htmlFor="client-email-input" className="font-semibold text-slate-700 block mb-1">Client Email</label>
+              <label htmlFor="client-email-input" className="font-semibold text-neutral-800 dark:text-neutral-200 block mb-1">Client Email</label>
               <input
                 id="client-email-input"
                 type="email"
                 value={clientEmail}
                 onChange={(e) => setClientEmail(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium"
+                className="w-full px-3 py-2 rounded-[7px] border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#121212] focus:outline-none focus:border-neutral-900 dark:focus:border-white text-xs font-medium text-neutral-900 dark:text-neutral-100"
               />
             </div>
             <div>
-              <label htmlFor="quote-language-select" className="font-semibold text-slate-700 block mb-1 flex items-center gap-1">
-                <Globe className="w-3.5 h-3.5 text-emerald-600" />
+              <label htmlFor="quote-language-select" className="font-semibold text-neutral-800 dark:text-neutral-200 block mb-1 flex items-center gap-1">
+                <Globe className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400" />
                 <span>{t.quoteLanguage}</span>
               </label>
               <select
                 id="quote-language-select"
                 value={quoteLanguage}
                 onChange={(e) => setQuoteLanguage(e.target.value as 'en' | 'am')}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium bg-white"
+                className="w-full px-3 py-2 rounded-[7px] border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#121212] focus:outline-none focus:border-neutral-900 dark:focus:border-white text-xs font-medium text-neutral-900 dark:text-neutral-100 cursor-pointer"
               >
                 <option value="en">English (EN)</option>
                 <option value="am">አማርኛ (Amharic)</option>
               </select>
             </div>
             <div>
-              <label htmlFor="quote-calendar-select" className="font-semibold text-slate-700 block mb-1 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-emerald-600" />
+              <label htmlFor="quote-calendar-select" className="font-semibold text-neutral-800 dark:text-neutral-200 block mb-1 flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400" />
                 <span>{t.quoteCalendar}</span>
               </label>
               <select
                 id="quote-calendar-select"
                 value={quoteCalendar}
                 onChange={(e) => setQuoteCalendar(e.target.value as 'ETHIOPIAN' | 'GREGORIAN')}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium bg-white"
+                className="w-full px-3 py-2 rounded-[7px] border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#121212] focus:outline-none focus:border-neutral-900 dark:focus:border-white text-xs font-medium text-neutral-900 dark:text-neutral-100 cursor-pointer"
               >
                 <option value="ETHIOPIAN">{t.ethiopianCalendar}</option>
                 <option value="GREGORIAN">{t.gregorianCalendar}</option>
               </select>
             </div>
             <div>
-              <label htmlFor="secondary-currency-select" className="font-semibold text-slate-700 block mb-1">Secondary Currency Snapshot</label>
+              <label htmlFor="secondary-currency-select" className="font-semibold text-neutral-800 dark:text-neutral-200 block mb-1">Secondary Currency Snapshot</label>
               <select
                 id="secondary-currency-select"
                 value={secondaryCurrency}
                 onChange={(e) => setSecondaryCurrency(e.target.value as 'NONE' | 'USD' | 'EUR')}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium bg-white"
+                className="w-full px-3 py-2 rounded-[7px] border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#121212] focus:outline-none focus:border-neutral-900 dark:focus:border-white text-xs font-medium text-neutral-900 dark:text-neutral-100 cursor-pointer"
               >
                 <option value="NONE">None (ETB Only)</option>
                 <option value="USD">USD (Snapshot ~155.0 ETB)</option>
@@ -746,40 +746,40 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
         {quotes.map((quote) => (
           <div
             key={quote.id}
-            className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col md:flex-row md:items-center justify-between gap-6"
+            className="p-5 rounded-[14px] bg-white dark:bg-[#141414] border border-black/[0.06] dark:border-white/[0.08] shadow-sm hover:border-black/[0.12] dark:hover:border-white/[0.12] transition-all flex flex-col md:flex-row md:items-center justify-between gap-6"
           >
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <span className="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 text-slate-800 border border-slate-200">
+                <span className="px-2.5 py-1 rounded-[7px] text-xs font-mono font-semibold bg-black/[0.03] dark:bg-white/[0.05] text-neutral-800 dark:text-neutral-200 border border-black/[0.06] dark:border-white/[0.08]">
                   {quote.quoteNumber}
                 </span>
-                <h3 className="font-bold text-base text-slate-900 tracking-tight">{quote.title}</h3>
+                <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 tracking-tight">{quote.title}</h3>
                 <span
-                  className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+                  className={`px-2.5 py-0.5 rounded-[7px] text-[10px] font-mono font-semibold uppercase tracking-wider ${
                     quote.status === 'ISSUED'
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1'
-                      : 'bg-amber-50 text-amber-700 border border-amber-200'
+                      ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1'
+                      : 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20'
                   }`}
                 >
-                  {quote.status === 'ISSUED' && <Lock className="w-3 h-3 text-emerald-600" />}
+                  {quote.status === 'ISSUED' && <Lock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />}
                   <span>{quote.status === 'ISSUED' ? t.issuedStatus : t.draftStatus}</span>
                 </span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                <span className="px-2 py-0.5 rounded-[7px] text-[10px] font-mono font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-neutral-700 dark:text-neutral-300 border border-black/[0.06] dark:border-white/[0.08]">
                   {quote.language === 'am' ? 'አማርኛ' : 'EN'}
                 </span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <span className="px-2 py-0.5 rounded-[7px] text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                   {quote.calendar === 'ETHIOPIAN' ? 'ዓ.ም. (E.C.)' : 'እ.ኤ.አ (G.C.)'}
                 </span>
               </div>
 
-              <div className="text-xs text-slate-500 flex flex-wrap items-center gap-x-4 gap-y-1">
+              <div className="text-xs text-neutral-500 dark:text-neutral-400 flex flex-wrap items-center gap-x-4 gap-y-1">
                 <span>
-                  Client: <strong className="text-slate-700">{quote.clientName}</strong>
+                  Client: <strong className="text-neutral-800 dark:text-neutral-200">{quote.clientName}</strong>
                 </span>
                 <span>•</span>
                 <span>
                   Valid Until:{' '}
-                  <strong className="text-slate-700">
+                  <strong className="text-neutral-800 dark:text-neutral-200">
                     {quote.calendar === 'ETHIOPIAN' || locale === 'am'
                       ? formatEthiopianDate(new Date(quote.validUntil), { locale })
                       : new Date(quote.validUntil).toLocaleDateString()}
@@ -787,28 +787,28 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
                 </span>
                 <span>•</span>
                 <span>
-                  Tax Pack: <strong className="text-emerald-700">v{quote.taxPackVersion}</strong>
+                  Tax Pack: <strong className="text-emerald-600 dark:text-emerald-400 font-mono">v{quote.taxPackVersion}</strong>
                 </span>
                 {quote.secondaryCurrency && (
                   <>
                     <span>•</span>
                     <span>
-                      Dual Currency: <strong className="text-slate-700">{quote.secondaryCurrency} Snapshot</strong>
+                      Dual Currency: <strong className="text-neutral-800 dark:text-neutral-200">{quote.secondaryCurrency} Snapshot</strong>
                     </span>
                   </>
                 )}
               </div>
 
-              <div className="text-xs font-semibold text-slate-600 flex items-center gap-4 pt-1">
+              <div className="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-4 pt-1 font-mono">
                 <span>
-                  Subtotal: <span className="text-slate-900 font-bold">{formatMoney(quote.subtotalMinor)}</span>
+                  Subtotal: <span className="text-neutral-900 dark:text-neutral-100 font-semibold">{formatMoney(quote.subtotalMinor)}</span>
                 </span>
                 <span>+</span>
                 <span>
-                  VAT (15%): <span className="text-slate-900 font-bold">{formatMoney(quote.vatAmountMinor)}</span>
+                  VAT (15%): <span className="text-neutral-900 dark:text-neutral-100 font-semibold">{formatMoney(quote.vatAmountMinor)}</span>
                 </span>
                 <span>=</span>
-                <span className="text-emerald-700 font-bold text-sm">
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
                   Total: {formatMoney(quote.totalPriceMinor)}
                 </span>
               </div>
@@ -821,9 +821,9 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
                   setSelectedQuote(quote);
                   setIsPreviewOpen(true);
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-[7px] bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] text-neutral-800 dark:text-neutral-200 text-xs font-semibold transition-colors border border-black/[0.06] dark:border-white/[0.08] cursor-pointer"
               >
-                <Eye className="w-4 h-4 text-slate-500" />
+                <Eye className="w-3.5 h-3.5 text-neutral-500" />
                 <span>{t.previewQuote}</span>
               </button>
 
@@ -832,18 +832,18 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
                   setSelectedQuote(quote);
                   setIsPreviewOpen(true);
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-semibold transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-[7px] bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 text-xs font-semibold transition-colors cursor-pointer"
               >
-                <Download className="w-4 h-4 text-emerald-600" />
+                <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>{t.exportPdf}</span>
               </button>
 
               {quote.status !== 'ISSUED' && (
                 <button
                   onClick={() => handleIssueQuote(quote.id)}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-colors shadow-sm"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-[7px] bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-900 text-xs font-semibold transition-colors shadow-sm cursor-pointer"
                 >
-                  <Lock className="w-4 h-4" />
+                  <Lock className="w-3.5 h-3.5" />
                   <span>{t.issueQuoteButton}</span>
                 </button>
               )}

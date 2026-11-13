@@ -8,8 +8,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        suppressHydrationWarning
+        className="min-h-screen bg-[#fafafa] dark:bg-[#0a0a0a] text-[#0a0a0a] dark:text-[#fafafa] transition-colors duration-150 antialiased selection:bg-[#007a55]/20 dark:selection:bg-[#5ee9b5]/20"
+      >
+        {children}
+      </body>
     </html>
   );
 }
+

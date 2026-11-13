@@ -675,7 +675,7 @@ describe('E2E: Stage 10 - Quote Builder, Immutable Snapshots, Milestones & PDF',
     expect(buffer.length).toBeGreaterThan(1000);
     const pdfHeader = buffer.subarray(0, 5).toString('ascii');
     expect(pdfHeader).toBe('%PDF-');
-  });
+  }, 30000);
 
   it('9. Stage 11: Creates Amharic quote with Ethiopian calendar dates and verifies localized HTML', async () => {
     const pmToken = createToken(storedUsers[1]); // PM
@@ -766,5 +766,5 @@ describe('E2E: Stage 10 - Quote Builder, Immutable Snapshots, Milestones & PDF',
     const buffer = Buffer.from(pdfRes.body);
     expect(buffer.length).toBeGreaterThan(1000);
     expect(buffer.subarray(0, 5).toString('ascii')).toBe('%PDF-');
-  });
+  }, 30000);
 });

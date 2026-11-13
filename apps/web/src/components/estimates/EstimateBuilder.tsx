@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Ruler, Sparkles, Layers, Trash2 } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 import { ProjectItem, ModuleItem, Feature, RoleOption, UserOption } from './types';
 import { WbsSummaryBar } from './WbsSummaryBar';
@@ -415,10 +416,10 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
       {/* Top Controls Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <span>📐</span> {t.estimateBuilder}
+          <h2 className="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+            <Ruler className="w-4 h-4 text-emerald-500" /> {t.estimateBuilder}
           </h2>
-          <p className="text-xs text-slate-400 mt-1">{t.wbsHierarchy}</p>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 font-mono">{t.wbsHierarchy}</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -426,11 +427,11 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
           <select
             value={activeProject.id}
             onChange={(e) => setActiveProjectId(e.target.value)}
-            className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 focus:ring-1 focus:ring-indigo-500"
+            className="bg-white dark:bg-[#141414] border border-black/[0.08] dark:border-white/[0.08] text-neutral-900 dark:text-neutral-100 text-xs rounded-[7px] px-3 py-1.5 focus:border-neutral-900 dark:focus:border-white focus:outline-none transition-colors"
           >
             {projects.map((p) => (
-              <option key={p.id} value={p.id}>
-                📁 {p.name}
+              <option key={p.id} value={p.id} className="bg-white dark:bg-[#141414] text-neutral-900 dark:text-neutral-100">
+                {p.name}
               </option>
             ))}
           </select>
@@ -439,9 +440,9 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
           {!isDeveloper && (
             <button
               onClick={() => setIsTemplateModalOpen(true)}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium px-3.5 py-2 rounded-lg text-xs shadow-md transition-all flex items-center gap-1.5"
+              className="bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-neutral-200 dark:text-neutral-900 font-semibold px-3 py-1.5 rounded-[7px] text-xs shadow-sm transition-all flex items-center gap-1.5"
             >
-              <span>🚀</span> {t.starterTemplates}
+              <Sparkles className="w-3.5 h-3.5" /> {t.starterTemplates}
             </button>
           )}
         </div>
@@ -461,29 +462,29 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
           return (
             <div
               key={module.id}
-              className="bg-slate-900/60 border border-slate-800 rounded-xl p-5 shadow-sm"
+              className="bg-white dark:bg-[#141414] border border-black/[0.06] dark:border-white/[0.08] rounded-[14px] p-5 shadow-sm"
             >
               {/* Module Header */}
-              <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-800">
+              <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-black/[0.06] dark:border-white/[0.08]">
                 <div className="flex items-center gap-2">
-                  <span className="text-indigo-400 font-mono text-sm">📦</span>
+                  <Layers className="w-4 h-4 text-neutral-400 dark:text-neutral-500 shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-white text-base">{module.name}</h3>
+                    <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 text-sm tracking-tight">{module.name}</h3>
                     {module.description && (
-                      <p className="text-xs text-slate-400 mt-0.5">{module.description}</p>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{module.description}</p>
                     )}
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-semibold text-indigo-300 bg-indigo-950/70 border border-indigo-800/60 rounded-lg px-2.5 py-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold font-mono text-neutral-800 dark:text-neutral-200 bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] rounded-[7px] px-2.5 py-1">
                     {Math.round(moduleTotalHours * 10) / 10} hrs
                   </span>
 
                   {!isDeveloper && (
                     <button
                       onClick={() => handleAddFeature(module.id)}
-                      className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1 rounded-lg border border-slate-700 transition-colors flex items-center gap-1"
+                      className="bg-white dark:bg-[#181818] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] text-neutral-800 dark:text-neutral-200 text-xs px-2.5 py-1 rounded-[7px] border border-black/[0.08] dark:border-white/[0.08] transition-colors flex items-center gap-1 font-medium"
                     >
                       <span>+</span> {t.addFeature}
                     </button>
@@ -492,10 +493,10 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
                   {!isDeveloper && (
                     <button
                       onClick={() => handleDeleteModule(module.id)}
-                      className="text-slate-500 hover:text-rose-400 text-sm p-1 rounded transition-colors"
+                      className="text-neutral-400 hover:text-rose-500 dark:hover:text-rose-400 text-sm p-1 rounded-[7px] transition-colors"
                       title={t.delete}
                     >
-                      🗑️
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
@@ -503,7 +504,7 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
 
               {/* Module Features */}
               {module.features.length === 0 ? (
-                <div className="text-center py-6 text-xs text-slate-500 italic bg-slate-950/30 rounded-lg border border-dashed border-slate-800">
+                <div className="text-center py-6 text-xs text-neutral-400 dark:text-neutral-500 italic bg-black/[0.015] dark:bg-white/[0.015] rounded-[10px] border border-dashed border-black/[0.06] dark:border-white/[0.08]">
                   No features yet in this module. Click &quot;+ {t.addFeature}&quot; above.
                 </div>
               ) : (
@@ -527,19 +528,19 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
 
         {/* Add New Module Input (Owner/PM only) */}
         {!isDeveloper && (
-          <div className="bg-slate-900/40 border border-dashed border-slate-800 rounded-xl p-4 flex items-center gap-3">
+          <div className="bg-black/[0.01] dark:bg-white/[0.01] border border-dashed border-black/[0.1] dark:border-white/[0.1] rounded-[14px] p-4 flex items-center gap-3">
             <input
               type="text"
               value={newModuleName}
               onChange={(e) => setNewModuleName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleAddModule()}
               placeholder={t.moduleName}
-              className="flex-1 bg-slate-950 border border-slate-800 text-slate-200 text-xs rounded-lg px-3 py-2 focus:ring-1 focus:ring-indigo-500"
+              className="flex-1 bg-white dark:bg-[#141414] border border-black/[0.08] dark:border-white/[0.08] text-neutral-900 dark:text-neutral-100 text-xs rounded-[7px] px-3 py-2 focus:border-neutral-900 dark:focus:border-white focus:outline-none"
             />
             <button
               onClick={handleAddModule}
               disabled={!newModuleName.trim()}
-              className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium px-4 py-2 rounded-lg text-xs transition-colors"
+              className="bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-900 disabled:opacity-40 font-semibold px-4 py-2 rounded-[7px] text-xs transition-colors shadow-sm"
             >
               + {t.addModule}
             </button>

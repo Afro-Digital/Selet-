@@ -1,0 +1,666 @@
+{
+ "note": "Everything here is the source page as rendered at 1440px, its words included. Copy from these files rather than redrawing.",
+ "viewport": 1440,
+ "lang": "en",
+ "sections": [
+  {
+   "file": "sections/01-div.html",
+   "name": "01-div",
+   "tag": "div",
+   "bytes": 9373
+  },
+  {
+   "file": "sections/02-div.html",
+   "name": "02-div",
+   "tag": "div",
+   "bytes": 2624
+  },
+  {
+   "file": "sections/03-div.html",
+   "name": "03-div",
+   "tag": "div",
+   "bytes": 1632
+  },
+  {
+   "file": "sections/04-div.html",
+   "name": "04-div",
+   "tag": "div",
+   "bytes": 1616
+  },
+  {
+   "file": "sections/05-div.html",
+   "name": "05-div",
+   "tag": "div",
+   "bytes": 1345
+  },
+  {
+   "file": "sections/06-header.html",
+   "name": "06-header",
+   "tag": "header",
+   "bytes": 4198
+  },
+  {
+   "file": "sections/07-div.html",
+   "name": "07-div",
+   "tag": "div",
+   "bytes": 1696
+  },
+  {
+   "file": "sections/08-div.html",
+   "name": "08-div",
+   "tag": "div",
+   "bytes": 1447
+  },
+  {
+   "file": "sections/09-div.html",
+   "name": "09-div",
+   "tag": "div",
+   "bytes": 7780
+  },
+  {
+   "file": "sections/10-div.html",
+   "name": "10-div",
+   "tag": "div",
+   "bytes": 14936
+  },
+  {
+   "file": "sections/11-div.html",
+   "name": "11-div",
+   "tag": "div",
+   "bytes": 14575
+  }
+ ],
+ "svgs": [
+  {
+   "file": "reference/assets/svg/001-icon-div.svg",
+   "role": "icon",
+   "width": 16,
+   "height": 16,
+   "label": null,
+   "section": "01-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "rgb(255, 255, 255)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/002-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "01-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(66.128 -0.0000298023 0.0000119209)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/003-logo-div.svg",
+   "role": "logo",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "02-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(7.78201 -0.0000149012 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/004-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "02-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/005-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "02-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/006-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "02-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/007-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "03-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/008-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "03-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/009-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "04-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/010-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "04-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/011-icon-header.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "06-header",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/012-icon-header.svg",
+   "role": "icon",
+   "width": 12,
+   "height": 12,
+   "label": null,
+   "section": "06-header",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(66.128 -0.0000298023 0.0000119209)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/013-icon-header.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "06-header",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(66.128 -0.0000298023 0.0000119209)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/014-icon-header.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "06-header",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/015-icon-header.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "06-header",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/016-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "07-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(15.204 0 -0.00000596046)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/017-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "07-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "rgb(255, 255, 255)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/018-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "08-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(37.8822 37.1699 52.2718)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/019-decoration-div.svg",
+   "role": "decoration",
+   "width": 72,
+   "height": 24,
+   "label": null,
+   "section": "09-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(66.9756 -58.27 19.5419)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/020-icon-div.svg",
+   "role": "icon",
+   "width": 12,
+   "height": 12,
+   "label": null,
+   "section": "09-div",
+   "animated": false,
+   "copies": 2,
+   "colors": [
+    "lab(44.4871 -41.0396 11.0361)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/021-decoration-div.svg",
+   "role": "decoration",
+   "width": 72,
+   "height": 24,
+   "label": null,
+   "section": "09-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(66.128 -0.0000298023 0.0000119209)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/022-decoration-div.svg",
+   "role": "decoration",
+   "width": 72,
+   "height": 24,
+   "label": null,
+   "section": "09-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(72.7183 31.8672 97.9407)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/023-icon-div.svg",
+   "role": "icon",
+   "width": 12,
+   "height": 12,
+   "label": null,
+   "section": "09-div",
+   "animated": false,
+   "copies": 3,
+   "colors": [
+    "lab(37.8822 37.1699 52.2718)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/024-decoration-div.svg",
+   "role": "decoration",
+   "width": 72,
+   "height": 24,
+   "label": null,
+   "section": "09-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(66.128 -0.0000298023 0.0000119209)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/025-icon-div.svg",
+   "role": "icon",
+   "width": 12,
+   "height": 12,
+   "label": null,
+   "section": "09-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(44.4871 -41.0396 11.0361)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/026-illustration-div.svg",
+   "role": "illustration",
+   "width": 723.3,
+   "height": 269.2,
+   "label": null,
+   "section": "10-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)",
+    "lab(66.9756 -58.27 19.5419)",
+    "lab(64.4125 63.0291 19.2068)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/027-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "10-div",
+   "animated": false,
+   "copies": 1,
+   "colors": [
+    "lab(48.496 0 0)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/028-icon-div.svg",
+   "role": "icon",
+   "width": 12,
+   "height": 12,
+   "label": null,
+   "section": "10-div",
+   "animated": false,
+   "copies": 2,
+   "colors": [
+    "lab(44.4871 -41.0396 11.0361)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/029-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "11-div",
+   "animated": false,
+   "copies": 2,
+   "colors": [
+    "lab(41.1651 71.6251 30.3087)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/030-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "11-div",
+   "animated": false,
+   "copies": 3,
+   "colors": [
+    "lab(66.128 -0.0000298023 0.0000119209)"
+   ]
+  },
+  {
+   "file": "reference/assets/svg/031-icon-div.svg",
+   "role": "icon",
+   "width": 14,
+   "height": 14,
+   "label": null,
+   "section": "11-div",
+   "animated": false,
+   "copies": 2,
+   "colors": [
+    "lab(66.128 -0.0000298023 0.0000119209)"
+   ]
+  }
+ ],
+ "images": [
+  {
+   "file": "reference/assets/images/001-icon.svg",
+   "from": "https://settle-941-v2-20261006.21st.app/icon.svg?icon.3togtg5-v7cpq.svg",
+   "bytes": 272,
+   "width": null,
+   "height": null
+  }
+ ],
+ "fonts": [],
+ "media": [],
+ "icons": [
+  {
+   "rel": "icon",
+   "sizes": "any",
+   "file": "reference/assets/images/001-icon.svg",
+   "from": "https://settle-941-v2-20261006.21st.app/icon.svg?icon.3togtg5-v7cpq.svg"
+  }
+ ],
+ "cssVars": {
+  "--tw-translate-x": "0",
+  "--tw-translate-y": "0",
+  "--tw-translate-z": "0",
+  "--tw-space-y-reverse": "0",
+  "--tw-divide-x-reverse": "0",
+  "--tw-border-style": "solid",
+  "--tw-shadow": "0 0 #0000",
+  "--tw-shadow-alpha": "100%",
+  "--tw-inset-shadow": "0 0 #0000",
+  "--tw-inset-shadow-alpha": "100%",
+  "--tw-ring-shadow": "0 0 #0000",
+  "--tw-inset-ring-shadow": "0 0 #0000",
+  "--tw-ring-offset-width": "0px",
+  "--tw-ring-offset-color": "#fff",
+  "--tw-ring-offset-shadow": "0 0 #0000",
+  "--tw-drop-shadow-alpha": "100%",
+  "--font-sans": "ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+  "--font-mono": "ui-monospace, SFMono-Regular, \"SF Mono\", Menlo, Consolas, \"Liberation Mono\", monospace",
+  "--color-red-50": "lab(96.5005% 4.18508 1.52328)",
+  "--color-red-200": "lab(86.017% 19.8815 7.75869)",
+  "--color-red-300": "lab(76.5514% 36.422 15.5335)",
+  "--color-red-400": "lab(63.7053% 60.745 31.3109)",
+  "--color-red-500": "lab(55.4814% 75.0732 48.8528)",
+  "--color-red-600": "lab(48.4493% 77.4328 61.5452)",
+  "--color-amber-50": "lab(98.6252% -.635922 8.42309)",
+  "--color-amber-200": "lab(91.7203% -.505269 49.9084)",
+  "--color-amber-300": "lab(86.4156% 6.13147 78.3961)",
+  "--color-amber-400": "lab(80.1641% 16.6016 99.2089)",
+  "--color-amber-500": "lab(72.7183% 31.8672 97.9407)",
+  "--color-amber-800": "lab(37.8822% 37.1699 52.2718)",
+  "--color-emerald-50": "lab(97.8462% -6.94966 1.85487)",
+  "--color-emerald-300": "lab(83.9203% -48.7124 13.8849)",
+  "--color-emerald-400": "lab(75.0771% -60.7313 19.4147)",
+  "--color-emerald-500": "lab(66.9756% -58.27 19.5419)",
+  "--color-emerald-700": "lab(44.4871% -41.0396 11.0361)",
+  "--color-blue-50": "lab(96.492% -1.14644 -5.11479)",
+  "--color-blue-200": "lab(86.15% -4.04379 -21.0797)",
+  "--color-blue-300": "lab(77.5052% -6.4629 -36.42)",
+  "--color-blue-400": "lab(65.0361% -1.42065 -56.9802)",
+  "--color-blue-500": "lab(54.1736% 13.3369 -74.6839)",
+  "--color-blue-700": "lab(36.9089% 35.0961 -85.6872)",
+  "--color-rose-50": "lab(96.2369% 4.94155 1.28011)",
+  "--color-rose-200": "lab(86.806% 19.1909 4.07754)",
+  "--color-rose-400": "lab(64.4125% 63.0291 19.2068)",
+  "--color-rose-500": "lab(56.101% 79.4328 31.4532)",
+  "--color-rose-700": "lab(41.1651% 71.6251 30.3087)",
+  "--color-neutral-50": "lab(98.26% 0 0)",
+  "--color-neutral-100": "lab(96.52% -.0000298023 .0000119209)",
+  "--color-neutral-200": "lab(90.952% 0 -.0000119209)",
+  "--color-neutral-300": "lab(84.92% 0 -.0000119209)",
+  "--color-neutral-400": "lab(66.128% -.0000298023 .0000119209)",
+  "--color-neutral-500": "lab(48.496% 0 0)",
+  "--color-neutral-600": "lab(34.924% 0 0)",
+  "--color-neutral-700": "lab(27.036% 0 0)",
+  "--color-neutral-800": "lab(15.204% 0 -.00000596046)",
+  "--color-neutral-900": "lab(7.78201% -.0000149012 0)",
+  "--color-neutral-950": "lab(2.75381% 0 0)",
+  "--color-black": "#000",
+  "--color-white": "#fff",
+  "--spacing": ".25rem",
+  "--font-weight-normal": "400",
+  "--font-weight-medium": "500",
+  "--font-weight-semibold": "600",
+  "--leading-tight": "1.25",
+  "--leading-snug": "1.375",
+  "--animate-spin": "spin 1s linear infinite",
+  "--default-transition-duration": ".15s",
+  "--default-transition-timing-function": "cubic-bezier(.4, 0, .2, 1)",
+  "--default-font-family": "ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif",
+  "--default-mono-font-family": "ui-monospace, SFMono-Regular, \"SF Mono\", Menlo, Consolas, \"Liberation Mono\", monospace"
+ },
+ "scripts": [
+  {
+   "file": "reference/scripts/01-inline.js",
+   "from": "inline",
+   "bytes": 451
+  },
+  {
+   "file": "reference/scripts/02-2i51e627rllld.js",
+   "from": "https://settle-941-v2-20261006.21st.app/_next/static/chunks/2i51e627rllld.js",
+   "bytes": 31346
+  },
+  {
+   "file": "reference/scripts/03-27t-qfc-3-lzs.js",
+   "from": "https://settle-941-v2-20261006.21st.app/_next/static/chunks/27t_qfc-3_lzs.js",
+   "bytes": 229156
+  },
+  {
+   "file": "reference/scripts/04-42ru0snkltfss.js",
+   "from": "https://settle-941-v2-20261006.21st.app/_next/static/chunks/42ru0snkltfss.js",
+   "bytes": 155501
+  },
+  {
+   "file": "reference/scripts/05-turbopack-42ovae8jhbjq2.js",
+   "from": "https://settle-941-v2-20261006.21st.app/_next/static/chunks/turbopack-42ovae8jhbjq2.js",
+   "bytes": 9721
+  },
+  {
+   "file": "reference/scripts/06-3fntmmi971322.js",
+   "from": "https://settle-941-v2-20261006.21st.app/_next/static/chunks/3fntmmi971322.js",
+   "bytes": 14375
+  },
+  {
+   "file": "reference/scripts/07-0sh4hmvdp3dcu.js",
+   "from": "https://settle-941-v2-20261006.21st.app/_next/static/chunks/0sh4hmvdp3dcu.js",
+   "bytes": 62523
+  },
+  {
+   "file": "reference/scripts/08-3tpkjntdex6mh.js",
+   "from": "https://settle-941-v2-20261006.21st.app/_next/static/chunks/3tpkjntdex6mh.js",
+   "bytes": 26530
+  },
+  {
+   "file": "reference/scripts/09-inline.js",
+   "from": "inline",
+   "bytes": 519
+  },
+  {
+   "file": "reference/scripts/10-0cz1d0mv5g-q7.js",
+   "from": "https://settle-941-v2-20261006.21st.app/_next/static/chunks/0cz1d0mv5g_q7.js",
+   "bytes": 112541
+  },
+  {
+   "file": "reference/scripts/11-3mc6dra1m0098.js",
+   "from": "https://settle-941-v2-20261006.21st.app/_next/static/chunks/3mc6dra1m0098.js",
+   "bytes": 12651
+  },
+  {
+   "file": "reference/scripts/12-inline.js",
+   "from": "inline",
+   "bytes": 43
+  },
+  {
+   "file": "reference/scripts/13-inline.js",
+   "from": "inline",
+   "bytes": 984
+  },
+  {
+   "file": "reference/scripts/14-inline.js",
+   "from": "inline",
+   "bytes": 6002
+  },
+  {
+   "file": "reference/scripts/15-inline.js",
+   "from": "inline",
+   "bytes": 192
+  },
+  {
+   "file": "reference/scripts/16-inline.js",
+   "from": "inline",
+   "bytes": 412
+  },
+  {
+   "file": "reference/scripts/17-inline.js",
+   "from": "inline",
+   "bytes": 529
+  },
+  {
+   "file": "reference/scripts/18-vce701823e78c4301a35b7e07294.js",
+   "from": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+   "bytes": 31853
+  }
+ ],
+ "libraries": [],
+ "skipped": [],
+ "notes": []
+}

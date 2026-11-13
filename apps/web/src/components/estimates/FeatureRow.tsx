@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { User, Trash2, Lock } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 import { Feature, EstimationMethod, TShirtSize, RoleOption, UserOption, RoleHours } from './types';
 
@@ -104,25 +105,25 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
   const featureTotalHours = feature.roleHours.reduce((sum, rh) => sum + (rh.expectedHours || 0), 0);
 
   return (
-    <div className="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 mb-3 hover:border-slate-700/80 transition-all">
+    <div className="bg-black/[0.015] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] rounded-[10px] p-4 mb-3 hover:border-black/[0.12] dark:hover:border-white/[0.14] transition-all">
       {/* Top Bar: Name, Method, Assignment, Total Hours */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-3 pb-3 border-b border-slate-800/60">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-3 pb-3 border-b border-black/[0.06] dark:border-white/[0.08]">
         <div className="flex-1 min-w-[240px]">
           {canEditDetails ? (
             <input
               type="text"
               value={feature.name}
               onChange={(e) => onUpdateFeature({ ...feature, name: e.target.value })}
-              className="bg-transparent font-medium text-white text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded px-1.5 py-0.5 w-full"
+              className="bg-transparent font-medium text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 rounded px-1.5 py-0.5 w-full"
               placeholder={t.featureName}
             />
           ) : (
-            <span className="font-medium text-white text-sm px-1.5 py-0.5 block">
+            <span className="font-medium text-neutral-900 dark:text-neutral-100 text-sm px-1.5 py-0.5 block">
               {feature.name}
             </span>
           )}
           {feature.description && (
-            <p className="text-xs text-slate-400 px-1.5 mt-0.5">{feature.description}</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 px-1.5 mt-0.5">{feature.description}</p>
           )}
         </div>
 
@@ -133,7 +134,7 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
               value={feature.method}
               aria-label={t.estimationMethod}
               onChange={(e) => handleMethodChange(e.target.value as EstimationMethod)}
-              className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1 focus:ring-1 focus:ring-indigo-500"
+              className="bg-white dark:bg-[#181818] border border-black/[0.08] dark:border-white/[0.08] text-neutral-900 dark:text-neutral-100 text-xs rounded-[7px] px-2.5 py-1 focus:border-neutral-900 dark:focus:border-white focus:outline-none"
             >
               <option value="THREE_POINT">PERT (O/L/P)</option>
               <option value="SINGLE_VALUE">Single Value (h)</option>
@@ -141,7 +142,7 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
               <option value="STORY_POINTS">Story Points</option>
             </select>
           ) : (
-            <span className="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700">
+            <span className="text-xs bg-black/[0.04] dark:bg-white/[0.06] text-neutral-800 dark:text-neutral-200 px-2.5 py-1 rounded-[7px] border border-black/[0.06] dark:border-white/[0.08] font-mono">
               {feature.method}
             </span>
           )}
@@ -157,31 +158,32 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
                   assignedUserName: users.find((u) => u.id === e.target.value)?.name,
                 })
               }
-              className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1 focus:ring-1 focus:ring-indigo-500"
+              className="bg-white dark:bg-[#181818] border border-black/[0.08] dark:border-white/[0.08] text-neutral-900 dark:text-neutral-100 text-xs rounded-[7px] px-2.5 py-1 focus:border-neutral-900 dark:focus:border-white focus:outline-none"
             >
               <option value="">-- {t.unassigned} --</option>
               {users
                 .filter((u) => u.role === 'DEVELOPER')
                 .map((u) => (
                   <option key={u.id} value={u.id}>
-                    👤 {u.name}
+                    {u.name}
                   </option>
                 ))}
             </select>
           ) : (
             <span
-              className={`text-xs px-2.5 py-1 rounded-lg border flex items-center gap-1 ${
+              className={`text-xs px-2.5 py-1 rounded-[7px] border flex items-center gap-1.5 ${
                 isAssignedToCurrentUser
-                  ? 'bg-emerald-950/60 border-emerald-700/60 text-emerald-300'
-                  : 'bg-slate-800 border-slate-700 text-slate-400'
+                  ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-medium'
+                  : 'bg-black/[0.03] dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.08] text-neutral-600 dark:text-neutral-400'
               }`}
             >
-              👤 {assignedUser ? assignedUser.name : t.unassigned}
+              <User className="w-3.5 h-3.5 inline text-neutral-500" />
+              <span>{assignedUser ? assignedUser.name : t.unassigned}</span>
             </span>
           )}
 
           {/* Feature Hours Badge */}
-          <div className="bg-indigo-950/70 border border-indigo-800/60 rounded-lg px-3 py-1 text-xs font-semibold text-indigo-300">
+          <div className="bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 rounded-[7px] px-2.5 py-1 text-xs font-mono font-semibold">
             {Math.round(featureTotalHours * 10) / 10}h
           </div>
 
@@ -189,10 +191,10 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
           {canEditDetails && (
             <button
               onClick={() => onDeleteFeature(feature.id)}
-              className="text-slate-500 hover:text-rose-400 p-1 text-sm rounded transition-colors"
+              className="text-neutral-400 hover:text-rose-500 dark:hover:text-rose-400 p-1 text-sm rounded-[7px] transition-colors"
               title={t.delete}
             >
-              🗑️
+              <Trash2 className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
@@ -200,8 +202,8 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
 
       {/* Developer Restricted Warning if not assigned */}
       {!canEditHours && (
-        <div className="mb-2 text-[11px] text-amber-400/90 bg-amber-950/30 border border-amber-900/40 rounded-lg px-2.5 py-1 flex items-center gap-1.5">
-          <span>🔒</span> {t.onlyAssignedCanEdit}
+        <div className="mb-2 text-[11px] font-mono text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-[7px] px-2.5 py-1 flex items-center gap-1.5">
+          <Lock className="w-3.5 h-3.5 shrink-0" /> {t.onlyAssignedCanEdit}
         </div>
       )}
 
@@ -218,24 +220,24 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
           return (
             <div
               key={role.id}
-              className={`rounded-lg p-2.5 border transition-all text-xs ${
+              className={`rounded-[7px] p-2.5 border transition-all text-xs ${
                 rh.expectedHours > 0
-                  ? 'bg-slate-900/90 border-slate-700'
-                  : 'bg-slate-900/40 border-slate-800/60'
+                  ? 'bg-white dark:bg-[#181818] border-black/[0.1] dark:border-white/[0.12] shadow-sm'
+                  : 'bg-black/[0.015] dark:bg-white/[0.02] border-black/[0.06] dark:border-white/[0.08]'
               }`}
             >
               <div className="flex items-center justify-between mb-1.5">
-                <span className="font-medium text-slate-300">{role.name}</span>
-                <span className="font-semibold text-indigo-400">
+                <span className="font-medium text-neutral-800 dark:text-neutral-200">{role.name}</span>
+                <span className="font-semibold font-mono text-neutral-900 dark:text-neutral-100">
                   {Math.round((rh.expectedHours || 0) * 10) / 10}h
                 </span>
               </div>
 
               {/* METHOD-SPECIFIC INPUTS */}
               {feature.method === 'THREE_POINT' && (
-                <div className="grid grid-cols-3 gap-1.5">
+                <div className="grid grid-cols-3 gap-1.5 font-mono">
                   <div>
-                    <label className="text-[10px] text-slate-500 block">O (min)</label>
+                    <label className="text-[10px] text-neutral-400 dark:text-neutral-500 block">O (min)</label>
                     <input
                       type="number"
                       min="0"
@@ -246,12 +248,12 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
                           optimisticHours: parseFloat(e.target.value) || 0,
                         })
                       }
-                      className="w-full bg-slate-950 border border-slate-800 disabled:opacity-50 text-slate-200 px-1.5 py-1 rounded text-xs focus:ring-1 focus:ring-indigo-500"
+                      className="w-full bg-white dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.08] disabled:opacity-40 text-neutral-900 dark:text-neutral-100 px-1.5 py-1 rounded-[5px] text-xs focus:border-neutral-900 dark:focus:border-white focus:outline-none"
                       placeholder="O"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-slate-500 block">L (likely)</label>
+                    <label className="text-[10px] text-neutral-400 dark:text-neutral-500 block">L (likely)</label>
                     <input
                       type="number"
                       min="0"
@@ -262,12 +264,12 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
                           likelyHours: parseFloat(e.target.value) || 0,
                         })
                       }
-                      className="w-full bg-slate-950 border border-slate-800 disabled:opacity-50 text-slate-200 px-1.5 py-1 rounded text-xs focus:ring-1 focus:ring-indigo-500"
+                      className="w-full bg-white dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.08] disabled:opacity-40 text-neutral-900 dark:text-neutral-100 px-1.5 py-1 rounded-[5px] text-xs focus:border-neutral-900 dark:focus:border-white focus:outline-none"
                       placeholder="L"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-slate-500 block">P (max)</label>
+                    <label className="text-[10px] text-neutral-400 dark:text-neutral-500 block">P (max)</label>
                     <input
                       type="number"
                       min="0"
@@ -278,7 +280,7 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
                           pessimisticHours: parseFloat(e.target.value) || 0,
                         })
                       }
-                      className="w-full bg-slate-950 border border-slate-800 disabled:opacity-50 text-slate-200 px-1.5 py-1 rounded text-xs focus:ring-1 focus:ring-indigo-500"
+                      className="w-full bg-white dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.08] disabled:opacity-40 text-neutral-900 dark:text-neutral-100 px-1.5 py-1 rounded-[5px] text-xs focus:border-neutral-900 dark:focus:border-white focus:outline-none"
                       placeholder="P"
                     />
                   </div>
@@ -286,8 +288,8 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
               )}
 
               {feature.method === 'SINGLE_VALUE' && (
-                <div>
-                  <label className="text-[10px] text-slate-500 block">{t.singleHours}</label>
+                <div className="font-mono">
+                  <label className="text-[10px] text-neutral-400 dark:text-neutral-500 block font-sans">{t.singleHours}</label>
                   <input
                     type="number"
                     min="0"
@@ -298,7 +300,7 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
                         singleHours: parseFloat(e.target.value) || 0,
                       })
                     }
-                    className="w-full bg-slate-950 border border-slate-800 disabled:opacity-50 text-slate-200 px-2 py-1 rounded text-xs focus:ring-1 focus:ring-indigo-500"
+                    className="w-full bg-white dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.08] disabled:opacity-40 text-neutral-900 dark:text-neutral-100 px-2 py-1 rounded-[5px] text-xs focus:border-neutral-900 dark:focus:border-white focus:outline-none"
                     placeholder="e.g. 16"
                   />
                 </div>
@@ -306,7 +308,7 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
 
               {feature.method === 'T_SHIRT' && (
                 <div>
-                  <label className="text-[10px] text-slate-500 block">{t.tshirtSize}</label>
+                  <label className="text-[10px] text-neutral-400 dark:text-neutral-500 block">{t.tshirtSize}</label>
                   <select
                     disabled={!canEditHours}
                     value={rh.tshirtSize || ''}
@@ -315,7 +317,7 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
                         tshirtSize: (e.target.value as TShirtSize) || undefined,
                       })
                     }
-                    className="w-full bg-slate-950 border border-slate-800 disabled:opacity-50 text-slate-200 px-2 py-1 rounded text-xs focus:ring-1 focus:ring-indigo-500"
+                    className="w-full bg-white dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.08] disabled:opacity-40 text-neutral-900 dark:text-neutral-100 px-2 py-1 rounded-[5px] text-xs focus:border-neutral-900 dark:focus:border-white focus:outline-none"
                   >
                     <option value="">-- Size --</option>
                     <option value="XS">XS (4 hrs)</option>
@@ -328,8 +330,8 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
               )}
 
               {feature.method === 'STORY_POINTS' && (
-                <div>
-                  <label className="text-[10px] text-slate-500 block">{t.storyPoints}</label>
+                <div className="font-mono">
+                  <label className="text-[10px] text-neutral-400 dark:text-neutral-500 block font-sans">{t.storyPoints}</label>
                   <input
                     type="number"
                     min="0"
@@ -341,7 +343,7 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
                         storyPoints: parseFloat(e.target.value) || 0,
                       })
                     }
-                    className="w-full bg-slate-950 border border-slate-800 disabled:opacity-50 text-slate-200 px-2 py-1 rounded text-xs focus:ring-1 focus:ring-indigo-500"
+                    className="w-full bg-white dark:bg-[#121212] border border-black/[0.08] dark:border-white/[0.08] disabled:opacity-40 text-neutral-900 dark:text-neutral-100 px-2 py-1 rounded-[5px] text-xs focus:border-neutral-900 dark:focus:border-white focus:outline-none"
                     placeholder="e.g. 3 (24h)"
                   />
                 </div>
