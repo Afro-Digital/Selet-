@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  OWNER
+  PM
+  DEVELOPER
+}
+
+enum PayType {
+  MONTHLY_SALARY
+  HOURLY
+  PER_PROJECT
+  CONTRACTOR
+}
+
+enum PensionBase {
+  BASIC
+  GROSS
+}
+
+model Organization {
+  id                    String      @id @default(uuid())
+  name                  String
+  defaultCurrency       String      @default("ETB")
+  minimumFloorMargin    Float       @default(0.15) // default 15% floor
+  targetMargin          Float       @default(0.30) // default 30% target
+  stretchMargin         Float       @default(0.40) // default 40% stretch
+  defaultOverheadRate   Float       @default(0.10) // 10% overhead
+  defaultContingencyRate Float      @default(0.10) // 10% contingency
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  users                 User[]
+  roles                 Role[]
+  people                Person[]
+  rateCards             RateCard[]
+  clients               Client[]
+  auditLogs             AuditLog[]
+
+  @@map("organizations")
+}
+
+model User {
+  id             String       @id @default(uuid())
+  organizationId String
+  email          String       @unique
+  passwordHash   String
+  name           String
+  role           UserRole     @default(DEVELOPER)
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  auditLogs      AuditLog[]
+
+  @@index([organizationId])
+  @@map("users")
+}
+
+model Role {
+  id                    String       @id @default(uuid())
+  organizationId        String
+  name                  String
+  description           String?
+  defaultHourlyCostMinor BigInt      @default(0) // integer minor units
+  currency              String       @default("ETB")
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+
+  organization          Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  people                Person[]
+  rateCardItems         RateCardItem[]
+
+  @@unique([organizationId, name])
+  @@index([organizationId])
+  @@map("roles")
+}
+
+model Person {
+  id                  String       @id @default(uuid())
+  organizationId      String
+  roleId              String
+  name                String
+  email               String?
+  payType             PayType      @default(MONTHLY_SALARY)
+  currency            String       @default("ETB")
+  // Money fields stored as integer minor units (BigInt)
+  basicSalaryMinor    BigInt       @default(0)
+  allowancesMinor     BigInt       @default(0)
+  benefitsMinor       BigInt       @default(0)
+  directHourlyRateMinor BigInt     @default(0)
+  paidHoursPerMonth   Int          @default(160)
+  utilizationRate     Float        @default(0.70)
+  isEthiopianNational Boolean      @default(true)
+  pensionRate         Float        @default(0.11)
+  pensionBase         PensionBase  @default(BASIC)
+  pensionCeilingMinor BigInt?
+  isActive            Boolean      @default(true)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  organization        Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role                Role         @relation(fields: [roleId], references: [id], onDelete: Restrict)
+
+  @@index([organizationId])
+  @@index([roleId])
+  @@map("people")
+}
+
+model RateCard {
+  id             String         @id @default(uuid())
+  organizationId String
+  name           String
+  currency       String         @default("ETB")
+  effectiveFrom  DateTime
+  isDefault      Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  items          RateCardItem[]
+
+  @@index([organizationId])
+  @@map("rate_cards")
+}
+
+model RateCardItem {
+  id             String    @id @default(uuid())
+  rateCardId     String
+  roleId         String
+  hourlyRateMinor BigInt   // Client billing rate in minor units
+  currency       String    @default("ETB")
+
+  rateCard       RateCard  @relation(fields: [rateCardId], references: [id], onDelete: Cascade)
+  role           Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([rateCardId, roleId])
+  @@map("rate_card_items")
+}
+
+model Client {
+  id             String       @id @default(uuid())
+  organizationId String
+  name           String
+  tin            String?      // Taxpayer Identification Number
+  contactName    String?
+  contactEmail   String?
+  contactPhone   String?
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("clients")
+}
+
+model AuditLog {
+  id             String       @id @default(uuid())
+  organizationId String
+  userId         String?
+  action         String       // e.g. "USER_LOGIN", "UPDATE_FLOOR_MARGIN", "UPDATE_PERSON_COST"
+  entityType     String       // e.g. "Person", "Organization", "RateCard", "TaxPack"
+  entityId       String?
+  oldValue       Json?
+  newValue       Json?
+  ipAddress      String?
+  userAgent      String?
+  createdAt      DateTime     @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@map("audit_logs")
+}
