@@ -161,6 +161,26 @@ export interface TranslationDictionary {
   recommendedPrice: string;
   projectProfit: string;
   balancingExplanation: string;
+  // Stage 10: Quote builder and PDF
+  quotesAndPdf: string;
+  quoteBuilder: string;
+  createQuote: string;
+  quoteNumber: string;
+  issuedStatus: string;
+  draftStatus: string;
+  perLineVisibility: string;
+  showPrice: string;
+  descriptionOnly: string;
+  mergeGroup: string;
+  paymentMilestones: string;
+  milestonePreset: string;
+  vat15Percent: string;
+  withholdingNote: string;
+  exportPdf: string;
+  previewQuote: string;
+  issueQuoteButton: string;
+  quoteImmutabilityNotice: string;
+  milestonesMustEqual100: string;
 }
 
 export const translations: Record<Locale, TranslationDictionary> = {
@@ -327,6 +347,27 @@ export const translations: Record<Locale, TranslationDictionary> = {
     projectProfit: 'Projected Net Profit',
     balancingExplanation:
       'Balancing lines adjusted automatically to preserve blended target margin.',
+    // Stage 10
+    quotesAndPdf: 'Quotes & PDF Export',
+    quoteBuilder: 'Afro Digital Quote Builder',
+    createQuote: 'Create New Quote',
+    quoteNumber: 'Quote Reference',
+    issuedStatus: 'Issued (Locked Snapshot)',
+    draftStatus: 'Draft Proposal',
+    perLineVisibility: 'Client Line Visibility',
+    showPrice: 'Show Price',
+    descriptionOnly: 'Deliverable Scope Only',
+    mergeGroup: 'Merge into Package Group',
+    paymentMilestones: 'Payment Milestones Schedule',
+    milestonePreset: 'Milestone Schedule Preset',
+    vat15Percent: 'Value Added Tax (15% - Proclamation 1341/2024)',
+    withholdingNote: 'Domestic Withholding Tax (3% Services Deduction)',
+    exportPdf: 'Export Afro Digital PDF',
+    previewQuote: 'Preview Branded Quote',
+    issueQuoteButton: 'Issue Quote (Freeze Snapshot)',
+    quoteImmutabilityNotice:
+      'Issued quotes are frozen immutable snapshots. Future rate or tax changes will never alter an issued quote.',
+    milestonesMustEqual100: 'Milestone percentages must sum to exactly 100%.',
   },
   am: {
     appName: 'ስሌት (Selet)',
@@ -489,5 +530,26 @@ export const translations: Record<Locale, TranslationDictionary> = {
     recommendedPrice: 'የሚመከር የመሸጫ ዋጋ',
     projectProfit: 'የሚጠበቅ የተጣራ ትርፍ',
     balancingExplanation: 'ዒላማ አማካይ የትርፍ ህዳግን ለመጠበቅ ሌሎች መስመሮች በራስ-ሰር ተስተካክለዋል።',
+    // Stage 10
+    quotesAndPdf: 'ዋጋ አቅርቦት እና ፒዲኤፍ (Quotes & PDF)',
+    quoteBuilder: 'የአፍሮ ዲጂታል ዋጋ አቅርቦት ማዘጋጃ',
+    createQuote: 'አዲስ የዋጋ አቅርቦት አዘጋጅ',
+    quoteNumber: 'የዋጋ አቅርቦት መለያ ቁጥር',
+    issuedStatus: 'የተሰጠ (የማይቀየር ቅጂ)',
+    draftStatus: 'ረቂቅ የዋጋ አቅርቦት',
+    perLineVisibility: 'የመስመር ዋጋ ታይነት',
+    showPrice: 'ዋጋ አሳይ',
+    descriptionOnly: 'የሥራ ዝርዝር ብቻ (ዋጋ ደብቅ)',
+    mergeGroup: 'በጥቅል ቡድን ውስጥ አዋህድ',
+    paymentMilestones: 'የክፍያ ደረጃዎች (ማይልስቶን)',
+    milestonePreset: 'የተዘጋጁ የክፍያ ተመኖች',
+    vat15Percent: 'ተጨማሪ እሴት ታክስ (15% አዋጅ 1341/2016)',
+    withholdingNote: 'የአገር ውስጥ የቅድመ ክፍያ ታክስ (3%)',
+    exportPdf: 'ፒዲኤፍ አውርድ (Playwright PDF)',
+    previewQuote: 'የተሟላ የዋጋ አቅርቦት ቅድመ እይታ',
+    issueQuoteButton: 'ዋጋ አቅርቦቱን አጽድቀህ ስጥ (እሰር)',
+    quoteImmutabilityNotice:
+      'የተሰጡ የዋጋ አቅርቦቶች በቋሚነት የተቆለፉ ናቸው። የወደፊት የምንዛሬ ወይም የታክስ ለውጥ ይህንን አይለውጠውም።',
+    milestonesMustEqual100: 'የክፍያ ደረጃዎች ድምር በትክክል 100% መሆን አለበት።',
   },
 };

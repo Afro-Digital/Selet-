@@ -10,6 +10,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { CatalogModule } from './catalog/catalog.module';
 import { CurrencyModule } from './currency/currency.module';
 import { EstimatesModule } from './estimates/estimates.module';
+import { QuotesModule } from './quotes/quotes.module';
 import { OrganizationModule } from './organization/organization.module';
 import { HealthModule } from './health/health.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
@@ -28,6 +29,7 @@ import { RoleSerializerInterceptor } from './common/interceptors/role-serializer
     CatalogModule,
     CurrencyModule,
     EstimatesModule,
+    QuotesModule,
     OrganizationModule,
     HealthModule,
   ],

@@ -35,6 +35,7 @@ import { ProjectCostSummaryCard } from '../components/cost/ProjectCostSummaryCar
 import { CommercialFloorGuard } from '../components/pricing/CommercialFloorGuard';
 import { PricingScenariosCard } from '../components/pricing/PricingScenariosCard';
 import { MarginBalancer, ModuleLineItem } from '../components/pricing/MarginBalancer';
+import { QuoteBuilder } from '../components/quotes/QuoteBuilder';
 import {
   Users,
   Briefcase,
@@ -49,13 +50,14 @@ import {
   Layers,
   TrendingUp,
   Tag,
+  FileText,
 } from 'lucide-react';
 
 export default function Home() {
   const [locale, setLocale] = useState<Locale>('en');
   const [userRole, setUserRole] = useState<UserRole>('OWNER');
   const [activeTab, setActiveTab] = useState<
-    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates' | 'scale' | 'pricing'
+    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates' | 'scale' | 'pricing' | 'quotes'
   >('people');
 
   const [people, setPeople] = useState<Person[]>(INITIAL_PEOPLE);
@@ -568,6 +570,18 @@ export default function Home() {
             <Tag className="w-4 h-4" />
             <span>{t.pricingAndMargins}</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('quotes')}
+            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap transition-colors ${
+              activeTab === 'quotes'
+                ? 'border-emerald-600 text-emerald-600'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <FileText className="w-4 h-4" />
+            <span>{t.quotesAndPdf}</span>
+          </button>
         </div>
 
         {/* Active Tab Views */}
@@ -815,6 +829,22 @@ export default function Home() {
               }}
             />
           </div>
+        )}
+
+        {activeTab === 'quotes' && (
+          <QuoteBuilder
+            t={t}
+            locale={locale}
+            userRole={userRole}
+            projectId="proj-1"
+            projectName="E-Commerce Platform with Chapa & Telebirr"
+            pricingModules={pricingLines.map((l) => ({
+              id: l.id,
+              name: l.name,
+              priceMinor: Math.round(l.costMinor / (1 - l.margin)),
+            }))}
+            clientMonthlyRecurringMinor={clientMonthlyRecurringMinor}
+          />
         )}
       </div>
 

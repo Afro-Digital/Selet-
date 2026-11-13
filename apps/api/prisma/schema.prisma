@@ -48,6 +48,7 @@ model Organization {
   exchangeRateHistories ExchangeRateHistory[]
   notifications         Notification[]
   projects              Project[]
+  quotes                Quote[]
 
   @@map("organizations")
 }
@@ -349,6 +350,7 @@ model Project {
   client           Client?           @relation(fields: [clientId], references: [id], onDelete: SetNull)
   versions         EstimateVersion[]
   modules          Module[]
+  quotes           Quote[]
 
   @@index([organizationId])
   @@index([clientId])
@@ -385,6 +387,7 @@ model EstimateVersion {
   updatedAt          DateTime       @updatedAt
 
   project            Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  quotes             Quote[]
 
   @@unique([projectId, versionNumber])
   @@index([projectId])
@@ -452,4 +455,68 @@ model FeatureRoleHours {
   @@index([featureId])
   @@index([roleId])
   @@map("feature_role_hours")
+}
+
+enum QuoteStatus {
+  DRAFT
+  ISSUED
+  EXPIRED
+  ACCEPTED
+  REJECTED
+}
+
+model Quote {
+  id                         String          @id @default(uuid())
+  organizationId             String
+  projectId                  String
+  versionId                  String
+  quoteNumber                String          // e.g. "QT-2026-0001"
+  status                     QuoteStatus     @default(DRAFT)
+  title                      String
+  clientName                 String
+  clientTin                  String?
+  clientContact              String?
+  clientEmail                String?
+  currency                   String          @default("ETB")
+
+  // Financial snapshot in minor units
+  subtotalMinor              BigInt          @default(0)
+  taxPackVersion             String          @default("2026.1")
+  vatRate                    Float           @default(0.15)
+  vatAmountMinor             BigInt          @default(0)
+  withholdingRate            Float?          @default(0.03)
+  withholdingAmountMinor     BigInt?         @default(0)
+  totalPriceMinor            BigInt          @default(0)
+  expectedCashMinor          BigInt?         @default(0)
+  clientRecurringMonthlyMinor BigInt         @default(0)
+
+  // Secondary currency snapshot
+  secondaryCurrency          String?
+  exchangeRateSnapshot       Float?
+  secondaryTotalPriceMinor   BigInt?
+
+  // Content snapshots
+  executiveSummary           String?
+  lineItemsSnapshot          Json
+  milestonesSnapshot         Json
+  termsAndConditions         String?
+  brandingSnapshot           Json?
+
+  // Dates
+  validUntil                 DateTime
+  issuedAt                   DateTime?
+  acceptedAt                 DateTime?
+  createdAt                  DateTime        @default(now())
+  updatedAt                  DateTime        @updatedAt
+
+  organization               Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project                    Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  version                    EstimateVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, quoteNumber])
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([versionId])
+  @@index([status])
+  @@map("quotes")
 }

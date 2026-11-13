@@ -388,4 +388,93 @@ describe('Stage 6: Cost Catalog, Currency Service & Notifications (UI)', () => {
       expect(screen.queryByText('Market Price Range')).toBeNull();
     });
   });
+
+  describe('Stage 10: Quote Builder and PDF (UI)', () => {
+    it('navigates to Quotes & PDF tab and displays quotes listing with immutable snapshot badges', () => {
+      render(<Home />);
+      const quotesTab = screen.getByRole('button', { name: /Quotes & PDF/i });
+      fireEvent.click(quotesTab);
+
+      // Verify Quote Builder header and sample quote
+      expect(screen.getByText('Afro Digital Quote Builder')).toBeDefined();
+      expect(screen.getByText('QT-2026-0001')).toBeDefined();
+      expect(screen.getByText(/Ethiopian Airlines Enterprise/i)).toBeDefined();
+      expect(screen.getByText(/1,380,000.00/i)).toBeDefined();
+    });
+
+    it('opens Afro Digital branded preview modal with deliverables, VAT 15%, and milestone schedule', () => {
+      render(<Home />);
+      const quotesTab = screen.getByRole('button', { name: /Quotes & PDF/i });
+      fireEvent.click(quotesTab);
+
+      // Click Preview Branded Quote
+      const previewBtn = screen.getByRole('button', { name: /Preview Branded Quote/i });
+      fireEvent.click(previewBtn);
+
+      // Verify Modal Content
+      expect(screen.getByRole('dialog', { name: /Quote Preview Modal/i })).toBeDefined();
+      expect(screen.getByText('Afro Digital Technologies')).toBeDefined();
+      expect(screen.getByText(/TIN: 0076543210/i)).toBeDefined();
+      expect(screen.getAllByText(/Proclamation 1341\/2024/i).length).toBeGreaterThan(0);
+      expect(screen.getByText('Payment Milestones Schedule')).toBeDefined();
+      expect(screen.getByText('Project Kickoff & Advance Mobilization')).toBeDefined();
+
+      // Close modal
+      const closeBtn = screen.getByRole('button', { name: /Close Preview/i });
+      fireEvent.click(closeBtn);
+      expect(screen.queryByRole('dialog', { name: /Quote Preview Modal/i })).toBeNull();
+    });
+
+    it('creates quote form validates milestone percentages sum to 100%', () => {
+      render(<Home />);
+      const quotesTab = screen.getByRole('button', { name: /Quotes & PDF/i });
+      fireEvent.click(quotesTab);
+
+      // Click Create New Quote
+      const createBtn = screen.getByRole('button', { name: /Create New Quote/i });
+      fireEvent.click(createBtn);
+
+      // Verify form elements
+      expect(screen.getByText('Create New Commercial Quote')).toBeDefined();
+      expect(screen.getByText(/Milestones total exactly 100.0%/i)).toBeDefined();
+
+      // Switch to 50/50 preset
+      const preset50Btn = screen.getByRole('button', { name: '50 / 50' });
+      fireEvent.click(preset50Btn);
+      expect(screen.getByDisplayValue('Advance Mobilization Deposit')).toBeDefined();
+      expect(screen.getByDisplayValue('Final Delivery & Acceptance Sign-off')).toBeDefined();
+      expect(screen.getByText(/Milestones total exactly 100.0%/i)).toBeDefined();
+
+      // Test invalid milestone sum (change 50 to 30 -> total 80%)
+      const percentageInputs = screen.getAllByRole('spinbutton', { name: /Milestone percentage for stage/i });
+      fireEvent.change(percentageInputs[0]!, { target: { value: '30' } });
+      expect(screen.getByText(/Milestone sum is 80.0%\. Must equal exactly 100%/i)).toBeDefined();
+
+      // Save button should be disabled when invalid
+      const saveBtn = screen.getByRole('button', { name: /Save Quote Draft/i });
+      expect(saveBtn.hasAttribute('disabled')).toBe(true);
+    });
+
+    it('Developer view restricts access to commercial quotes and PDF export', () => {
+      render(<Home />);
+      // Switch simulated role to Developer
+      const roleSelect = screen.getByRole('combobox');
+      fireEvent.change(roleSelect, { target: { value: 'DEVELOPER' } });
+
+      const quotesTab = screen.getByRole('button', { name: /Quotes & PDF/i });
+      fireEvent.click(quotesTab);
+
+      // Check confidentiality notice
+      expect(screen.getByText('Access Restricted')).toBeDefined();
+      expect(
+        screen.getByText(
+          /Quotes, commercial rates, statutory tax items, and PDF exports are accessible to Project Managers and Owners only/i,
+        ),
+      ).toBeDefined();
+
+      // No quote records or create buttons rendered
+      expect(screen.queryByText('QT-2026-0001')).toBeNull();
+      expect(screen.queryByText('Create New Quote')).toBeNull();
+    });
+  });
 });
