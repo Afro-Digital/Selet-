@@ -22,7 +22,6 @@ import {
   ArrowDownRight,
   Check,
   AlertTriangle,
-  Globe,
   Clock,
   Trash2,
 } from 'lucide-react';
@@ -434,17 +433,17 @@ export default function PageDesignDemo() {
           <header className={`sticky top-0 z-30 flex h-14 shrink-0 items-center gap-4 border-b px-4 backdrop-blur-[6px] sm:px-6 2xl:px-10 ${headerBgClass}`}>
             {/* Breadcrumb */}
             <nav className="flex min-w-0 items-center">
-              <ol className="m-0 flex min-w-0 list-none items-center gap-1 p-0">
-                <li className="min-w-0 hidden sm:block">
-                  <span className={`crumb-link truncate text-[12.5px] font-medium ${subtextClass}`}>
-                    {lang === 'am' ? 'ስሌት (Selet)' : 'Selet'}
+              <ol className="m-0 flex min-w-0 list-none items-center gap-1.5 p-0">
+                <li className="min-w-0 hidden sm:flex items-center">
+                  <span className={`crumb-link truncate text-[12.5px] font-medium leading-none ${subtextClass}`}>
+                    {lang === 'am' ? 'ስሌት' : 'Selet'}
                   </span>
                 </li>
-                <li className={`hidden shrink-0 sm:block ${subtextClass}`}>
+                <li className={`hidden shrink-0 sm:flex items-center ${subtextClass}`}>
                   <ChevronRight className="h-3 w-3" />
                 </li>
-                <li className="min-w-0">
-                  <span className="crumb-current truncate text-[12.5px] font-semibold">
+                <li className="min-w-0 flex items-center">
+                  <span className="crumb-current truncate text-[12.5px] font-semibold leading-none">
                     {activeNav === 'overview' && (lang === 'am' ? 'አጠቃላይ ዳሽቦርድ' : 'Overview')}
                     {activeNav === 'wbs' && (lang === 'am' ? 'የስራ ዝርዝር ግምት (WBS)' : 'WBS Feature Estimation')}
                     {activeNav === 'balancer' && (lang === 'am' ? 'የትርፍ ማመጣጠኛ' : 'Margin Balancer')}
@@ -467,26 +466,39 @@ export default function PageDesignDemo() {
               />
             </div>
 
-            {/* Bilingual Switcher */}
-            <button
-              type="button"
-              onClick={() => setLang(lang === 'en' ? 'am' : 'en')}
-              className={`ibtn border rounded-[8px] flex items-center gap-1.5 w-auto px-2.5 h-8 text-[12px] font-semibold transition-all ${
-                isDark
-                  ? 'border-white/[0.14] text-neutral-200 hover:bg-white/[0.08]'
-                  : 'border-black/[0.12] text-neutral-800 hover:bg-black/[0.05]'
-              }`}
-              title="Toggle language"
-            >
-              <Globe className="h-3.5 w-3.5" />
-              <span>{lang === 'en' ? 'አማርኛ' : 'EN'}</span>
-            </button>
+            {/* Bilingual Segmented Toggle (Zero Layout Shift) */}
+            <div className={`flex items-center h-8 rounded-[8px] border p-0.5 shrink-0 ${
+              isDark ? 'border-white/[0.14] bg-white/[0.04]' : 'border-black/[0.1] bg-black/[0.03]'
+            }`}>
+              <button
+                type="button"
+                onClick={() => setLang('en')}
+                className={`h-7 px-2.5 rounded-[6px] text-[11.5px] font-semibold transition-all ${
+                  lang === 'en'
+                    ? isDark ? 'bg-neutral-800 text-white shadow-sm' : 'bg-white text-neutral-900 shadow-sm'
+                    : isDark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-900'
+                }`}
+              >
+                EN
+              </button>
+              <button
+                type="button"
+                onClick={() => setLang('am')}
+                className={`h-7 px-2.5 rounded-[6px] text-[11.5px] font-semibold transition-all ${
+                  lang === 'am'
+                    ? isDark ? 'bg-neutral-800 text-white shadow-sm' : 'bg-white text-neutral-900 shadow-sm'
+                    : isDark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-500 hover:text-neutral-900'
+                }`}
+              >
+                አማርኛ
+              </button>
+            </div>
 
             {/* Dark/Light Theme Switcher Button */}
             <button
               type="button"
               onClick={toggleTheme}
-              className={`ibtn border rounded-[8px] flex items-center justify-center w-8 h-8 transition-all ${
+              className={`ibtn border rounded-[8px] flex items-center justify-center w-8 h-8 transition-all shrink-0 ${
                 isDark
                   ? 'border-white/[0.14] text-amber-300 hover:bg-white/[0.08]'
                   : 'border-black/[0.12] text-neutral-700 hover:bg-black/[0.05]'
@@ -499,7 +511,7 @@ export default function PageDesignDemo() {
             {/* Notification Bell */}
             <button
               type="button"
-              className={`ibtn border rounded-[8px] flex items-center justify-center w-8 h-8 relative ${
+              className={`ibtn border rounded-[8px] flex items-center justify-center w-8 h-8 relative shrink-0 ${
                 isDark
                   ? 'border-white/[0.14] text-neutral-300 hover:bg-white/[0.08]'
                   : 'border-black/[0.12] text-neutral-700 hover:bg-black/[0.05]'
@@ -513,7 +525,7 @@ export default function PageDesignDemo() {
             <span className={`hidden h-5 w-px sm:block ${dividerClass}`} />
 
             {/* User Profile */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <span className={`grid h-7 w-7 place-items-center rounded-full text-[11px] font-semibold ${
                 isDark ? 'bg-neutral-100 text-neutral-950' : 'bg-neutral-900 text-white'
               }`}>
@@ -609,7 +621,7 @@ export default function PageDesignDemo() {
                     </span>
                   </div>
                   <p className="t-display m-0 mt-3.5 tabular-nums text-[26px] font-bold">
-                    ETB {(discountedPriceMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                    ETB {Math.round(discountedPriceMinor / 100).toLocaleString('en-US')}
                   </p>
                   <div className={`mt-3.5 flex flex-wrap items-center gap-2 text-[11.5px] ${subtextClass}`}>
                     <span className="badge bg-emerald-50 text-emerald-700 dark:bg-emerald-500/[0.15] dark:text-emerald-300">
@@ -685,13 +697,13 @@ export default function PageDesignDemo() {
                     </span>
                   </div>
                   <p className="t-display m-0 mt-3.5 tabular-nums text-[26px] font-bold">
-                    ETB {(vatMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                    ETB {Math.round(vatMinor / 100).toLocaleString('en-US')}
                   </p>
                   <div className={`mt-3.5 flex flex-wrap items-center gap-2 text-[11.5px] ${subtextClass}`}>
                     <span className="badge bg-emerald-50 text-emerald-700 dark:bg-emerald-500/[0.15] dark:text-emerald-300">
                       Proc 1341/2016
                     </span>
-                    <span>2% WHT: ETB {(whtMinor / 100).toFixed(0)}</span>
+                    <span>2% WHT: ETB {Math.round(whtMinor / 100).toLocaleString('en-US')}</span>
                   </div>
                 </div>
               </div>
@@ -815,8 +827,8 @@ export default function PageDesignDemo() {
                         <p className={`m-0 text-[11px] ${subtextClass}`}>
                           {lang === 'am' ? 'የሰው ኃይል ወጪ' : 'Direct Labor Cost'}
                         </p>
-                        <p className="m-0 mt-1 text-[14px] font-semibold tabular-nums">
-                          ETB {(Number(totalLaborCostMinor) / 100).toLocaleString()}
+                        <p className="m-0 mt-1 text-[14px] font-semibold tabular-nums font-mono">
+                          ETB {Math.round(Number(totalLaborCostMinor) / 100).toLocaleString('en-US')}
                         </p>
                         <p className={`m-0 mt-1 text-[10.5px] ${subtextClass}`}>
                           {totalExpectedHours.toFixed(0)} PERT hrs
@@ -827,8 +839,8 @@ export default function PageDesignDemo() {
                         <p className={`m-0 text-[11px] ${subtextClass}`}>
                           {lang === 'am' ? 'የአደጋ ተቀማጭ (10%)' : 'Contingency Risk (10%)'}
                         </p>
-                        <p className="m-0 mt-1 text-[14px] font-semibold tabular-nums">
-                          ETB {(Number(riskCostMinor) / 100).toLocaleString()}
+                        <p className="m-0 mt-1 text-[14px] font-semibold tabular-nums font-mono">
+                          ETB {Math.round(Number(riskCostMinor) / 100).toLocaleString('en-US')}
                         </p>
                         <p className={`m-0 mt-1 text-[10.5px] ${subtextClass}`}>
                           PERT beta variance
@@ -839,8 +851,8 @@ export default function PageDesignDemo() {
                         <p className={`m-0 text-[11px] ${subtextClass}`}>
                           {lang === 'am' ? 'ተጓዳኝ ወጪ (10%)' : 'Overhead (10%)'}
                         </p>
-                        <p className="m-0 mt-1 text-[14px] font-semibold tabular-nums">
-                          ETB {(Number(overheadCostMinor) / 100).toLocaleString()}
+                        <p className="m-0 mt-1 text-[14px] font-semibold tabular-nums font-mono">
+                          ETB {Math.round(Number(overheadCostMinor) / 100).toLocaleString('en-US')}
                         </p>
                         <p className={`m-0 mt-1 text-[10.5px] ${subtextClass}`}>
                           Office & tools buffer
@@ -851,11 +863,11 @@ export default function PageDesignDemo() {
                         <p className={`m-0 text-[11px] ${subtextClass}`}>
                           {lang === 'am' ? 'የተጣራ ትርፍ መጠን' : 'Net Gross Margin'}
                         </p>
-                        <p className="m-0 mt-1 text-[14px] font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
+                        <p className="m-0 mt-1 text-[14px] font-semibold tabular-nums font-mono text-emerald-600 dark:text-emerald-400">
                           {effectiveMargin.toFixed(1)}%
                         </p>
                         <p className={`m-0 mt-1 text-[10.5px] ${subtextClass}`}>
-                          ETB {((discountedPriceMinor - Number(totalDirectCostMinor)) / 100).toLocaleString()} profit
+                          ETB {Math.round((discountedPriceMinor - Number(totalDirectCostMinor)) / 100).toLocaleString('en-US')} profit
                         </p>
                       </div>
                     </div>
@@ -864,7 +876,7 @@ export default function PageDesignDemo() {
 
                 {/* Right Side Column (xl:col-span-4) */}
                 <div className="flex flex-col gap-4 xl:col-span-4 2xl:col-span-3">
-                  {/* Balance / Statutory Waterfall Card */}
+                  {/* Ethiopian Statutory Waterfall Card (Pixel-Aligned) */}
                   <section className={`flex flex-col rounded-[14px] border shadow-[0_1px_2px_rgba(0,0,0,0.04)] ${cardBgClass}`}>
                     <div className="flex flex-wrap items-start justify-between gap-4 px-4 pt-4">
                       <div className="min-w-0">
@@ -878,48 +890,52 @@ export default function PageDesignDemo() {
                     </div>
 
                     <div className="flex flex-1 flex-col p-4">
+                      {/* Tri-color horizontal bar matching list */}
                       <div className={`flex w-full overflow-hidden rounded-full h-2 ${isDark ? 'bg-white/[0.08]' : 'bg-black/[0.05]'}`}>
-                        <span className={`h-full ${isDark ? 'bg-neutral-100' : 'bg-neutral-900'}`} style={{ width: '60%' }} />
-                        <span className="h-full bg-emerald-500" style={{ width: '28%' }} />
-                        <span className="h-full bg-amber-400" style={{ width: '12%' }} />
+                        <span className={`h-full ${isDark ? 'bg-neutral-100' : 'bg-neutral-900'}`} style={{ width: '70%' }} />
+                        <span className="h-full bg-emerald-500" style={{ width: '25%' }} />
+                        <span className="h-full bg-amber-400" style={{ width: '5%' }} />
                       </div>
 
-                      <ul className="m-0 mt-4 list-none space-y-2 p-0">
-                        <li className="flex items-center gap-2">
+                      {/* Aligned Waterfall Rows */}
+                      <ul className="m-0 mt-4 list-none space-y-2.5 p-0">
+                        <li className="flex items-center gap-2.5">
                           <span className={`h-2 w-2 shrink-0 rounded-full ${isDark ? 'bg-neutral-100' : 'bg-neutral-900'}`} />
-                          <span className="t-body min-w-0 truncate text-[12.5px]">
+                          <span className="text-[12.5px] min-w-0 flex-1 truncate">
                             {lang === 'am' ? 'የፕሮጀክት ጠቅላላ ዋጋ' : 'Contracted Base Price'}
                           </span>
-                          <span className="ml-auto text-[12.5px] font-semibold tabular-nums">
-                            ETB {(discountedPriceMinor / 100).toLocaleString()}
+                          <span className="text-[12.5px] font-semibold tabular-nums font-mono text-right shrink-0">
+                            ETB {Math.round(discountedPriceMinor / 100).toLocaleString('en-US')}
                           </span>
                         </li>
-                        <li className="flex items-center gap-2">
+                        <li className="flex items-center gap-2.5">
                           <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-500" />
-                          <span className="t-body min-w-0 truncate text-[12.5px] text-emerald-600 dark:text-emerald-400">
+                          <span className="text-[12.5px] min-w-0 flex-1 truncate text-emerald-600 dark:text-emerald-400 font-medium">
                             {lang === 'am' ? '+ 15% ተ.እ.ታ (ተጨማሪ እሴት)' : '+ 15% VAT (Invoice Add-on)'}
                           </span>
-                          <span className="ml-auto text-[12.5px] font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
-                            + ETB {(vatMinor / 100).toLocaleString()}
+                          <span className="text-[12.5px] font-semibold tabular-nums font-mono text-emerald-600 dark:text-emerald-400 text-right shrink-0">
+                            + ETB {Math.round(vatMinor / 100).toLocaleString('en-US')}
                           </span>
                         </li>
-                        <li className="flex items-center gap-2">
+                        <li className="flex items-center gap-2.5">
                           <span className="h-2 w-2 shrink-0 rounded-full bg-amber-400" />
-                          <span className="t-body min-w-0 truncate text-[12.5px] text-amber-600 dark:text-amber-400">
+                          <span className="text-[12.5px] min-w-0 flex-1 truncate text-amber-600 dark:text-amber-400 font-medium">
                             {lang === 'am' ? '- 2% ቅድመ ግብር (ከምንጭ)' : '- 2% Withholding Tax (Source)'}
                           </span>
-                          <span className="ml-auto text-[12.5px] font-semibold tabular-nums text-amber-600 dark:text-amber-400">
-                            - ETB {(whtMinor / 100).toLocaleString()}
+                          <span className="text-[12.5px] font-semibold tabular-nums font-mono text-amber-600 dark:text-amber-400 text-right shrink-0">
+                            - ETB {Math.round(whtMinor / 100).toLocaleString('en-US')}
                           </span>
                         </li>
                       </ul>
 
-                      <div className={`mt-3 pt-3 border-t flex items-center justify-between ${dividerClass}`}>
-                        <span className="text-[12px] font-bold">
+                      {/* Aligned Summary Net Cash Row with Matching Dot */}
+                      <div className={`mt-3.5 pt-3 border-t flex items-center gap-2.5 ${dividerClass}`}>
+                        <span className="h-2 w-2 shrink-0 rounded-full bg-[#007a55] dark:bg-[#5ee9b5]" />
+                        <span className="text-[12.5px] font-bold min-w-0 flex-1 truncate">
                           {lang === 'am' ? 'የተጣራ የጥሬ ገንዘብ ገቢ' : 'Net Cash Realized'}
                         </span>
-                        <span className="text-[13px] font-bold tabular-nums text-[#007a55] dark:text-[#5ee9b5]">
-                          ETB {(netReceivableMinor / 100).toLocaleString()}
+                        <span className="text-[13px] font-bold tabular-nums font-mono text-[#007a55] dark:text-[#5ee9b5] text-right shrink-0">
+                          ETB {Math.round(netReceivableMinor / 100).toLocaleString('en-US')}
                         </span>
                       </div>
                     </div>
@@ -985,86 +1001,89 @@ export default function PageDesignDemo() {
                 </div>
               </div>
 
-              {/* Bottom Two Settle-941 Panels */}
-              <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
-                {/* Panel 1: Interactive WBS Task Editor (xl:col-span-7) */}
-                <section className={`flex flex-col rounded-[14px] border p-4 shadow-[0_1px_2px_rgba(0,0,0,0.04)] xl:col-span-7 ${cardBgClass}`}>
-                  <div className={`flex flex-wrap items-center justify-between gap-2 border-b pb-3 ${dividerClass}`}>
-                    <div>
-                      <h2 className="t-h2 m-0 text-[15px] font-semibold">
-                        {lang === 'am' ? 'የስራ ተግባራት ዝርዝር (WBS)' : 'Active WBS Tasks & PERT Hours'}
-                      </h2>
-                      <p className={`t-meta m-0 mt-0.5 text-[11px] ${subtextClass}`}>
-                        {lang === 'am'
-                          ? 'የሰው ኃይል ሰዓት እና የዋጋ ቀመር (O, M, P)'
-                          : 'Three-point estimation: (O + 4M + P)/6'}
-                      </p>
+              {/* Bottom Two Settle-941 Panels (Symmetric 6 / 6 Split) */}
+              <div className="grid grid-cols-1 gap-4 xl:grid-cols-12 items-stretch">
+                {/* Panel 1: Interactive WBS Task Editor (xl:col-span-6) */}
+                <section className={`flex flex-col justify-between rounded-[14px] border p-4 shadow-[0_1px_2px_rgba(0,0,0,0.04)] xl:col-span-6 min-h-[440px] ${cardBgClass}`}>
+                  <div>
+                    {/* Header with Matching Badge */}
+                    <div className={`flex flex-wrap items-center justify-between gap-2 border-b pb-3 ${dividerClass}`}>
+                      <div className="min-w-0">
+                        <h2 className="t-h2 m-0 text-[15px] font-semibold truncate">
+                          {lang === 'am' ? 'የስራ ተግባራት ዝርዝር (WBS)' : 'Active WBS Tasks & PERT Hours'}
+                        </h2>
+                        <p className={`t-meta m-0 mt-0.5 text-[11px] truncate ${subtextClass}`}>
+                          {lang === 'am'
+                            ? 'የሰው ኃይል ሰዓት እና የዋጋ ቀመር (O, M, P)'
+                            : 'Three-point estimation: (O + 4M + P)/6'}
+                        </p>
+                      </div>
+                      <span className={`badge shrink-0 ${isDark ? 'bg-white/[0.1] text-neutral-200' : 'bg-black/[0.06] text-neutral-700'}`}>
+                        {tasks.length} tasks
+                      </span>
                     </div>
-                    <span className={`badge ${isDark ? 'bg-white/[0.1] text-neutral-200' : 'bg-black/[0.06] text-neutral-700'}`}>
-                      {tasks.length} tasks
-                    </span>
-                  </div>
 
-                  {/* Tasks List */}
-                  <div className={`divide-y max-h-[360px] overflow-y-auto ${isDark ? 'divide-white/[0.08]' : 'divide-black/[0.06]'}`}>
-                    {tasks.map((task) => {
-                      const exp = pertExpected(task.o, task.m, task.p);
-                      const cost = BigInt(Math.round(exp * 100)) * (task.hourlyRateMinor / 100n);
-                      return (
-                        <div
-                          key={task.id}
-                          className={`flex items-center justify-between py-3 text-[12.5px] px-2 rounded-[8px] transition-colors ${
-                            isDark ? 'hover:bg-white/[0.03]' : 'hover:bg-black/[0.02]'
-                          }`}
-                        >
-                          <div className="min-w-0 pr-3">
-                            <p className="m-0 font-medium truncate">
-                              {task.name}
-                            </p>
-                            <p className={`m-0 mt-0.5 text-[11px] ${subtextClass}`}>
-                              {task.role} · <span className="font-mono">ETB {(Number(task.hourlyRateMinor) / 100).toFixed(0)}/hr</span> · O:{task.o}h / M:{task.m}h / P:{task.p}h
-                            </p>
-                          </div>
-                          <div className="flex items-center gap-3 shrink-0">
-                            <div className="text-right">
-                              <p className="m-0 font-semibold tabular-nums">
-                                ETB {(Number(cost) / 100).toLocaleString()}
+                    {/* Tasks List */}
+                    <div className={`divide-y max-h-[290px] overflow-y-auto ${isDark ? 'divide-white/[0.08]' : 'divide-black/[0.06]'}`}>
+                      {tasks.map((task) => {
+                        const exp = pertExpected(task.o, task.m, task.p);
+                        const cost = BigInt(Math.round(exp * 100)) * (task.hourlyRateMinor / 100n);
+                        return (
+                          <div
+                            key={task.id}
+                            className={`flex items-center justify-between py-2.5 text-[12.5px] px-2 rounded-[8px] transition-colors ${
+                              isDark ? 'hover:bg-white/[0.03]' : 'hover:bg-black/[0.02]'
+                            }`}
+                          >
+                            <div className="min-w-0 pr-3 flex-1">
+                              <p className="m-0 font-medium truncate text-[12.5px]">
+                                {task.name}
                               </p>
-                              <span className={`text-[11px] font-mono ${subtextClass}`}>
-                                {exp.toFixed(1)} hrs
-                              </span>
+                              <p className={`m-0 mt-0.5 text-[11px] truncate ${subtextClass}`}>
+                                {task.role} · <span className="font-mono">ETB {Math.round(Number(task.hourlyRateMinor) / 100).toLocaleString('en-US')}/hr</span> · O:{task.o}h M:{task.m}h P:{task.p}h
+                              </p>
                             </div>
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteTask(task.id)}
-                              className={`ibtn-sm ${isDark ? 'text-neutral-400 hover:text-rose-400' : 'text-neutral-400 hover:text-rose-600'}`}
-                              title="Delete task"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
+                            <div className="flex items-center gap-3 shrink-0">
+                              <div className="text-right">
+                                <p className="m-0 font-semibold tabular-nums font-mono text-[12.5px]">
+                                  ETB {Math.round(Number(cost) / 100).toLocaleString('en-US')}
+                                </p>
+                                <span className={`text-[11px] font-mono ${subtextClass}`}>
+                                  {exp.toFixed(1)} hrs
+                                </span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteTask(task.id)}
+                                className={`ibtn-sm ${isDark ? 'text-neutral-400 hover:text-rose-400' : 'text-neutral-400 hover:text-rose-600'}`}
+                                title="Delete task"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  {/* Add Task Quick Form */}
+                  {/* Add Task Quick Form (Aligned Inputs & Labels) */}
                   <form onSubmit={handleAddTask} className={`mt-3 pt-3 border-t flex flex-wrap gap-2 items-center ${dividerClass}`}>
                     <input
                       type="text"
-                      placeholder={lang === 'am' ? 'አዲስ የስራ ተግባር ስም...' : 'New feature or task name...'}
+                      placeholder={lang === 'am' ? 'አዲስ የስራ ተግባር ስም...' : 'Task name...'}
                       value={newTaskName}
                       onChange={(e) => setNewTaskName(e.target.value)}
-                      className={`h-8 flex-1 min-w-[180px] rounded-[7px] border bg-transparent px-2.5 text-[12px] focus:outline-none ${
+                      className={`h-8 flex-1 min-w-[140px] rounded-[7px] border bg-transparent px-2.5 text-[12px] focus:outline-none ${
                         isDark ? 'border-white/[0.14] text-neutral-100 placeholder:text-neutral-500' : 'border-black/[0.1] text-neutral-900 placeholder:text-neutral-400'
                       }`}
                     />
                     <input
                       type="number"
-                      placeholder="Rate (ETB)"
+                      placeholder="ETB/hr"
                       value={newTaskRate}
                       onChange={(e) => setNewTaskRate(Number(e.target.value))}
-                      className={`h-8 w-24 rounded-[7px] border bg-transparent px-2 text-[12px] focus:outline-none ${
+                      className={`h-8 w-20 rounded-[7px] border bg-transparent px-2 text-[12px] font-mono focus:outline-none ${
                         isDark ? 'border-white/[0.14] text-neutral-100' : 'border-black/[0.1] text-neutral-900'
                       }`}
                       title="Hourly Rate in ETB"
@@ -1075,7 +1094,7 @@ export default function PageDesignDemo() {
                         placeholder="O"
                         value={newTaskO}
                         onChange={(e) => setNewTaskO(Number(e.target.value))}
-                        className={`h-8 w-12 rounded-[7px] border bg-transparent px-1 text-center text-[12px] focus:outline-none ${
+                        className={`h-8 w-11 rounded-[7px] border bg-transparent px-1 text-center text-[12px] font-mono focus:outline-none ${
                           isDark ? 'border-white/[0.14] text-neutral-100' : 'border-black/[0.1] text-neutral-900'
                         }`}
                         title="Optimistic Hours"
@@ -1085,7 +1104,7 @@ export default function PageDesignDemo() {
                         placeholder="M"
                         value={newTaskM}
                         onChange={(e) => setNewTaskM(Number(e.target.value))}
-                        className={`h-8 w-12 rounded-[7px] border bg-transparent px-1 text-center text-[12px] focus:outline-none ${
+                        className={`h-8 w-11 rounded-[7px] border bg-transparent px-1 text-center text-[12px] font-mono focus:outline-none ${
                           isDark ? 'border-white/[0.14] text-neutral-100' : 'border-black/[0.1] text-neutral-900'
                         }`}
                         title="Likely Hours"
@@ -1095,7 +1114,7 @@ export default function PageDesignDemo() {
                         placeholder="P"
                         value={newTaskP}
                         onChange={(e) => setNewTaskP(Number(e.target.value))}
-                        className={`h-8 w-12 rounded-[7px] border bg-transparent px-1 text-center text-[12px] focus:outline-none ${
+                        className={`h-8 w-11 rounded-[7px] border bg-transparent px-1 text-center text-[12px] font-mono focus:outline-none ${
                           isDark ? 'border-white/[0.14] text-neutral-100' : 'border-black/[0.1] text-neutral-900'
                         }`}
                         title="Pessimistic Hours"
@@ -1103,90 +1122,117 @@ export default function PageDesignDemo() {
                     </div>
                     <button
                       type="submit"
-                      className={`btn h-8 px-3 text-[12px] font-medium rounded-[7px] transition-all ${
+                      className={`btn h-8 px-3 text-[12px] font-medium rounded-[7px] transition-all shrink-0 ${
                         isDark ? 'bg-neutral-100 text-neutral-950 hover:bg-white' : 'bg-neutral-900 text-white hover:bg-neutral-800'
                       }`}
                     >
                       <Plus className="h-3.5 w-3.5" />
-                      <span>{lang === 'am' ? 'አክል' : 'Add Task'}</span>
+                      <span>{lang === 'am' ? 'አክል' : 'Add'}</span>
                     </button>
                   </form>
                 </section>
 
-                {/* Panel 2: Live Enterprise Quotes (xl:col-span-5) */}
-                <section className={`flex flex-col rounded-[14px] border p-4 shadow-[0_1px_2px_rgba(0,0,0,0.04)] xl:col-span-5 ${cardBgClass}`}>
-                  <div className={`flex flex-wrap items-center justify-between gap-2 border-b pb-3 ${dividerClass}`}>
-                    <div>
-                      <h2 className="t-h2 m-0 text-[15px] font-semibold">
-                        {lang === 'am' ? 'የቅርብ ጊዜ የዋጋ ማቅረቢያዎች' : 'Latest Enterprise Quotes'}
-                      </h2>
-                      <p className={`t-meta m-0 mt-0.5 text-[11px] ${subtextClass}`}>
-                        {lang === 'am' ? 'የኢትዮጵያ ተቋማት እና ባንኮች' : 'Commercial clients & contract status'}
-                      </p>
+                {/* Panel 2: Live Enterprise Quotes (xl:col-span-6) */}
+                <section className={`flex flex-col justify-between rounded-[14px] border p-4 shadow-[0_1px_2px_rgba(0,0,0,0.04)] xl:col-span-6 min-h-[440px] ${cardBgClass}`}>
+                  <div>
+                    {/* Header with Matching Badge */}
+                    <div className={`flex flex-wrap items-center justify-between gap-2 border-b pb-3 ${dividerClass}`}>
+                      <div className="min-w-0">
+                        <h2 className="t-h2 m-0 text-[15px] font-semibold truncate">
+                          {lang === 'am' ? 'የቅርብ ጊዜ የዋጋ ማቅረቢያዎች' : 'Latest Enterprise Quotes'}
+                        </h2>
+                        <p className={`t-meta m-0 mt-0.5 text-[11px] truncate ${subtextClass}`}>
+                          {lang === 'am' ? 'የኢትዮጵያ ተቋማት እና ባንኮች' : 'Commercial clients & contract status'}
+                        </p>
+                      </div>
+                      <span className={`badge shrink-0 ${isDark ? 'bg-white/[0.1] text-neutral-200' : 'bg-black/[0.06] text-neutral-700'}`}>
+                        4 quotes
+                      </span>
                     </div>
-                    <span className={`text-[11.5px] font-medium ${subtextClass}`}>Live feed</span>
+
+                    {/* Aligned Quotes Table Rows */}
+                    <div className={`divide-y mt-1 max-h-[290px] overflow-y-auto ${isDark ? 'divide-white/[0.08]' : 'divide-black/[0.06]'}`}>
+                      {[
+                        {
+                          client: 'Commercial Bank of Ethiopia (CBE)',
+                          project: 'Mobile Banking Core Re-platform',
+                          amount: 'ETB 3,450,000',
+                          status: 'ISSUED',
+                          date: 'ጥቅምት 12',
+                        },
+                        {
+                          client: 'Ethio Telecom Enterprise',
+                          project: 'Telebirr SuperApp Merchant API Suite',
+                          amount: 'ETB 2,180,000',
+                          status: 'ACCEPTED',
+                          date: 'ጥቅምት 8',
+                        },
+                        {
+                          client: 'Ministry of Innovation & Tech (MInT)',
+                          project: 'National Citizen Portal Phase 2',
+                          amount: 'ETB 4,850,000',
+                          status: 'IN REVIEW',
+                          date: 'ጥቅምት 2',
+                        },
+                        {
+                          client: 'Ethiopian Airlines Group',
+                          project: 'Crew Rostering & Crew Portal',
+                          amount: 'ETB 1,920,000',
+                          status: 'DRAFT',
+                          date: 'መስከረም 26',
+                        },
+                      ].map((row, idx) => (
+                        <div
+                          key={idx}
+                          className={`flex items-center justify-between py-2.5 text-[12.5px] px-2 rounded-[8px] transition-colors ${
+                            isDark ? 'hover:bg-white/[0.03]' : 'hover:bg-black/[0.02]'
+                          }`}
+                        >
+                          <div className="min-w-0 pr-3 flex-1">
+                            <p className="m-0 font-medium truncate text-[12.5px]">
+                              {row.client}
+                            </p>
+                            <p className={`m-0 text-[11px] truncate ${subtextClass}`}>
+                              {row.project}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-3 shrink-0">
+                            <span className={`text-[11px] font-mono w-16 text-right ${subtextClass}`}>
+                              {row.date}
+                            </span>
+                            <span className="font-semibold tabular-nums font-mono text-[12.5px] w-28 text-right">
+                              {row.amount}
+                            </span>
+                            <span
+                              className={`badge text-[10.5px] min-w-[76px] justify-center text-center font-medium ${
+                                row.status === 'ACCEPTED'
+                                  ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/[0.15] dark:text-emerald-300'
+                                  : row.status === 'ISSUED'
+                                  ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/[0.15] dark:text-blue-300'
+                                  : row.status === 'IN REVIEW'
+                                  ? 'bg-amber-50 text-amber-800 dark:bg-amber-500/[0.15] dark:text-amber-200'
+                                  : isDark ? 'bg-white/[0.08] text-neutral-300' : 'bg-neutral-100 text-neutral-600'
+                              }`}
+                            >
+                              {row.status}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className={`divide-y mt-1 ${isDark ? 'divide-white/[0.08]' : 'divide-black/[0.06]'}`}>
-                    {[
-                      {
-                        client: 'Commercial Bank of Ethiopia (CBE)',
-                        project: 'Mobile Banking Core Re-platform',
-                        amount: 'ETB 3,450,000',
-                        status: 'ISSUED',
-                        date: 'ጥቅምት 12',
-                      },
-                      {
-                        client: 'Ethio Telecom Enterprise',
-                        project: 'Telebirr SuperApp Merchant API Suite',
-                        amount: 'ETB 2,180,000',
-                        status: 'ACCEPTED',
-                        date: 'ጥቅምት 8',
-                      },
-                      {
-                        client: 'Ministry of Innovation & Tech (MInT)',
-                        project: 'National Citizen Portal Phase 2',
-                        amount: 'ETB 4,850,000',
-                        status: 'IN REVIEW',
-                        date: 'ጥቅምት 2',
-                      },
-                      {
-                        client: 'Ethiopian Airlines Group',
-                        project: 'Crew Rostering & Crew Portal',
-                        amount: 'ETB 1,920,000',
-                        status: 'DRAFT',
-                        date: 'መስከረም 26',
-                      },
-                    ].map((row, idx) => (
-                      <div key={idx} className="flex items-center justify-between py-3 text-[12px]">
-                        <div className="min-w-0 pr-3">
-                          <p className="m-0 font-medium truncate">
-                            {row.client}
-                          </p>
-                          <p className={`m-0 text-[11px] truncate ${subtextClass}`}>
-                            {row.project}
-                          </p>
-                        </div>
-                        <div className="text-right shrink-0">
-                          <p className="m-0 font-semibold tabular-nums">
-                            {row.amount}
-                          </p>
-                          <span
-                            className={`badge text-[10px] ${
-                              row.status === 'ACCEPTED'
-                                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/[0.15] dark:text-emerald-300'
-                                : row.status === 'ISSUED'
-                                ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/[0.15] dark:text-blue-300'
-                                : row.status === 'IN REVIEW'
-                                ? 'bg-amber-50 text-amber-800 dark:bg-amber-500/[0.15] dark:text-amber-200'
-                                : isDark ? 'bg-white/[0.08] text-neutral-300' : 'bg-neutral-100 text-neutral-600'
-                            }`}
-                          >
-                            {row.status}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                  {/* Matching Bottom Summary Footer */}
+                  <div className={`mt-3 pt-3 border-t flex items-center justify-between ${dividerClass}`}>
+                    <span className={`text-[11.5px] font-medium ${subtextClass}`}>
+                      {lang === 'am' ? '4 የኢትዮጵያ ተቋማት ጨረታዎች' : '4 Active Enterprise Tenders'}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[11px] font-mono ${subtextClass}`}>Total:</span>
+                      <span className="text-[12.5px] font-bold tabular-nums font-mono text-[#007a55] dark:text-[#5ee9b5]">
+                        ETB 12,400,000
+                      </span>
+                    </div>
                   </div>
                 </section>
               </div>
