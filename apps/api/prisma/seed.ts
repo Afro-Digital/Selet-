@@ -1,4 +1,4 @@
-import { PrismaClient, UserRole, PayType, PensionBase, CatalogCategory, PriceRecurrence } from '@prisma/client';
+import { PrismaClient, UserRole, PayType, PensionBase, CatalogCategory, PriceModel } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -275,7 +275,7 @@ async function main() {
       update: {
         rate: ex.rate,
         source: ex.source,
-        capturedAt: new Date(),
+        effectiveAt: new Date(),
       },
       create: {
         organizationId: org.id,
@@ -283,7 +283,7 @@ async function main() {
         toCurrency: ex.to,
         rate: ex.rate,
         source: ex.source,
-        capturedAt: new Date(),
+        effectiveAt: new Date(),
       },
     });
   }
@@ -294,34 +294,30 @@ async function main() {
     {
       name: 'DigitalOcean Basic Droplet (2GB, 1 vCPU)',
       category: CatalogCategory.HOSTING,
-      costMinor: 1200n, // $12.00
+      amountMinor: 1200n, // $12.00
       currency: 'USD',
-      recurrence: PriceRecurrence.MONTHLY,
-      vendor: 'DigitalOcean LLC',
+      priceModel: PriceModel.PER_MONTH,
     },
     {
       name: 'AWS EC2 t4g.medium (4GB, 2 vCPU Graviton)',
       category: CatalogCategory.HOSTING,
-      costMinor: 2450n, // $24.50
+      amountMinor: 2450n, // $24.50
       currency: 'USD',
-      recurrence: PriceRecurrence.MONTHLY,
-      vendor: 'Amazon Web Services',
+      priceModel: PriceModel.PER_MONTH,
     },
     {
       name: 'Ethio Telecom Enterprise Bulk SMS Gateway',
-      category: CatalogCategory.THIRD_PARTY_SERVICE,
-      costMinor: 35n, // 0.35 ETB / SMS
+      category: CatalogCategory.TOOL,
+      amountMinor: 35n, // 0.35 ETB / SMS
       currency: 'ETB',
-      recurrence: PriceRecurrence.USAGE_BASED,
-      vendor: 'Ethio Telecom',
+      priceModel: PriceModel.FIXED,
     },
     {
       name: 'Telebirr Payment Gateway Core API License',
-      category: CatalogCategory.THIRD_PARTY_SERVICE,
-      costMinor: 2500000n, // 25,000 ETB / year
+      category: CatalogCategory.PAYMENT_GATEWAY,
+      amountMinor: 2500000n, // 25,000 ETB / year
       currency: 'ETB',
-      recurrence: PriceRecurrence.ANNUAL,
-      vendor: 'Ethio Telecom',
+      priceModel: PriceModel.PER_MONTH,
     },
   ];
 
@@ -335,11 +331,10 @@ async function main() {
           organizationId: org.id,
           name: item.name,
           category: item.category,
-          unitCostMinor: item.costMinor,
+          amountMinor: item.amountMinor,
           currency: item.currency,
-          recurrence: item.recurrence,
-          vendor: item.vendor,
-          lastVerifiedAt: new Date(),
+          priceModel: item.priceModel,
+          verifiedAt: new Date(),
         },
       });
     }
