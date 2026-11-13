@@ -3,7 +3,7 @@
 import React from 'react';
 import { TranslationDictionary } from '../../lib/i18n';
 import { UserRole } from '../../types';
-import { TrendingUp, AlertTriangle, CheckCircle, ArrowUpRight, Lock } from 'lucide-react';
+import { TrendingUp, AlertTriangle, CheckCircle, ArrowUpRight, Lock, Tag } from 'lucide-react';
 
 export interface PricingScenarioItem {
   name: string;
@@ -64,7 +64,7 @@ export const PricingScenariosCard: React.FC<PricingScenariosCardProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-black/[0.06] dark:border-white/[0.08]">
         <div>
           <h2 className="text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-            <span>🏷️</span> {t.pricingAndMargins}
+            <Tag className="w-4 h-4 text-emerald-500" /> {t.pricingAndMargins}
           </h2>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
             Defensible price modeling: Low (optimistic), Recommended (target margin), and High

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { BarChart3, Lock } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 import { UserRole } from '../../types';
 
@@ -47,7 +48,7 @@ export const ProjectCostSummaryCard: React.FC<ProjectCostSummaryCardProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-black/[0.06] dark:border-white/[0.08]">
         <div>
           <h2 className="text-base font-semibold tracking-tight flex items-center gap-2">
-            <span>📊</span> {t.costBreakdown}
+            <BarChart3 className="w-4 h-4 text-emerald-500" /> {t.costBreakdown}
           </h2>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
             Full project cost formula: Direct + Risk (Contingency + Multipliers) + Overhead
@@ -167,7 +168,7 @@ export const ProjectCostSummaryCard: React.FC<ProjectCostSummaryCardProps> = ({
         </div>
       ) : (
         <div className="mt-6 bg-amber-500/10 border border-amber-500/20 rounded-[7px] p-3 text-xs font-mono text-amber-700 dark:text-amber-400 flex items-center gap-2">
-          <span>🔒</span> {t.developerHoursOnlyNotice}
+          <Lock className="w-3.5 h-3.5 text-amber-500 shrink-0" /> {t.developerHoursOnlyNotice}
         </div>
       )}
     </div>

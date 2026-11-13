@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { ShieldAlert } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 import { UserRole } from '../../types';
 
@@ -60,7 +61,7 @@ export const RiskManager: React.FC<RiskManagerProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-black/[0.06] dark:border-white/[0.08]">
         <div>
           <h2 className="text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-            <span>🛡️</span> {t.riskFactors}
+            <ShieldAlert className="w-4 h-4 text-amber-500" /> {t.riskFactors}
           </h2>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
             Apply project risk multipliers and contingency to guard margin against requirement

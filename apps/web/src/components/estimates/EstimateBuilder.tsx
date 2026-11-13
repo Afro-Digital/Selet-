@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Ruler, Sparkles, Layers, Trash2 } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 import { ProjectItem, ModuleItem, Feature, RoleOption, UserOption } from './types';
 import { WbsSummaryBar } from './WbsSummaryBar';
@@ -416,7 +417,7 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-            <span>📐</span> {t.estimateBuilder}
+            <Ruler className="w-4 h-4 text-emerald-500" /> {t.estimateBuilder}
           </h2>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 font-mono">{t.wbsHierarchy}</p>
         </div>
@@ -430,7 +431,7 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
           >
             {projects.map((p) => (
               <option key={p.id} value={p.id} className="bg-white dark:bg-[#141414] text-neutral-900 dark:text-neutral-100">
-                📁 {p.name}
+                {p.name}
               </option>
             ))}
           </select>
@@ -441,7 +442,7 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
               onClick={() => setIsTemplateModalOpen(true)}
               className="bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-neutral-200 dark:text-neutral-900 font-semibold px-3 py-1.5 rounded-[7px] text-xs shadow-sm transition-all flex items-center gap-1.5"
             >
-              <span>🚀</span> {t.starterTemplates}
+              <Sparkles className="w-3.5 h-3.5" /> {t.starterTemplates}
             </button>
           )}
         </div>
@@ -466,7 +467,7 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
               {/* Module Header */}
               <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-black/[0.06] dark:border-white/[0.08]">
                 <div className="flex items-center gap-2">
-                  <span className="text-neutral-500 font-mono text-sm">📦</span>
+                  <Layers className="w-4 h-4 text-neutral-400 dark:text-neutral-500 shrink-0" />
                   <div>
                     <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 text-sm tracking-tight">{module.name}</h3>
                     {module.description && (
@@ -495,7 +496,7 @@ export const EstimateBuilder: React.FC<EstimateBuilderProps> = ({
                       className="text-neutral-400 hover:text-rose-500 dark:hover:text-rose-400 text-sm p-1 rounded-[7px] transition-colors"
                       title={t.delete}
                     >
-                      🗑️
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>

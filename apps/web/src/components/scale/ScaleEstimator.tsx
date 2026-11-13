@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { TrendingUp, Users, HardDrive, Globe, CreditCard, Zap, Lock } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 import { CatalogCategory, Payer, UserRole } from '../../types';
 
@@ -266,7 +267,7 @@ export const ScaleEstimator: React.FC<ScaleEstimatorProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-black/[0.06] dark:border-white/[0.08]">
         <div>
           <h2 className="text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-            <span>📈</span> {t.scaleEstimator}
+            <TrendingUp className="w-4 h-4 text-emerald-500" /> {t.scaleEstimator}
           </h2>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
             Map project traffic and user volume to suggested infrastructure tiers, gateway fees, and
@@ -281,9 +282,10 @@ export const ScaleEstimator: React.FC<ScaleEstimatorProps> = ({
         <div className="bg-black/[0.015] dark:bg-white/[0.02] p-3.5 rounded-[10px] border border-black/[0.06] dark:border-white/[0.08]">
           <label
             htmlFor="scale-monthly-users"
-            className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 block mb-1.5"
+            className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 flex items-center gap-1.5 mb-1.5"
           >
-            👥 {t.monthlyUsers}
+            <Users className="w-3.5 h-3.5 text-neutral-500" />
+            <span>{t.monthlyUsers}</span>
           </label>
           <input
             id="scale-monthly-users"
@@ -303,9 +305,10 @@ export const ScaleEstimator: React.FC<ScaleEstimatorProps> = ({
         <div className="bg-black/[0.015] dark:bg-white/[0.02] p-3.5 rounded-[10px] border border-black/[0.06] dark:border-white/[0.08]">
           <label
             htmlFor="scale-storage-gb"
-            className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 block mb-1.5"
+            className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 flex items-center gap-1.5 mb-1.5"
           >
-            💾 {t.storageGb}
+            <HardDrive className="w-3.5 h-3.5 text-neutral-500" />
+            <span>{t.storageGb}</span>
           </label>
           <input
             id="scale-storage-gb"
@@ -323,9 +326,10 @@ export const ScaleEstimator: React.FC<ScaleEstimatorProps> = ({
         <div className="bg-black/[0.015] dark:bg-white/[0.02] p-3.5 rounded-[10px] border border-black/[0.06] dark:border-white/[0.08]">
           <label
             htmlFor="scale-traffic-gb"
-            className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 block mb-1.5"
+            className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 flex items-center gap-1.5 mb-1.5"
           >
-            🌐 {t.trafficGb}
+            <Globe className="w-3.5 h-3.5 text-neutral-500" />
+            <span>{t.trafficGb}</span>
           </label>
           <input
             id="scale-traffic-gb"
@@ -343,9 +347,10 @@ export const ScaleEstimator: React.FC<ScaleEstimatorProps> = ({
         <div className="bg-black/[0.015] dark:bg-white/[0.02] p-3.5 rounded-[10px] border border-black/[0.06] dark:border-white/[0.08]">
           <label
             htmlFor="scale-payment-volume"
-            className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 block mb-1.5"
+            className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 flex items-center gap-1.5 mb-1.5"
           >
-            💳 {t.paymentVolume}
+            <CreditCard className="w-3.5 h-3.5 text-neutral-500" />
+            <span>{t.paymentVolume}</span>
           </label>
           <input
             id="scale-payment-volume"
@@ -365,7 +370,8 @@ export const ScaleEstimator: React.FC<ScaleEstimatorProps> = ({
           onClick={handleRecalculate}
           className="bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-900 font-semibold px-4 py-2 rounded-[7px] text-xs shadow-sm transition-colors flex items-center gap-1.5"
         >
-          <span>⚡</span> {t.calculateSuggestions}
+          <Zap className="w-3.5 h-3.5" />
+          <span>{t.calculateSuggestions}</span>
         </button>
       </div>
 
@@ -523,7 +529,7 @@ export const ScaleEstimator: React.FC<ScaleEstimatorProps> = ({
         </div>
       ) : (
         <div className="mt-6 bg-amber-500/10 border border-amber-500/20 rounded-[7px] p-3 text-xs font-mono text-amber-700 dark:text-amber-400 flex items-center gap-2">
-          <span>🔒</span> {t.developerHoursOnlyNotice}
+          <Lock className="w-3.5 h-3.5 shrink-0" /> {t.developerHoursOnlyNotice}
         </div>
       )}
     </div>

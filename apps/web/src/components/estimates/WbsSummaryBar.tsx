@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Lock } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 import { ProjectItem, RoleOption } from './types';
 
@@ -96,8 +97,8 @@ export const WbsSummaryBar: React.FC<WbsSummaryBarProps> = ({
             </div>
           </div>
         ) : (
-          <div className="bg-amber-500/10 border border-amber-500/20 rounded-[7px] px-3 py-2 text-xs font-mono text-amber-700 dark:text-amber-300">
-            🔒 {t.developerHoursOnlyNotice}
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-[7px] px-3 py-2 text-xs font-mono text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+            <Lock className="w-3.5 h-3.5 shrink-0" /> {t.developerHoursOnlyNotice}
           </div>
         )}
 

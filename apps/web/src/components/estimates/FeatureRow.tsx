@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { User, Trash2, Lock } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 import { Feature, EstimationMethod, TShirtSize, RoleOption, UserOption, RoleHours } from './types';
 
@@ -164,19 +165,20 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
                 .filter((u) => u.role === 'DEVELOPER')
                 .map((u) => (
                   <option key={u.id} value={u.id}>
-                    👤 {u.name}
+                    {u.name}
                   </option>
                 ))}
             </select>
           ) : (
             <span
-              className={`text-xs px-2.5 py-1 rounded-[7px] border flex items-center gap-1 ${
+              className={`text-xs px-2.5 py-1 rounded-[7px] border flex items-center gap-1.5 ${
                 isAssignedToCurrentUser
                   ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-medium'
                   : 'bg-black/[0.03] dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.08] text-neutral-600 dark:text-neutral-400'
               }`}
             >
-              👤 {assignedUser ? assignedUser.name : t.unassigned}
+              <User className="w-3.5 h-3.5 inline text-neutral-500" />
+              <span>{assignedUser ? assignedUser.name : t.unassigned}</span>
             </span>
           )}
 
@@ -192,7 +194,7 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
               className="text-neutral-400 hover:text-rose-500 dark:hover:text-rose-400 p-1 text-sm rounded-[7px] transition-colors"
               title={t.delete}
             >
-              🗑️
+              <Trash2 className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
@@ -201,7 +203,7 @@ export const FeatureRow: React.FC<FeatureRowProps> = ({
       {/* Developer Restricted Warning if not assigned */}
       {!canEditHours && (
         <div className="mb-2 text-[11px] font-mono text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-[7px] px-2.5 py-1 flex items-center gap-1.5">
-          <span>🔒</span> {t.onlyAssignedCanEdit}
+          <Lock className="w-3.5 h-3.5 shrink-0" /> {t.onlyAssignedCanEdit}
         </div>
       )}
 

@@ -41,7 +41,7 @@ export default function PageDesignDemo() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [activeNav, setActiveNav] = useState<'overview' | 'wbs' | 'balancer' | 'quotes'>('overview');
   const [activeTimeRange, setActiveTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
-  const [targetMarginPercent, setTargetMarginPercent] = useState<number>(30);
+  const [targetMarginPercent, _setTargetMarginPercent] = useState<number>(30);
   const [discountPercent, setDiscountPercent] = useState<number>(0);
 
   // Sync theme with document class and local storage
@@ -117,7 +117,7 @@ export default function PageDesignDemo() {
 
   // New task form state
   const [newTaskName, setNewTaskName] = useState('');
-  const [newTaskRole, setNewTaskRole] = useState('Senior Engineer');
+  const [newTaskRole, _setNewTaskRole] = useState('Senior Engineer');
   const [newTaskRate, setNewTaskRate] = useState(1800);
   const [newTaskO, setNewTaskO] = useState(10);
   const [newTaskM, setNewTaskM] = useState(20);

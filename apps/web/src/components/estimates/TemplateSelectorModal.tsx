@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Sparkles, Info, X } from 'lucide-react';
 import { TranslationDictionary } from '../../lib/i18n';
 
 export interface TemplateCard {
@@ -56,17 +57,17 @@ export const TemplateSelectorModal: React.FC<TemplateSelectorModalProps> = ({
         <div className="flex items-center justify-between pb-4 border-b border-black/[0.06] dark:border-white/[0.08]">
           <div>
             <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-              <span>🚀</span> {t.starterTemplates}
+              <Sparkles className="w-4 h-4 text-emerald-500" /> {t.starterTemplates}
             </h3>
             <p className="text-xs font-mono text-amber-700 dark:text-amber-400 mt-1 flex items-center gap-1.5">
-              <span>ℹ️</span> {t.exampleHoursDisclaimer}
+              <Info className="w-3.5 h-3.5 shrink-0" /> {t.exampleHoursDisclaimer}
             </p>
           </div>
           <button
             onClick={onClose}
             className="text-neutral-400 hover:text-neutral-900 dark:hover:text-white p-1 text-sm rounded-[7px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
           >
-            ✕
+            <X className="w-4 h-4" />
           </button>
         </div>
 

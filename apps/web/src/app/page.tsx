@@ -60,9 +60,7 @@ import {
   Moon,
   Search,
   ChevronRight,
-  SlidersHorizontal,
-  FolderKanban,
-  Check,
+  Building2,
 } from 'lucide-react';
 
 export default function Home() {
@@ -74,7 +72,16 @@ export default function Home() {
     'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates' | 'scale' | 'pricing' | 'quotes' | 'reports'
   >('people');
 
-  // Theme synchronization with document class and localStorage
+  const [companyConfig, setCompanyConfig] = useState({
+    companyName: 'Afro Digital Technologies',
+    tin: '0012345678',
+    currency: 'ETB',
+    marginFloor: 20,
+    overheadRate: 10,
+    contingencyRate: 15,
+  });
+
+  // Theme & Organization Configuration synchronization
   useEffect(() => {
     const saved = (localStorage.getItem('selet_theme') as 'light' | 'dark') || 'light';
     setTheme(saved);
@@ -82,6 +89,32 @@ export default function Home() {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
+    }
+
+    try {
+      const storedConfig = localStorage.getItem('selet_company_config');
+      if (storedConfig) {
+        const parsed = JSON.parse(storedConfig);
+        setCompanyConfig((prev) => ({ ...prev, ...parsed }));
+        if (parsed.overheadRate !== undefined) {
+          setOverheadRate(parsed.overheadRate / 100);
+        }
+        if (parsed.contingencyRate !== undefined) {
+          setContingencyRate(parsed.contingencyRate / 100);
+        }
+        if (parsed.marginFloor !== undefined) {
+          setPricingBlendedMargin(parsed.marginFloor / 100);
+        }
+      }
+      const storedSession = localStorage.getItem('selet_auth_session');
+      if (storedSession) {
+        const session = JSON.parse(storedSession);
+        if (session.role) {
+          setUserRole(session.role as UserRole);
+        }
+      }
+    } catch {
+      // fallback
     }
   }, []);
 
@@ -358,13 +391,18 @@ export default function Home() {
     { id: 'reports', label: t.reports, icon: BarChart3 },
   ] as const;
 
-  const masterDataNavItems = [
+  const masterDataNavItems: Array<{
+    id: 'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency';
+    label: string;
+    icon: any;
+    count?: number;
+  }> = [
     { id: 'people', label: t.teamMembers, icon: Users, count: people.length },
     { id: 'roles', label: t.jobRoles, icon: Briefcase, count: roles.length },
     { id: 'rate-cards', label: t.rateCards, icon: CreditCard, count: rateCards.length },
     { id: 'catalog', label: t.costCatalog, icon: Package, count: catalogItems.length },
     { id: 'currency', label: t.currencyService, icon: Coins },
-  ] as const;
+  ];
 
   const currentTabLabel =
     [...coreNavItems, ...masterDataNavItems].find((item) => item.id === activeTab)?.label ||
@@ -502,9 +540,34 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Sidebar Footer */}
-        <div className="p-3 border-t border-black/[0.06] dark:border-white/[0.08] space-y-2">
-          <div className="flex items-center justify-between px-2 py-1 text-[11px] text-neutral-400 dark:text-neutral-500">
+        {/* Sidebar Footer with Active Organization Profile */}
+        <div className="p-3 border-t border-black/[0.06] dark:border-white/[0.08] space-y-2.5">
+          <div className="bg-black/[0.02] dark:bg-white/[0.04] p-2.5 rounded-[10px] border border-black/[0.04] dark:border-white/[0.06]">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
+                Organization
+              </span>
+              <a
+                href="/login"
+                className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+                title="Configure Company Baselines & Pricing"
+              >
+                <span>Edit</span>
+              </a>
+            </div>
+            <div className="flex items-center gap-2">
+              <Building2 className="w-3.5 h-3.5 text-neutral-500 shrink-0" />
+              <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100 truncate" title={companyConfig.companyName}>
+                Org: {companyConfig.companyName}
+              </span>
+            </div>
+            <div className="mt-1 text-[10px] font-mono text-neutral-400 dark:text-neutral-500 flex items-center justify-between">
+              <span>TIN: {companyConfig.tin}</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{companyConfig.marginFloor}% Floor</span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between px-2 py-0.5 text-[11px] text-neutral-400 dark:text-neutral-500">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>{locale === 'am' ? 'ሲስተም ንቁ' : 'System Live'}</span>
@@ -628,6 +691,19 @@ export default function Home() {
                 <option value="DEVELOPER" className="dark:bg-neutral-900">{t.roleDeveloper}</option>
               </select>
             </div>
+
+            {/* Organization / Sign In Link */}
+            <a
+              href="/login"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-[7px] bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-medium text-neutral-700 dark:text-neutral-300 transition-colors"
+              title="Configure Organization & Pricing Floors"
+            >
+              <Building2 className="w-3.5 h-3.5 text-emerald-500" />
+              <span className="hidden xl:inline">Organization: {companyConfig.companyName}</span>
+              <span className="px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-[10px] font-mono font-semibold">
+                {userRole}
+              </span>
+            </a>
 
             {/* Legal Disclaimer Button */}
             <button

@@ -12,7 +12,7 @@ import {
   BalancerLine,
   BalancerResult,
 } from '@selet/pricing-engine';
-import { Sliders, Target, Percent, AlertCircle, Lock, ArrowRight } from 'lucide-react';
+import { Sliders, Target, Percent, AlertCircle, Lock, ArrowRight, Scale } from 'lucide-react';
 
 export interface ModuleLineItem {
   id: string;
@@ -154,7 +154,7 @@ export const MarginBalancer: React.FC<MarginBalancerProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-black/[0.06] dark:border-white/[0.08]">
         <div>
           <h2 className="text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-            <span>⚖️</span> {t.marginBalancer}
+            <Scale className="w-4 h-4 text-emerald-500" /> {t.marginBalancer}
           </h2>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
             Dynamic margin redistribution engine. Lock project margin, model client budgets, and
