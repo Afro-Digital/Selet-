@@ -37,6 +37,7 @@ import { PricingScenariosCard } from '../components/pricing/PricingScenariosCard
 import { MarginBalancer, ModuleLineItem } from '../components/pricing/MarginBalancer';
 import { QuoteBuilder } from '../components/quotes/QuoteBuilder';
 import { ReportsDashboard } from '../components/reports/ReportsDashboard';
+import { LegalDisclaimerModal } from '../components/legal/LegalDisclaimerModal';
 import {
   Users,
   Briefcase,
@@ -54,6 +55,7 @@ import {
   FileText,
   Calendar,
   BarChart3,
+  Scale,
 } from 'lucide-react';
 
 export default function Home() {
@@ -91,6 +93,7 @@ export default function Home() {
   ]);
   const [notifications, setNotifications] = useState<InAppNotification[]>(INITIAL_NOTIFICATIONS);
   const [isAddPersonModalOpen, setIsAddPersonModalOpen] = useState(false);
+  const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
 
   // Stage 8 Risk & Scale State
   const [contingencyRate, setContingencyRate] = useState<number>(0.1);
@@ -330,7 +333,7 @@ export default function Home() {
                   Selet (ስሌት)
                 </span>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
-                  v0.1.0 Stage 11
+                  v1.0.0
                 </span>
               </div>
               <p className="text-xs text-slate-500 hidden sm:block">{t.tagline}</p>
@@ -412,6 +415,17 @@ export default function Home() {
                 <option value="DEVELOPER">{t.roleDeveloper}</option>
               </select>
             </div>
+
+            {/* Legal Disclaimer Button */}
+            <button
+              onClick={() => setIsLegalModalOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer"
+              title={t.legalDisclaimer}
+              aria-label={t.legalDisclaimer}
+            >
+              <Scale className="w-3.5 h-3.5 text-amber-700" />
+              <span className="hidden lg:inline">{t.legalDisclaimer}</span>
+            </button>
           </div>
         </div>
       </header>
@@ -903,6 +917,34 @@ export default function Home() {
         locale={locale}
         onAddPerson={handleAddPerson}
       />
+
+      {/* Statutory Legal & Tax Disclaimer Modal */}
+      <LegalDisclaimerModal
+        isOpen={isLegalModalOpen}
+        onClose={() => setIsLegalModalOpen(false)}
+        t={t}
+        locale={locale}
+      />
+
+      {/* Accessible Footer */}
+      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-slate-200 mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-slate-800">Selet (ስሌት) v1.0.0</span>
+          <span>•</span>
+          <span>Open-source software pricing platform for Ethiopia (Apache-2.0)</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsLegalModalOpen(true)}
+            className="text-amber-800 hover:text-amber-900 font-semibold underline underline-offset-4 flex items-center gap-1 focus:outline-none cursor-pointer"
+          >
+            <Scale className="w-3.5 h-3.5" />
+            <span>{t.legalDisclaimer}</span>
+          </button>
+          <span>•</span>
+          <span>afrodigital.dev</span>
+        </div>
+      </footer>
     </main>
   );
 }

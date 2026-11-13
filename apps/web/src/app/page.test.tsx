@@ -5,7 +5,7 @@ import Home from './page';
 describe('Stage 6: Cost Catalog, Currency Service & Notifications (UI)', () => {
   it('renders the header with app name and branding', () => {
     render(<Home />);
-    expect(screen.getByText(/Selet \(ስሌት\)/i)).toBeDefined();
+    expect(screen.getAllByText(/Selet \(ስሌት\)/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText('Team Members').length).toBeGreaterThan(0);
   });
 
@@ -633,6 +633,41 @@ describe('Stage 6: Cost Catalog, Currency Service & Notifications (UI)', () => {
       // Confidential KPI numbers and financial tables must NOT be rendered
       expect(screen.queryByText(/Total Portfolio Revenue/i)).toBeNull();
       expect(screen.queryByText(/QT-2026-0001/i)).toBeNull();
+    });
+  });
+
+  describe('Stage 13: Hardening, Accessibility & Statutory Legal Disclaimer (UI)', () => {
+    it('opens Legal & Tax Disclaimer modal with Ethiopian statutory citations and closes via button', () => {
+      render(<Home />);
+
+      // Open modal via header button
+      const disclaimerButtons = screen.getAllByRole('button', { name: /Legal & Tax Disclaimer/i });
+      expect(disclaimerButtons.length).toBeGreaterThan(0);
+      fireEvent.click(disclaimerButtons[0]!);
+
+      // Verify modal content
+      expect(screen.getByRole('dialog')).toBeDefined();
+      expect(screen.getByText('Statutory Limitations & Tax Disclaimer')).toBeDefined();
+      expect(screen.getByText(/Value Added Tax \(VAT 15%\)/i)).toBeDefined();
+      expect(screen.getByText(/Proc\. 1341\/2016/i)).toBeDefined();
+      expect(screen.getByText(/Proc\. 979\/2016/i)).toBeDefined();
+      expect(screen.getByText(/Proc\. 1268\/2022/i)).toBeDefined();
+      expect(screen.getByText(/NBE FXD\/01\/2024/i)).toBeDefined();
+
+      // Close modal using acknowledge button
+      const ackButton = screen.getByRole('button', { name: /I Understand & Acknowledge/i });
+      fireEvent.click(ackButton);
+
+      // Verify modal is closed
+      expect(screen.queryByRole('dialog')).toBeNull();
+    });
+
+    it('renders accessible footer with release version v1.0.0 and disclaimer link', () => {
+      render(<Home />);
+
+      expect(screen.getAllByText(/Selet \(ስሌት\) v1\.0\.0/i).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/Apache-2\.0/i).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/afrodigital\.dev/i).length).toBeGreaterThan(0);
     });
   });
 });

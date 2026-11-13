@@ -213,6 +213,17 @@ export interface TranslationDictionary {
   attributedRevenue: string;
   profitContribution: string;
   developerRestrictedReports: string;
+  // Stage 13: Hardening, Accessibility & Statutory Legal Disclaimer
+  legalDisclaimer: string;
+  legalDisclaimerTitle: string;
+  legalDisclaimerSummary: string;
+  taxComplianceNotice: string;
+  vatProclamationNotice: string;
+  withholdingNotice: string;
+  pensionPoessaNotice: string;
+  forexDisclaimerNotice: string;
+  verificationResponsibility: string;
+  iUnderstand: string;
 }
 
 export const translations: Record<Locale, TranslationDictionary> = {
@@ -433,6 +444,24 @@ export const translations: Record<Locale, TranslationDictionary> = {
     profitContribution: 'Gross Profit Contribution',
     developerRestrictedReports:
       'Executive financial reports, profit margins, and commercial reconciliations are restricted to Owners and Project Managers.',
+    // Stage 13: Legal Disclaimer
+    legalDisclaimer: 'Legal & Tax Disclaimer',
+    legalDisclaimerTitle: 'Statutory Limitations & Tax Disclaimer',
+    legalDisclaimerSummary:
+      'Selet (ስሌት) is a software engineering estimation and commercial margin calculation platform. It does NOT provide certified public accounting (CPA), legal, or statutory tax advisory services.',
+    taxComplianceNotice:
+      'All tax calculations (15% VAT under Proclamation 1341/2016, 3% domestic withholding, and 11% POESSA employer pension under Proclamation 1268/2022) represent mathematical models based on statutory default rates.',
+    vatProclamationNotice:
+      'VAT rules and exemptions (such as export of services, foreign currency invoicing, and statutory registration thresholds) are subject to Ministry of Revenue (MoR) directives.',
+    withholdingNotice:
+      'Withholding tax applies to domestic business transactions exceeding statutory thresholds. Cross-border payments may be subject to non-resident withholding (10% under Income Tax Proclamation 979/2016) unless modified by double-taxation treaties.',
+    pensionPoessaNotice:
+      'Private organization employer pension (11%) and employee pension (7%) must be remitted monthly to the Private Organizations Employees Social Security Administration (POESSA).',
+    forexDisclaimerNotice:
+      'Foreign exchange conversion rates derive from National Bank of Ethiopia (NBE) benchmarks. Agencies should apply appropriate buffer multipliers for foreign currency risks.',
+    verificationResponsibility:
+      'Software agencies and contractors must independently verify all tax, legal, and financial computations with an authorized tax advisor or certified public accountant before executing contracts.',
+    iUnderstand: 'I Understand & Acknowledge',
   },
   am: {
     appName: 'ስሌት (Selet)',
@@ -649,5 +678,23 @@ export const translations: Record<Locale, TranslationDictionary> = {
     profitContribution: 'የትርፍ አስተዋጽኦ',
     developerRestrictedReports:
       'የድርጅቱ የፋይናንስ እና የትርፍ ትንተና ሪፖርቶች ሚስጥራዊ ስለሆኑ ለባለቤቶች እና ለፕሮጀክት አስተዳዳሪዎች ብቻ የተፈቀዱ ናቸው።',
+    // Stage 13: Legal Disclaimer
+    legalDisclaimer: 'የህግና የታክስ ማሳሰቢያ',
+    legalDisclaimerTitle: 'የህግ ማሳሰቢያ እና የታክስ ገደቦች',
+    legalDisclaimerSummary:
+      'ስሌት (Selet) የሶፍትዌር ፕሮጀክቶች የወጪ ግምት እና የትርፍ መጠን ማስያ መድረክ ነው። ህጋዊ የሂሳብ አያያዝ፣ የህግ ወይም የታክስ አማካሪነት አገልግሎት አይሰጥም።',
+    taxComplianceNotice:
+      'ሁሉም የታክስ ስሌቶች (15% የተጨማሪ እሴት ታክስ በአዋጅ ቁጥር 1341/2016፣ 3% የቅድመ ግብር ቅነሳ፣ እና 11% የPOESSA የጡረታ መዋጮ በአዋጅ 1268/2022) ህጋዊ ነባሪ ተመኖችን መሰረት ያደረጉ የሂሳብ ቀመሮች ናቸው።',
+    vatProclamationNotice:
+      'የተጨማሪ እሴት ታክስ ደንቦች እና ነፃ የመሆን ሁኔታዎች (የውጭ አገር አገልግሎት ኤክስፖርት እና የምዝገባ ገደቦች) በገቢዎች ሚኒስቴር መመሪያዎች መሰረት መረጋገጥ አለባቸው።',
+    withholdingNotice:
+      'የቅድመ ግብር ቅነሳ ህጋዊ ገደቦችን በሚያልፉ የሀገር ውስጥ ክፍያዎች ላይ ተፈፃሚ ይሆናል። ለውጭ ሀገር ኩባንያዎች የሚከፈሉ ክፍያዎች በገቢ ግብር አዋጅ 979/2016 መሰረት 10% የዊዝሆልዲንግ ታክስ ሊጣልባቸው ይችላል።',
+    pensionPoessaNotice:
+      'የግል ድርጅቶች ቀጣሪዎች የ11% እና የሰራተኞች 7% የጡረታ መዋጮ በየወሩ ለግል ድርጅቶች ሠራተኞች የማህበራዊ ዋስትና አስተዳደር (POESSA) መከፈል አለበት።',
+    forexDisclaimerNotice:
+      'የውጭ ምንዛሬ ተመኖች ከኢትዮጵያ ብሔራዊ ባንክ (NBE) የተገኙ መነሻዎች ናቸው። ተጠቃሚዎች ለምንዛሬ መለዋወጥ ተገቢውን የስጋት መከላከያ መቶኛ መጨመር አለባቸው።',
+    verificationResponsibility:
+      'የሶፍትዌር ድርጅቶች እና ተቋራጮች ከደንበኞቻቸው ጋር ውል ከመፈራረማቸው በፊት ማንኛውንም የታክስ እና የፋይናንስ ስሌት ከተፈቀደለት የሂሳብ ባለሙያ ወይም የግብር አማካሪ ጋር ማረጋገጥ አለባቸው።',
+    iUnderstand: 'ተረድቻለሁ / አረጋግጫለሁ',
   },
 };
