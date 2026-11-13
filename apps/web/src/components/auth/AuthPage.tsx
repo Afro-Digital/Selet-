@@ -41,9 +41,11 @@ export function AuthPage() {
   const [email, setEmail] = useState('');
   const [config, setConfig] = useState<CompanyConfig>(DEFAULT_CONFIG);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Initialize theme from document
+  // Initialize theme from document after mount to avoid hydration mismatch
   React.useEffect(() => {
+    setMounted(true);
     if (typeof window !== 'undefined') {
       const isDark = document.documentElement.classList.contains('dark');
       setIsDarkMode(isDark);
@@ -170,8 +172,12 @@ export function AuthPage() {
 
         {/* Dynamic Animated Floating Vectors */}
         <div className="absolute inset-0 pointer-events-none opacity-40 dark:opacity-30">
-          <FloatingPaths position={1} />
-          <FloatingPaths position={-1} />
+          {mounted && (
+            <>
+              <FloatingPaths position={1} />
+              <FloatingPaths position={-1} />
+            </>
+          )}
         </div>
       </div>
 
@@ -201,7 +207,11 @@ export function AuthPage() {
             className="w-8 h-8 rounded-full"
             title="Toggle theme"
           >
-            {isDarkMode ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-neutral-600" />}
+            {mounted && isDarkMode ? (
+              <Sun className="w-3.5 h-3.5 text-amber-400" />
+            ) : (
+              <Moon className="w-3.5 h-3.5 text-neutral-600" />
+            )}
           </Button>
         </div>
 
@@ -449,16 +459,16 @@ export function AuthPage() {
 }
 
 function FloatingPaths({ position }: { position: number }) {
-  const paths = Array.from({ length: 36 }, (_, i) => ({
+  const paths = Array.from({ length: 24 }, (_, i) => ({
     id: i,
-    d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
-      380 - i * 5 * position
-    } -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${
-      152 - i * 5 * position
-    } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
-      684 - i * 5 * position
-    } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-    width: 0.5 + i * 0.03,
+    d: `M-${380 - i * 6 * position} -${189 + i * 8}C-${
+      380 - i * 6 * position
+    } -${189 + i * 8} -${312 - i * 6 * position} ${216 - i * 8} ${
+      152 - i * 6 * position
+    } ${343 - i * 8}C${616 - i * 6 * position} ${470 - i * 8} ${
+      684 - i * 6 * position
+    } ${875 - i * 8} ${684 - i * 6 * position} ${875 - i * 8}`,
+    width: 0.6 + i * 0.04,
   }));
 
   return (
@@ -472,21 +482,27 @@ function FloatingPaths({ position }: { position: number }) {
         <title>Background Paths</title>
         {paths.map((path) => (
           <motion.path
-            key={path.id}
+            key={`${position}-${path.id}`}
             d={path.d}
             stroke="currentColor"
             strokeWidth={path.width}
             strokeOpacity={0.08 + path.id * 0.015}
-            initial={{ pathLength: 0.3, opacity: 0.5 }}
+            initial={{ pathLength: 0.35, pathOffset: 0, opacity: 0.2 }}
             animate={{
-              pathLength: 1,
-              opacity: [0.2, 0.5, 0.2],
-              pathOffset: [0, 1, 0],
+              pathOffset: [0, 1],
+              opacity: [0.15, 0.45, 0.15],
             }}
             transition={{
-              duration: 25 + (path.id % 5) * 2,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: 'linear',
+              pathOffset: {
+                duration: 20 + (path.id % 6) * 3,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: 'linear',
+              },
+              opacity: {
+                duration: 4 + (path.id % 3) * 2,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: 'easeInOut',
+              },
             }}
           />
         ))}
