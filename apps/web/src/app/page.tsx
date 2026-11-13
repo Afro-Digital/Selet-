@@ -32,6 +32,9 @@ import { EstimateBuilder } from '../components/estimates/EstimateBuilder';
 import { ScaleEstimator } from '../components/scale/ScaleEstimator';
 import { RiskManager, RiskFactorUi } from '../components/risk/RiskManager';
 import { ProjectCostSummaryCard } from '../components/cost/ProjectCostSummaryCard';
+import { CommercialFloorGuard } from '../components/pricing/CommercialFloorGuard';
+import { PricingScenariosCard } from '../components/pricing/PricingScenariosCard';
+import { MarginBalancer, ModuleLineItem } from '../components/pricing/MarginBalancer';
 import {
   Users,
   Briefcase,
@@ -45,13 +48,14 @@ import {
   Lock,
   Layers,
   TrendingUp,
+  Tag,
 } from 'lucide-react';
 
 export default function Home() {
   const [locale, setLocale] = useState<Locale>('en');
   const [userRole, setUserRole] = useState<UserRole>('OWNER');
   const [activeTab, setActiveTab] = useState<
-    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates' | 'scale'
+    'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates' | 'scale' | 'pricing'
   >('people');
 
   const [people, setPeople] = useState<Person[]>(INITIAL_PEOPLE);
@@ -113,6 +117,31 @@ export default function Home() {
   ]);
   const [clientMonthlyRecurringMinor, setClientMonthlyRecurringMinor] = useState<number>(2212250);
   const [agencyMonthlyRecurringMinor, setAgencyMonthlyRecurringMinor] = useState<number>(334100);
+
+  // Stage 9 Pricing & Margin Balancer State
+  const [organizationFloorMargin] = useState<number>(0.15);
+  const [isOwnerApprovedBelowFloor, setIsOwnerApprovedBelowFloor] = useState<boolean>(false);
+  const [pricingBlendedMargin, setPricingBlendedMargin] = useState<number>(0.3);
+  const [marketRangeMin, setMarketRangeMin] = useState<number>(60000);
+  const [marketRangeMax, setMarketRangeMax] = useState<number>(90000);
+  const [pricingLines] = useState<ModuleLineItem[]>([
+    {
+      id: 'mod-a',
+      name: 'Module A (Core Features & API)',
+      costMinor: 200000, // 2,000 ETB
+      margin: 0.25, // 25%
+      floorMargin: 0.15,
+      ceilingMargin: 0.6,
+    },
+    {
+      id: 'mod-b',
+      name: 'Module B (Storefront & Checkout)',
+      costMinor: 200000, // 2,000 ETB
+      margin: 0.35, // 35%
+      floorMargin: 0.15,
+      ceilingMargin: 0.6,
+    },
+  ]);
 
   const t = translations[locale];
   const isOwner = userRole === 'OWNER';
@@ -295,7 +324,7 @@ export default function Home() {
                   Selet (ስሌት)
                 </span>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
-                  v0.1.0 Stage 8
+                  v0.1.0 Stage 9
                 </span>
               </div>
               <p className="text-xs text-slate-500 hidden sm:block">{t.tagline}</p>
@@ -527,6 +556,18 @@ export default function Home() {
             <TrendingUp className="w-4 h-4" />
             <span>{t.scaleAndRisk}</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('pricing')}
+            className={`pb-3 px-1 text-sm font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap transition-colors ${
+              activeTab === 'pricing'
+                ? 'border-indigo-600 text-indigo-600'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <Tag className="w-4 h-4" />
+            <span>{t.pricingAndMargins}</span>
+          </button>
         </div>
 
         {/* Active Tab Views */}
@@ -712,6 +753,67 @@ export default function Home() {
                 />
               </div>
             </div>
+          </div>
+        )}
+
+        {activeTab === 'pricing' && (
+          <div className="space-y-8">
+            <CommercialFloorGuard
+              t={t}
+              userRole={userRole}
+              currentMargin={pricingBlendedMargin}
+              floorMargin={organizationFloorMargin}
+              isOwnerApproved={isOwnerApprovedBelowFloor}
+              onApprove={() => setIsOwnerApprovedBelowFloor(true)}
+              onRevoke={() => setIsOwnerApprovedBelowFloor(false)}
+            />
+
+            <PricingScenariosCard
+              t={t}
+              userRole={userRole}
+              currency="ETB"
+              scenarios={{
+                low: {
+                  name: 'Conservative / Low',
+                  costMinor: 3400000,
+                  priceMinor: 4000000,
+                  profitMinor: 600000,
+                  margin: 0.15,
+                },
+                recommended: {
+                  name: 'Recommended',
+                  costMinor: 4000000,
+                  priceMinor: 5714286,
+                  profitMinor: 1714286,
+                  margin: 0.3,
+                },
+                high: {
+                  name: 'Stretch / High',
+                  costMinor: 5000000,
+                  priceMinor: 8333333,
+                  profitMinor: 3333333,
+                  margin: 0.4,
+                },
+              }}
+              marketRangeMin={marketRangeMin}
+              marketRangeMax={marketRangeMax}
+              onMarketRangeChange={(min, max) => {
+                setMarketRangeMin(min);
+                setMarketRangeMax(max);
+              }}
+            />
+
+            <MarginBalancer
+              t={t}
+              userRole={userRole}
+              currency="ETB"
+              initialLines={pricingLines}
+              initialBlendedMargin={0.3}
+              floorMargin={organizationFloorMargin}
+              onBlendedMarginChange={(blended) => {
+                setPricingBlendedMargin(blended);
+              }}
+            />
           </div>
         )}
       </div>

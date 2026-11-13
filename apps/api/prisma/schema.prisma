@@ -368,6 +368,19 @@ model EstimateVersion {
   riskFactors        Json?          // [{ id, name, multiplier, isEnabled }]
   scaleInputs        Json?          // { monthlyUsers, peakConcurrency, storageGb, trafficGb, monthlyPaymentVolumeMinor }
   scaleItems         Json?          // [{ id, name, category, amountMinor, currency, payer, isIncluded, assumption, isUserOverridden }]
+  // Stage 9: Pricing scenarios and Margin Balancer
+  targetMargin            Float?         // defaults to organization.targetMargin (e.g. 0.30)
+  minimumMargin           Float?         // defaults to organization.minimumFloorMargin (e.g. 0.15)
+  stretchMargin           Float?         // defaults to organization.stretchMargin (e.g. 0.40)
+  marketRateMinMinor      BigInt?
+  marketRateMaxMinor      BigInt?
+  pricingMode             String         @default("TARGET_MARGIN") // "TARGET_MARGIN" | "FIXED_BUDGET" | "DISCOUNT"
+  fixedBudgetMinor        BigInt?
+  discountPercent         Float?
+  discountLineId          String?
+  moduleMargins           Json?          // { [moduleId: string]: { margin: number, floorMargin?: number, ceilingMargin?: number } }
+  ownerApprovedBelowFloor Boolean        @default(false)
+  ownerApprovalUserId     String?
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 

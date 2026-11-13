@@ -138,6 +138,29 @@ export interface TranslationDictionary {
   newTechnology: string;
   tightDeadline: string;
   overrideItem: string;
+  // Stage 9: Pricing scenarios and Margin Balancer
+  pricingAndMargins: string;
+  marginBalancer: string;
+  targetMargin: string;
+  minimumMargin: string;
+  stretchMargin: string;
+  marketRange: string;
+  lowScenario: string;
+  recommendedScenario: string;
+  highScenario: string;
+  lockBlendedMargin: string;
+  targetPriceMode: string;
+  whatIfDiscount: string;
+  ownerFloorViolated: string;
+  ownerApprovalRequired: string;
+  approveBelowFloor: string;
+  ownerApprovedNotice: string;
+  infeasibleMarginGap: string;
+  blendedMargin: string;
+  projectCostBasis: string;
+  recommendedPrice: string;
+  projectProfit: string;
+  balancingExplanation: string;
 }
 
 export const translations: Record<Locale, TranslationDictionary> = {
@@ -280,6 +303,30 @@ export const translations: Record<Locale, TranslationDictionary> = {
     newTechnology: 'New / Unfamiliar Technology Stack',
     tightDeadline: 'Tight Deadline / Urgent Delivery',
     overrideItem: 'Override Sizing / Cost',
+    // Stage 9
+    pricingAndMargins: 'Pricing & Margin Balancer',
+    marginBalancer: 'Margin Balancer',
+    targetMargin: 'Target Margin (%)',
+    minimumMargin: 'Minimum Margin Floor (%)',
+    stretchMargin: 'Stretch Margin (%)',
+    marketRange: 'Market Price Range',
+    lowScenario: 'Conservative / Low',
+    recommendedScenario: 'Recommended',
+    highScenario: 'Stretch / High',
+    lockBlendedMargin: 'Lock Blended Margin',
+    targetPriceMode: 'Target Price (Client Budget)',
+    whatIfDiscount: 'What-If Discount',
+    ownerFloorViolated: 'Below Owner Margin Floor',
+    ownerApprovalRequired: 'Owner Approval Required',
+    approveBelowFloor: 'Approve Below-Floor Pricing',
+    ownerApprovedNotice: 'Owner Override Approved',
+    infeasibleMarginGap: 'Infeasible: Margin Guardrail Violation',
+    blendedMargin: 'Blended Margin',
+    projectCostBasis: 'Project Cost Basis',
+    recommendedPrice: 'Recommended Price',
+    projectProfit: 'Projected Net Profit',
+    balancingExplanation:
+      'Balancing lines adjusted automatically to preserve blended target margin.',
   },
   am: {
     appName: 'ስሌት (Selet)',
@@ -419,5 +466,28 @@ export const translations: Record<Locale, TranslationDictionary> = {
     newTechnology: 'አዲስ ወይም ያልተለመደ የቴክኖሎጂ ቁልል',
     tightDeadline: 'አስቸኳይ ወይም አጭር የማስረከቢያ ጊዜ',
     overrideItem: 'የእቃውን መጠን/ዋጋ ቀይር',
+    // Stage 9
+    pricingAndMargins: 'የዋጋ እና የትርፍ ህዳግ ማመጣጠኛ',
+    marginBalancer: 'የትርፍ ማመጣጠኛ (Margin Balancer)',
+    targetMargin: 'ዒላማ የትርፍ ህዳግ (%)',
+    minimumMargin: 'ዝቅተኛ የትርፍ ወለል (%)',
+    stretchMargin: 'ከፍተኛ የትርፍ ጣሪያ (%)',
+    marketRange: 'የገበያ ዋጋ ክልል',
+    lowScenario: 'ዝቅተኛ አማራጭ',
+    recommendedScenario: 'የሚመከር ዋጋ',
+    highScenario: 'ከፍተኛ አማራጭ',
+    lockBlendedMargin: 'አማካይ የትርፍ ህዳግን ቆልፍ',
+    targetPriceMode: 'የደንበኛ በጀት (የተወሰነ ዋጋ)',
+    whatIfDiscount: 'የቅናሽ አማራጭ (ምን ቢሆን?)',
+    ownerFloorViolated: 'ከድርጅቱ ዝቅተኛ የትርፍ ወለል በታች ነው',
+    ownerApprovalRequired: 'የባለቤት ፈቃድ ያስፈልጋል',
+    approveBelowFloor: 'ከወለል በታች ዋጋን አጽድቅ',
+    ownerApprovedNotice: 'የባለቤት ማጽደቂያ ተሰጥቷል',
+    infeasibleMarginGap: 'ሊተገበር የማይችል የትርፍ ክፍተት',
+    blendedMargin: 'አማካይ የትርፍ ህዳግ',
+    projectCostBasis: 'የፕሮጀክት መነሻ ወጪ',
+    recommendedPrice: 'የሚመከር የመሸጫ ዋጋ',
+    projectProfit: 'የሚጠበቅ የተጣራ ትርፍ',
+    balancingExplanation: 'ዒላማ አማካይ የትርፍ ህዳግን ለመጠበቅ ሌሎች መስመሮች በራስ-ሰር ተስተካክለዋል።',
   },
 };

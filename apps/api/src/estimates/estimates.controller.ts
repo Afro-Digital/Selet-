@@ -25,6 +25,10 @@ import { UpdateFeatureHoursDto } from './dto/update-feature-hours.dto';
 import { ScaleEstimateInputDto } from './dto/scale-estimate.dto';
 import { UpdateRiskDto } from './dto/update-risk.dto';
 import { UpdateScaleItemsDto } from './dto/update-scale-items.dto';
+import { UpdatePricingScenarioDto } from './dto/update-pricing-scenario.dto';
+import { MarginBalancerRequestDto } from './dto/margin-balancer-request.dto';
+import { TargetBudgetRequestDto } from './dto/target-budget-request.dto';
+import { ApplyDiscountRequestDto } from './dto/apply-discount-request.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser, AuthenticatedUser } from '../common/decorators/current-user.decorator';
 import { RoleSerializerInterceptor } from '../common/interceptors/role-serializer.interceptor';
@@ -326,5 +330,104 @@ export class EstimatesController {
     @CurrentUser() user: AuthenticatedUser,
   ) {
     return this.estimatesService.getCostSummary(id, versionId, user);
+  }
+
+  // ==========================================
+  // STAGE 9: PRICING SCENARIOS & MARGIN BALANCER
+  // ==========================================
+
+  @Get(':id/versions/:versionId/pricing')
+  @Roles(UserRole.OWNER, UserRole.PM)
+  @ApiOperation({
+    summary:
+      'Get pricing scenarios (Low, Recommended, High), market comparison, and live margin balancer lines',
+  })
+  @ApiResponse({ status: 200, description: 'Pricing scenarios and balancer data' })
+  async getPricingScenario(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.getPricingScenario(id, versionId, user);
+  }
+
+  @Put(':id/versions/:versionId/pricing')
+  @Roles(UserRole.OWNER, UserRole.PM)
+  @ApiOperation({
+    summary: 'Update pricing scenarios, margins, market rate range, and owner approval',
+  })
+  @ApiResponse({ status: 200, description: 'Pricing scenario updated' })
+  async updatePricingScenario(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @Body() dto: UpdatePricingScenarioDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.updatePricingScenario(id, versionId, dto, user);
+  }
+
+  @Post(':id/versions/:versionId/pricing/balance')
+  @HttpCode(HttpStatus.OK)
+  @Roles(UserRole.OWNER, UserRole.PM)
+  @ApiOperation({
+    summary: 'Margin Balancer: lock blended margin, shift margin between lines, check guardrails',
+  })
+  @ApiResponse({ status: 200, description: 'Balanced margins computed' })
+  async balanceMargins(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @Body() dto: MarginBalancerRequestDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.balanceMargins(id, versionId, dto, user);
+  }
+
+  @Post(':id/versions/:versionId/pricing/target-price')
+  @HttpCode(HttpStatus.OK)
+  @Roles(UserRole.OWNER, UserRole.PM)
+  @ApiOperation({
+    summary:
+      'Target price mode: client states a budget, recompute blended margin and line allocation',
+  })
+  @ApiResponse({ status: 200, description: 'Target price distribution computed' })
+  async targetPrice(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @Body() dto: TargetBudgetRequestDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.targetPrice(id, versionId, dto, user);
+  }
+
+  @Post(':id/versions/:versionId/pricing/discount')
+  @HttpCode(HttpStatus.OK)
+  @Roles(UserRole.OWNER, UserRole.PM)
+  @ApiOperation({
+    summary: 'What-if discount: apply a percentage discount to total project or a specific line',
+  })
+  @ApiResponse({ status: 200, description: 'Discounted scenario computed' })
+  async applyDiscount(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @Body() dto: ApplyDiscountRequestDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.applyDiscountScenario(id, versionId, dto, user);
+  }
+
+  @Post(':id/versions/:versionId/pricing/approve-below-floor')
+  @HttpCode(HttpStatus.OK)
+  @Roles(UserRole.OWNER)
+  @ApiOperation({
+    summary:
+      'Approve below-floor pricing (Owner only) allowing quote saving below commercial margin floor',
+  })
+  @ApiResponse({ status: 200, description: 'Below-floor pricing approved' })
+  async approveBelowFloor(
+    @Param('id') id: string,
+    @Param('versionId') versionId: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.estimatesService.approveBelowFloor(id, versionId, user);
   }
 }

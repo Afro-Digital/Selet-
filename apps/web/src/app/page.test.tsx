@@ -274,4 +274,118 @@ describe('Stage 6: Cost Catalog, Currency Service & Notifications (UI)', () => {
       expect((sliders[0] as HTMLInputElement).disabled).toBe(true);
     });
   });
+
+  describe('Stage 9: Pricing Scenarios, Margin Balancer & Commercial Floors (UI)', () => {
+    it('navigates to Pricing tab and displays scenario cards, market baseline and balancer table', () => {
+      render(<Home />);
+      const pricingTab = screen.getByRole('button', { name: /Pricing & Margin/i });
+      fireEvent.click(pricingTab);
+
+      expect(screen.getAllByText('Pricing & Margin Balancer').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Margin Balancer').length).toBeGreaterThan(0);
+      expect(screen.getByText('Conservative / Low')).toBeDefined();
+      expect(screen.getByText('Recommended')).toBeDefined();
+      expect(screen.getByText('Stretch / High')).toBeDefined();
+      expect(screen.getByText('Market Price Range')).toBeDefined();
+      expect(screen.getByText('Module A (Core Features & API)')).toBeDefined();
+      expect(screen.getByText('Module B (Storefront & Checkout)')).toBeDefined();
+    });
+
+    it('PRD Test: locks blended margin at 30%, lowers Module A from 25% to 20%, raises Module B', () => {
+      render(<Home />);
+      const pricingTab = screen.getByRole('button', { name: /Pricing & Margin/i });
+      fireEvent.click(pricingTab);
+
+      // Check initial Module A (25.0%) and Module B (35.0%)
+      expect(screen.getByText('25.0%')).toBeDefined();
+      expect(screen.getByText('35.0%')).toBeDefined();
+
+      // Locate Module A margin slider
+      const sliderA = screen.getByLabelText(/Module A .* Margin/i);
+      // Lower Module A margin from 25% to 20%
+      fireEvent.change(sliderA, { target: { value: '0.2' } });
+
+      // Module A is now 20.0%
+      expect(screen.getByText('20.0%')).toBeDefined();
+
+      // Module B margin must automatically shift to 37.8%
+      expect(screen.getByText('37.8%')).toBeDefined();
+
+      // Blended margin remains locked at 30.0%
+      expect(screen.getAllByText('30.0%').length).toBeGreaterThan(0);
+
+      // Explanation callout confirms the shift
+      expect(
+        screen.getByText(
+          /Adjusted Module A \(Core Features & API\) margin to 20\.0%\. Module B \(Storefront & Checkout\) margin shifted to 37\.8% to maintain 30\.0% blended margin/i,
+        ),
+      ).toBeDefined();
+    });
+
+    it('Target Price mode distributes client budget and calculates blended margin', () => {
+      render(<Home />);
+      const pricingTab = screen.getByRole('button', { name: /Pricing & Margin/i });
+      fireEvent.click(pricingTab);
+
+      // Switch to Target Price (Client Budget) tab
+      const targetBudgetBtn = screen.getByRole('button', {
+        name: /Target Price \(Client Budget\)/i,
+      });
+      fireEvent.click(targetBudgetBtn);
+
+      // Enter client budget
+      const budgetInput = screen.getByLabelText(/Client Fixed Budget/i);
+      fireEvent.change(budgetInput, { target: { value: '6000' } });
+
+      // Click calculate
+      const calcBtn = screen.getByRole('button', { name: /Calculate Line Distribution/i });
+      fireEvent.click(calcBtn);
+
+      // Verify explanation shows distributed budget
+      expect(
+        screen.getByText(/Distributed client budget of 6,000 ETB proportionally across modules/i),
+      ).toBeDefined();
+    });
+
+    it('What-If Discount mode applies discount and displays resulting margin', () => {
+      render(<Home />);
+      const pricingTab = screen.getByRole('button', { name: /Pricing & Margin/i });
+      fireEvent.click(pricingTab);
+
+      // Switch to What-If Discount tab
+      const discountTabBtn = screen.getByRole('button', { name: /What-If Discount/i });
+      fireEvent.click(discountTabBtn);
+
+      // Click apply discount
+      const applyBtn = screen.getByRole('button', { name: /Apply What-If Discount/i });
+      fireEvent.click(applyBtn);
+
+      // Verify explanation shows applied discount
+      expect(screen.getByText(/Applied 10% discount to entire project/i)).toBeDefined();
+    });
+
+    it('Developer view redacts all margins, pricing scenarios, and profits', () => {
+      render(<Home />);
+      // Switch simulated role to Developer
+      const roleSelect = screen.getByRole('combobox');
+      fireEvent.change(roleSelect, { target: { value: 'DEVELOPER' } });
+
+      const pricingTab = screen.getByRole('button', { name: /Pricing & Margin/i });
+      fireEvent.click(pricingTab);
+
+      // Check confidentiality notices
+      expect(
+        screen.getByText(
+          /Financial margins, pricing scenarios, and profits are strictly hidden in Developer mode/i,
+        ),
+      ).toBeDefined();
+      expect(
+        screen.getByText(/Margin Balancer and financial levers are hidden in Developer mode/i),
+      ).toBeDefined();
+
+      // No price cards or profit totals rendered
+      expect(screen.queryByText('Conservative / Low')).toBeNull();
+      expect(screen.queryByText('Market Price Range')).toBeNull();
+    });
+  });
 });

@@ -18,8 +18,22 @@ import { UpdateFeatureHoursDto, RoleHoursEntryDto } from './dto/update-feature-h
 import { ScaleEstimateInputDto } from './dto/scale-estimate.dto';
 import { UpdateRiskDto, RiskFactorEntryDto } from './dto/update-risk.dto';
 import { UpdateScaleItemsDto, ScaleItemEntryDto } from './dto/update-scale-items.dto';
+import { UpdatePricingScenarioDto } from './dto/update-pricing-scenario.dto';
+import { MarginBalancerRequestDto } from './dto/margin-balancer-request.dto';
+import { TargetBudgetRequestDto } from './dto/target-budget-request.dto';
+import { ApplyDiscountRequestDto } from './dto/apply-discount-request.dto';
 import { ScaleService } from './scale.service';
-import { threePointHours, calculateProjectCost, money } from '@selet/pricing-engine';
+import {
+  threePointHours,
+  calculateProjectCost,
+  money,
+  priceFromMargin,
+  createBalancerLine,
+  lockBlended,
+  targetPriceMode,
+  applyDiscount,
+  BalancerLine,
+} from '@selet/pricing-engine';
 
 export const DEFAULT_RISK_FACTORS: RiskFactorEntryDto[] = [
   {
@@ -1520,6 +1534,439 @@ export class EstimatesService {
       totalRiskRate: contingencyRate + enabledMultipliers.reduce((a, b) => a + b, 0),
       riskFactors,
       scaleItems,
+    };
+  }
+
+  // ==========================================
+  // STAGE 9: PRICING SCENARIOS & MARGIN BALANCER
+  // ==========================================
+
+  private async buildModuleBalancerLines(
+    projectId: string,
+    versionId: string,
+    user: AuthenticatedUser,
+  ): Promise<{
+    lines: BalancerLine[];
+    totalCostMinor: number;
+    currency: string;
+    version: any;
+    org: any;
+    costSummary: any;
+  }> {
+    const project = await this.findOneProject(projectId, user);
+    const org = await this.prisma.organization.findUnique({
+      where: { id: user.organizationId },
+    });
+    const version = project.versions.find((v) => v.id === versionId) || project.versions[0];
+    if (!version) {
+      throw new NotFoundException('Estimate version not found');
+    }
+
+    const costSummary = await this.getCostSummary(projectId, version.id, user);
+    const rollup = await this.getRollup(projectId, user);
+
+    const savedModuleMargins = (version.moduleMargins as Record<string, any>) || {};
+    const defaultMargin = version.targetMargin ?? org?.targetMargin ?? 0.3;
+    const defaultFloor = version.minimumMargin ?? org?.minimumFloorMargin ?? 0.15;
+    const defaultCeiling = 0.7;
+
+    const lines: BalancerLine[] = [];
+
+    if (rollup.byModule && rollup.byModule.length > 0) {
+      for (const mod of rollup.byModule) {
+        const saved = savedModuleMargins[mod.moduleId];
+        const margin = saved?.margin ?? defaultMargin;
+        const floor = saved?.floorMargin ?? defaultFloor;
+        const ceiling = saved?.ceilingMargin ?? defaultCeiling;
+        // Cost is module labor cost; if 0, use minimal baseline
+        const costMinor = Math.max(100000, mod.laborCost || 0);
+        lines.push(
+          createBalancerLine(
+            mod.moduleId,
+            mod.moduleName,
+            money(BigInt(costMinor), project.currency),
+            margin,
+            { floorMargin: floor, ceilingMargin: ceiling },
+          ),
+        );
+      }
+    } else {
+      lines.push(
+        createBalancerLine(
+          'mod-core',
+          'Core Features & Backend',
+          money(200000n, project.currency),
+          defaultMargin,
+          { floorMargin: defaultFloor, ceilingMargin: defaultCeiling },
+        ),
+        createBalancerLine(
+          'mod-ui',
+          'User Interface & Frontend',
+          money(200000n, project.currency),
+          defaultMargin,
+          { floorMargin: defaultFloor, ceilingMargin: defaultCeiling },
+        ),
+      );
+    }
+
+    const totalCostMinor = lines.reduce((acc, l) => acc + Number(l.cost.amount), 0);
+
+    return { lines, totalCostMinor, currency: project.currency, version, org, costSummary };
+  }
+
+  async getPricingScenario(
+    projectId: string,
+    versionId: string | undefined,
+    user: AuthenticatedUser,
+  ) {
+    if (user.role === UserRole.DEVELOPER) {
+      throw new ForbiddenException(
+        'Developers are not permitted to view pricing or margin details',
+      );
+    }
+
+    const project = await this.findOneProject(projectId, user);
+    const vId = versionId || project.versions[0]?.id;
+    if (!vId) {
+      throw new NotFoundException('Estimate version not found');
+    }
+
+    const { lines, totalCostMinor, currency, version, org, costSummary } =
+      await this.buildModuleBalancerLines(projectId, vId, user);
+
+    const targetMargin = version.targetMargin ?? org?.targetMargin ?? 0.3;
+    const minimumMargin = version.minimumMargin ?? org?.minimumFloorMargin ?? 0.15;
+    const stretchMargin = version.stretchMargin ?? org?.stretchMargin ?? 0.4;
+    const orgFloorMargin = org?.minimumFloorMargin ?? 0.15;
+
+    // Direct project cost from full cost summary
+    const fullCostBasisMinor = costSummary.totalCostMinor || totalCostMinor;
+
+    // 1. Recommended Scenario (Likely hours + Target margin)
+    const recommendedPriceMinor = Number(
+      priceFromMargin(money(BigInt(fullCostBasisMinor), currency), targetMargin).amount,
+    );
+    const recommendedProfitMinor = recommendedPriceMinor - fullCostBasisMinor;
+
+    // 2. Low / Conservative Scenario (Optimistic cost + Minimum margin)
+    const optimisticCostBasisMinor = Math.round(fullCostBasisMinor * 0.85);
+    const lowPriceMinor = Number(
+      priceFromMargin(money(BigInt(optimisticCostBasisMinor), currency), minimumMargin).amount,
+    );
+    const lowProfitMinor = lowPriceMinor - optimisticCostBasisMinor;
+
+    // 3. High / Stretch Scenario (Pessimistic cost + Stretch margin)
+    const pessimisticCostBasisMinor = Math.round(fullCostBasisMinor * 1.25);
+    const highPriceMinor = Number(
+      priceFromMargin(money(BigInt(pessimisticCostBasisMinor), currency), stretchMargin).amount,
+    );
+    const highProfitMinor = highPriceMinor - pessimisticCostBasisMinor;
+
+    // Market Comparison
+    const marketRateMinMinor = version.marketRateMinMinor
+      ? Number(version.marketRateMinMinor)
+      : undefined;
+    const marketRateMaxMinor = version.marketRateMaxMinor
+      ? Number(version.marketRateMaxMinor)
+      : undefined;
+
+    let marketStatus: 'BELOW_MARKET' | 'WITHIN_MARKET' | 'ABOVE_MARKET' | 'NOT_SET' = 'NOT_SET';
+    if (marketRateMinMinor !== undefined && marketRateMaxMinor !== undefined) {
+      if (recommendedPriceMinor < marketRateMinMinor) {
+        marketStatus = 'BELOW_MARKET';
+      } else if (recommendedPriceMinor > marketRateMaxMinor) {
+        marketStatus = 'ABOVE_MARKET';
+      } else {
+        marketStatus = 'WITHIN_MARKET';
+      }
+    }
+
+    // Active Balancer Lines & Blended Margin
+    const currentPriceMinor = lines.reduce((acc, l) => acc + Number(l.price.amount), 0);
+    const currentCostMinor = lines.reduce((acc, l) => acc + Number(l.cost.amount), 0);
+    const currentBlendedMargin =
+      currentPriceMinor > 0 ? (currentPriceMinor - currentCostMinor) / currentPriceMinor : 0;
+
+    const isBelowFloor = currentBlendedMargin < orgFloorMargin;
+    const ownerApprovalRequired = isBelowFloor && !version.ownerApprovedBelowFloor;
+
+    return {
+      projectId: project.id,
+      versionId: version.id,
+      currency,
+      costBasisMinor: fullCostBasisMinor,
+      targetMargin,
+      minimumMargin,
+      stretchMargin,
+      orgFloorMargin,
+      pricingMode: version.pricingMode || 'TARGET_MARGIN',
+      fixedBudgetMinor: version.fixedBudgetMinor ? Number(version.fixedBudgetMinor) : undefined,
+      discountPercent: version.discountPercent ?? undefined,
+      discountLineId: version.discountLineId ?? undefined,
+      ownerApprovedBelowFloor: version.ownerApprovedBelowFloor,
+      ownerApprovalUserId: version.ownerApprovalUserId,
+      ownerApprovalRequired,
+      isBelowFloor,
+      scenarios: {
+        low: {
+          name: 'Conservative / Low',
+          costMinor: optimisticCostBasisMinor,
+          priceMinor: lowPriceMinor,
+          profitMinor: lowProfitMinor,
+          margin: minimumMargin,
+        },
+        recommended: {
+          name: 'Recommended',
+          costMinor: fullCostBasisMinor,
+          priceMinor: recommendedPriceMinor,
+          profitMinor: recommendedProfitMinor,
+          margin: targetMargin,
+        },
+        high: {
+          name: 'Stretch / High',
+          costMinor: pessimisticCostBasisMinor,
+          priceMinor: highPriceMinor,
+          profitMinor: highProfitMinor,
+          margin: stretchMargin,
+        },
+      },
+      marketComparison: {
+        marketRateMinMinor,
+        marketRateMaxMinor,
+        status: marketStatus,
+      },
+      balancer: {
+        lines: lines.map((l) => ({
+          id: l.id,
+          name: l.name,
+          costMinor: Number(l.cost.amount),
+          margin: l.margin,
+          priceMinor: Number(l.price.amount),
+          floorMargin: l.floorMargin,
+          ceilingMargin: l.ceilingMargin,
+        })),
+        totalCostMinor: currentCostMinor,
+        totalPriceMinor: currentPriceMinor,
+        blendedMargin: currentBlendedMargin,
+        isFeasible: true,
+      },
+    };
+  }
+
+  async updatePricingScenario(
+    projectId: string,
+    versionId: string,
+    dto: UpdatePricingScenarioDto,
+    user: AuthenticatedUser,
+  ) {
+    if (user.role === UserRole.DEVELOPER) {
+      throw new ForbiddenException('Developers cannot update pricing scenarios');
+    }
+
+    const project = await this.findOneProject(projectId, user);
+    const org = await this.prisma.organization.findUnique({
+      where: { id: user.organizationId },
+    });
+    const version = project.versions.find((v) => v.id === versionId);
+    if (!version) {
+      throw new NotFoundException('Estimate version not found');
+    }
+
+    const orgFloor = org?.minimumFloorMargin ?? 0.15;
+
+    // Commercial Floor Enforcement: PM cannot save quote below floor without Owner approval
+    if (user.role === UserRole.PM) {
+      if (dto.targetMargin !== undefined && dto.targetMargin < orgFloor) {
+        if (!version.ownerApprovedBelowFloor) {
+          throw new ForbiddenException(
+            `Target margin ${(dto.targetMargin * 100).toFixed(1)}% is below organization floor ${(orgFloor * 100).toFixed(1)}%. Owner approval required.`,
+          );
+        }
+      }
+
+      if (dto.ownerApprovedBelowFloor) {
+        throw new ForbiddenException('Project Managers cannot self-approve below-floor margins');
+      }
+    }
+
+    const dataToUpdate: any = {};
+    if (dto.targetMargin !== undefined) dataToUpdate.targetMargin = dto.targetMargin;
+    if (dto.minimumMargin !== undefined) dataToUpdate.minimumMargin = dto.minimumMargin;
+    if (dto.stretchMargin !== undefined) dataToUpdate.stretchMargin = dto.stretchMargin;
+    if (dto.marketRateMinMinor !== undefined)
+      dataToUpdate.marketRateMinMinor = BigInt(Math.round(Number(dto.marketRateMinMinor)));
+    if (dto.marketRateMaxMinor !== undefined)
+      dataToUpdate.marketRateMaxMinor = BigInt(Math.round(Number(dto.marketRateMaxMinor)));
+    if (dto.pricingMode !== undefined) dataToUpdate.pricingMode = dto.pricingMode;
+    if (dto.fixedBudgetMinor !== undefined)
+      dataToUpdate.fixedBudgetMinor = BigInt(Math.round(Number(dto.fixedBudgetMinor)));
+    if (dto.discountPercent !== undefined) dataToUpdate.discountPercent = dto.discountPercent;
+    if (dto.discountLineId !== undefined) dataToUpdate.discountLineId = dto.discountLineId;
+    if (dto.moduleMargins !== undefined) dataToUpdate.moduleMargins = dto.moduleMargins;
+
+    if (user.role === UserRole.OWNER && dto.ownerApprovedBelowFloor !== undefined) {
+      dataToUpdate.ownerApprovedBelowFloor = dto.ownerApprovedBelowFloor;
+      dataToUpdate.ownerApprovalUserId = dto.ownerApprovedBelowFloor ? user.id : null;
+    }
+
+    await this.prisma.estimateVersion.update({
+      where: { id: versionId },
+      data: dataToUpdate,
+    });
+
+    await this.auditService.log({
+      organizationId: user.organizationId,
+      userId: user.id,
+      action: 'UPDATE',
+      entityType: 'EstimatePricingScenario',
+      entityId: versionId,
+      newValue: dto,
+    });
+
+    return this.getPricingScenario(projectId, versionId, user);
+  }
+
+  async balanceMargins(
+    projectId: string,
+    versionId: string,
+    dto: MarginBalancerRequestDto,
+    user: AuthenticatedUser,
+  ) {
+    if (user.role === UserRole.DEVELOPER) {
+      throw new ForbiddenException('Developers are not permitted to use Margin Balancer');
+    }
+
+    const { lines } = await this.buildModuleBalancerLines(projectId, versionId, user);
+
+    const result = lockBlended(
+      lines,
+      dto.changedLineId,
+      dto.newMargin,
+      dto.targetBlendedMargin,
+      dto.balancingLineIds,
+    );
+
+    return {
+      lines: result.lines.map((l) => ({
+        id: l.id,
+        name: l.name,
+        costMinor: Number(l.cost.amount),
+        margin: l.margin,
+        priceMinor: Number(l.price.amount),
+        floorMargin: l.floorMargin,
+        ceilingMargin: l.ceilingMargin,
+      })),
+      totalCostMinor: Number(result.totalCost.amount),
+      totalPriceMinor: Number(result.totalPrice.amount),
+      blendedMargin: result.blendedMargin,
+      isFeasible: result.isFeasible,
+      gapPriceMinor: result.gapPrice ? Number(result.gapPrice.amount) : 0,
+      infeasibilityReason: result.infeasibilityReason,
+      violations: result.violations,
+    };
+  }
+
+  async targetPrice(
+    projectId: string,
+    versionId: string,
+    dto: TargetBudgetRequestDto,
+    user: AuthenticatedUser,
+  ) {
+    if (user.role === UserRole.DEVELOPER) {
+      throw new ForbiddenException('Developers are not permitted to view pricing modes');
+    }
+
+    const { lines, currency, org } = await this.buildModuleBalancerLines(
+      projectId,
+      versionId,
+      user,
+    );
+    const floor = dto.floorBlendedMargin ?? org?.minimumFloorMargin ?? 0.15;
+    const budgetMoney = money(BigInt(Math.round(Number(dto.budgetMinor))), currency);
+
+    const result = targetPriceMode(lines, budgetMoney, floor);
+
+    return {
+      lines: result.lines.map((l) => ({
+        id: l.id,
+        name: l.name,
+        costMinor: Number(l.cost.amount),
+        margin: l.margin,
+        priceMinor: Number(l.price.amount),
+        floorMargin: l.floorMargin,
+        ceilingMargin: l.ceilingMargin,
+      })),
+      totalCostMinor: Number(result.totalCost.amount),
+      totalPriceMinor: Number(result.totalPrice.amount),
+      blendedMargin: result.blendedMargin,
+      isFeasible: result.isFeasible,
+      infeasibilityReason: result.infeasibilityReason,
+    };
+  }
+
+  async applyDiscountScenario(
+    projectId: string,
+    versionId: string,
+    dto: ApplyDiscountRequestDto,
+    user: AuthenticatedUser,
+  ) {
+    if (user.role === UserRole.DEVELOPER) {
+      throw new ForbiddenException('Developers are not permitted to apply discounts');
+    }
+
+    const { lines, org } = await this.buildModuleBalancerLines(projectId, versionId, user);
+    const floor = dto.projectFloorMargin ?? org?.minimumFloorMargin ?? 0.15;
+
+    const result = applyDiscount(lines, dto.discountPercent, dto.targetLineId, floor);
+
+    return {
+      lines: result.lines.map((l) => ({
+        id: l.id,
+        name: l.name,
+        costMinor: Number(l.cost.amount),
+        margin: l.margin,
+        priceMinor: Number(l.price.amount),
+        floorMargin: l.floorMargin,
+        ceilingMargin: l.ceilingMargin,
+      })),
+      totalCostMinor: Number(result.totalCost.amount),
+      totalPriceMinor: Number(result.totalPrice.amount),
+      blendedMargin: result.blendedMargin,
+      isFeasible: result.isFeasible,
+      infeasibilityReason: result.infeasibilityReason,
+    };
+  }
+
+  async approveBelowFloor(projectId: string, versionId: string, user: AuthenticatedUser) {
+    if (user.role !== UserRole.OWNER) {
+      throw new ForbiddenException('Only Organization Owners can approve below-floor pricing');
+    }
+
+    await this.findOneProject(projectId, user);
+
+    await this.prisma.estimateVersion.update({
+      where: { id: versionId },
+      data: {
+        ownerApprovedBelowFloor: true,
+        ownerApprovalUserId: user.id,
+      },
+    });
+
+    await this.auditService.log({
+      organizationId: user.organizationId,
+      userId: user.id,
+      action: 'APPROVE',
+      entityType: 'EstimateBelowFloorPricing',
+      entityId: versionId,
+      newValue: { approvedBy: user.id },
+    });
+
+    return {
+      projectId,
+      versionId,
+      ownerApprovedBelowFloor: true,
+      ownerApprovalUserId: user.id,
+      message: 'Below-floor pricing approved by Owner',
     };
   }
 }
