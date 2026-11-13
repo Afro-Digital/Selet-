@@ -123,6 +123,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@selet/pricing-engine':
+        specifier: workspace:*
+        version: link:../../packages/pricing-engine
       '@selet/shared':
         specifier: workspace:*
         version: link:../../packages/shared

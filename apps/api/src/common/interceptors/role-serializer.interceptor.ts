@@ -9,6 +9,7 @@ const DEVELOPER_FORBIDDEN_FIELDS = new Set([
   'allowancesMinor',
   'benefitsMinor',
   'directHourlyRateMinor',
+  'defaultHourlyCostMinor',
   'hourlyCostMinor',
   'computedHourlyCost',
   'hourlyCost',

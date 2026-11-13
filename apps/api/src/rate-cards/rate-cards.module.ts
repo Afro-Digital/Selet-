@@ -1,0 +1,13 @@
+import { Module } from '@nestjs/common';
+import { RateCardsController } from './rate-cards.controller';
+import { RateCardsService } from './rate-cards.service';
+import { PrismaModule } from '../prisma/prisma.module';
+import { AuditModule } from '../audit/audit.module';
+
+@Module({
+  imports: [PrismaModule, AuditModule],
+  controllers: [RateCardsController],
+  providers: [RateCardsService],
+  exports: [RateCardsService],
+})
+export class RateCardsModule {}

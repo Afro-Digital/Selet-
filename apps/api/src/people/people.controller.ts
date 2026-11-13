@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Param, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, UseInterceptors } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { PeopleService } from './people.service';
 import { CreatePersonDto } from './dto/create-person.dto';
+import { UpdatePersonDto } from './dto/update-person.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser, AuthenticatedUser } from '../common/decorators/current-user.decorator';
 import { RoleSerializerInterceptor } from '../common/interceptors/role-serializer.interceptor';
@@ -36,5 +37,25 @@ export class PeopleController {
   @ApiResponse({ status: 201, description: 'Person successfully added' })
   async create(@Body() dto: CreatePersonDto, @CurrentUser() user: AuthenticatedUser) {
     return this.peopleService.create(dto, user);
+  }
+
+  @Patch(':id')
+  @Roles(UserRole.OWNER, UserRole.PM)
+  @ApiOperation({ summary: 'Update a team member (restricted to Owner and PM)' })
+  @ApiResponse({ status: 200, description: 'Person successfully updated' })
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdatePersonDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.peopleService.update(id, dto, user);
+  }
+
+  @Delete(':id')
+  @Roles(UserRole.OWNER)
+  @ApiOperation({ summary: 'Delete a team member (restricted to Owner)' })
+  @ApiResponse({ status: 200, description: 'Person successfully deleted' })
+  async delete(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
+    return this.peopleService.delete(id, user);
   }
 }
