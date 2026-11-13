@@ -477,4 +477,68 @@ describe('Stage 6: Cost Catalog, Currency Service & Notifications (UI)', () => {
       expect(screen.queryByText('Create New Quote')).toBeNull();
     });
   });
+
+  describe('Stage 11: Amharic and Ethiopian Calendar (UI & Conversion)', () => {
+    it('renders calendar preference switcher and toggles between Ethiopian (ዓ.ም.) and Gregorian (G.C.)', () => {
+      render(<Home />);
+      const ethiopianCalBtn = screen.getByRole('button', { name: 'ዓ.ም.' });
+      const gregorianCalBtn = screen.getByRole('button', { name: 'G.C.' });
+
+      expect(ethiopianCalBtn).toBeDefined();
+      expect(gregorianCalBtn).toBeDefined();
+
+      fireEvent.click(gregorianCalBtn);
+      fireEvent.click(ethiopianCalBtn);
+    });
+
+    it('creates an Amharic quote with Ethiopian calendar and displays Ge\'ez numerals and Ethiopian date in preview', () => {
+      render(<Home />);
+      const quotesTab = screen.getByRole('button', { name: /Quotes & PDF/i });
+      fireEvent.click(quotesTab);
+
+      // Click Create New Quote button
+      const createBtn = screen.getByRole('button', { name: /Create New Quote/i });
+      fireEvent.click(createBtn);
+
+      // Verify Quote Language selector and Calendar selector exist
+      const langSelect = screen.getByLabelText(/Quote Language/i);
+      expect(langSelect).toBeDefined();
+      fireEvent.change(langSelect, { target: { value: 'am' } });
+
+      const calSelect = screen.getByLabelText(/Quote Calendar/i);
+      expect(calSelect).toBeDefined();
+      fireEvent.change(calSelect, { target: { value: 'ETHIOPIAN' } });
+
+      // Title input
+      const titleInput = screen.getByLabelText(/Quote Title/i);
+      fireEvent.change(titleInput, { target: { value: 'የኢንተርፕራይዝ ሲስተም የዋጋ ማቅረቢያ' } });
+
+      // Save quote draft
+      const saveBtn = screen.getByRole('button', { name: /Save Quote Draft/i });
+      fireEvent.click(saveBtn);
+
+      // New quote card should appear with Amharic badge and Ethiopian calendar badge
+      expect(screen.getByText('የኢንተርፕራይዝ ሲስተም የዋጋ ማቅረቢያ')).toBeDefined();
+      expect(screen.getAllByText('አማርኛ').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('ዓ.ም. (E.C.)').length).toBeGreaterThan(0);
+
+      // Open Preview Modal on the newly created quote
+      const previewButtons = screen.getAllByRole('button', { name: /Preview/i });
+      fireEvent.click(previewButtons[0]!);
+
+      // Verify Amharic Formal Quote Title
+      expect(screen.getByText('የአፍሮ ዲጂታል ኦፊሴላዊ የዋጋ ማቅረቢያ')).toBeDefined();
+      expect(screen.getByText('ኦፊሴላዊ የዋጋ ማቅረቢያ')).toBeDefined();
+
+      // Verify Ethiopian Calendar date indicator in preview
+      expect(screen.getAllByText(/ዓ\.ም\./i).length).toBeGreaterThan(0);
+
+      // Verify Birr currency in Amharic
+      expect(screen.getAllByText(/ብር/i).length).toBeGreaterThan(0);
+
+      // Verify Statutory Tax citation in Amharic (Proclamation 1341/2016)
+      expect(screen.getByText(/የታክስ ህግ ተገዢነት ማረጋገጫ/i)).toBeDefined();
+      expect(screen.getAllByText(/1341\/2016/i).length).toBeGreaterThan(0);
+    });
+  });
 });

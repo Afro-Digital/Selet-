@@ -10,9 +10,13 @@ import {
   ShieldCheck,
   Layers,
   Sparkles,
+  Globe,
+  Calendar,
 } from 'lucide-react';
 import { TranslationDictionary, Locale } from '../../lib/i18n';
 import { QuotePreviewModal, QuoteUiData } from './QuotePreviewModal';
+import { EthiopianDatePicker } from '../calendar/EthiopianDatePicker';
+import { formatEthiopianDate } from '@selet/shared';
 
 export interface QuoteBuilderProps {
   t: TranslationDictionary;
@@ -27,6 +31,7 @@ export interface QuoteBuilderProps {
 
 export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
   t,
+  locale = 'en',
   userRole,
   projectName,
   initialQuotes = [],
@@ -47,6 +52,8 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
         clientContact: 'Tewodros Kassahun',
         clientEmail: 'tewodros@ethiopianairlines.com',
         currency: 'ETB',
+        language: 'en',
+        calendar: 'ETHIOPIAN',
         subtotalMinor: 120000000, // 1,200,000 ETB
         taxPackVersion: '2026.1',
         vatRate: 0.15,
@@ -135,7 +142,11 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
   const [clientTin, setClientTin] = useState('0098765432');
   const [clientContact, setClientContact] = useState('Abebe Bikila');
   const [clientEmail, setClientEmail] = useState('client@example.et');
-  const [validDays, setValidDays] = useState(30);
+  const [validUntilDate, setValidUntilDate] = useState<string>(() =>
+    new Date(Date.now() + 30 * 86400000).toISOString(),
+  );
+  const [quoteLanguage, setQuoteLanguage] = useState<'en' | 'am'>(locale === 'am' ? 'am' : 'en');
+  const [quoteCalendar, setQuoteCalendar] = useState<'ETHIOPIAN' | 'GREGORIAN'>('ETHIOPIAN');
   const [secondaryCurrency, setSecondaryCurrency] = useState<'NONE' | 'USD' | 'EUR'>('USD');
   const [includeWithholding, setIncludeWithholding] = useState(true);
 
@@ -256,6 +267,8 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
       secondaryCurrency: secondaryCurrency !== 'NONE' ? secondaryCurrency : undefined,
       exchangeRateSnapshot: rateSnapshot,
       secondaryTotalPriceMinor: secondaryTotal,
+      language: quoteLanguage,
+      calendar: quoteCalendar,
       executiveSummary: `Formal quotation for ${projectName} comprising ${lineItems.length} deliverable modules.`,
       lineItems: lineItems.map((l, idx) => ({ ...l, id: l.id || `line-${idx}` })),
       milestones: milestones.map((m, idx) => ({
@@ -265,7 +278,7 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
         amountMinor: Math.round((calculatedTotal * m.percentage) / 100),
         description: m.description,
       })),
-      validUntil: new Date(Date.now() + validDays * 86400000).toISOString(),
+      validUntil: validUntilDate,
       createdAt: new Date().toISOString(),
     };
 
@@ -398,16 +411,34 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
               />
             </div>
             <div>
-              <label htmlFor="validity-days-input" className="font-semibold text-slate-700 block mb-1">Validity (Days)</label>
-              <input
-                id="validity-days-input"
-                type="number"
-                min="1"
-                max="180"
-                value={validDays}
-                onChange={(e) => setValidDays(Number(e.target.value) || 30)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium"
-              />
+              <label htmlFor="quote-language-select" className="font-semibold text-slate-700 block mb-1 flex items-center gap-1">
+                <Globe className="w-3.5 h-3.5 text-emerald-600" />
+                <span>{t.quoteLanguage}</span>
+              </label>
+              <select
+                id="quote-language-select"
+                value={quoteLanguage}
+                onChange={(e) => setQuoteLanguage(e.target.value as 'en' | 'am')}
+                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium bg-white"
+              >
+                <option value="en">English (EN)</option>
+                <option value="am">አማርኛ (Amharic)</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="quote-calendar-select" className="font-semibold text-slate-700 block mb-1 flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-emerald-600" />
+                <span>{t.quoteCalendar}</span>
+              </label>
+              <select
+                id="quote-calendar-select"
+                value={quoteCalendar}
+                onChange={(e) => setQuoteCalendar(e.target.value as 'ETHIOPIAN' | 'GREGORIAN')}
+                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 text-xs font-medium bg-white"
+              >
+                <option value="ETHIOPIAN">{t.ethiopianCalendar}</option>
+                <option value="GREGORIAN">{t.gregorianCalendar}</option>
+              </select>
             </div>
             <div>
               <label htmlFor="secondary-currency-select" className="font-semibold text-slate-700 block mb-1">Secondary Currency Snapshot</label>
@@ -421,6 +452,17 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
                 <option value="USD">USD (Snapshot ~155.0 ETB)</option>
                 <option value="EUR">EUR (Snapshot ~165.0 ETB)</option>
               </select>
+            </div>
+
+            {/* Ethiopian / Gregorian Date Picker */}
+            <div className="col-span-1 md:col-span-3 pt-2">
+              <EthiopianDatePicker
+                value={validUntilDate}
+                onChange={(iso) => setValidUntilDate(iso)}
+                locale={locale}
+                defaultCalendar={quoteCalendar}
+                label={locale === 'am' ? 'የዋጋ ማቅረቢያው የሚያበቃበት ቀን' : 'Quote Validity Date'}
+              />
             </div>
           </div>
 
@@ -722,6 +764,12 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
                   {quote.status === 'ISSUED' && <Lock className="w-3 h-3 text-emerald-600" />}
                   <span>{quote.status === 'ISSUED' ? t.issuedStatus : t.draftStatus}</span>
                 </span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                  {quote.language === 'am' ? 'አማርኛ' : 'EN'}
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  {quote.calendar === 'ETHIOPIAN' ? 'ዓ.ም. (E.C.)' : 'እ.ኤ.አ (G.C.)'}
+                </span>
               </div>
 
               <div className="text-xs text-slate-500 flex flex-wrap items-center gap-x-4 gap-y-1">
@@ -730,7 +778,12 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
                 </span>
                 <span>•</span>
                 <span>
-                  Valid Until: <strong className="text-slate-700">{new Date(quote.validUntil).toLocaleDateString()}</strong>
+                  Valid Until:{' '}
+                  <strong className="text-slate-700">
+                    {quote.calendar === 'ETHIOPIAN' || locale === 'am'
+                      ? formatEthiopianDate(new Date(quote.validUntil), { locale })
+                      : new Date(quote.validUntil).toLocaleDateString()}
+                  </strong>
                 </span>
                 <span>•</span>
                 <span>

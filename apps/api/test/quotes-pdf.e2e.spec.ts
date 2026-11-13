@@ -676,4 +676,95 @@ describe('E2E: Stage 10 - Quote Builder, Immutable Snapshots, Milestones & PDF',
     const pdfHeader = buffer.subarray(0, 5).toString('ascii');
     expect(pdfHeader).toBe('%PDF-');
   });
+
+  it('9. Stage 11: Creates Amharic quote with Ethiopian calendar dates and verifies localized HTML', async () => {
+    const pmToken = createToken(storedUsers[1]); // PM
+
+    // Create quote with language: 'am' and calendar: 'ETHIOPIAN'
+    const createRes = await request(app.getHttpServer())
+      .post(`/projects/${testProjectId}/versions/${testVersionId}/quotes`)
+      .set('Authorization', `Bearer ${pmToken}`)
+      .send({
+        title: 'የኢትዮጵያ አየር መንገድ የካርጎ ስርዓት ማዘመኛ (Ethiopian Airlines Cargo Modernization)',
+        clientName: 'የኢትዮጵያ አየር መንገድ (Ethiopian Airlines)',
+        clientTin: '0012345678',
+        language: 'am',
+        calendar: 'ETHIOPIAN',
+        executiveSummary: 'ይህ ፕሮጀክት የአየር ካርጎ አስተዳደርን በዘመናዊ የዲጂታል ቴክኖሎጂ የሚያሳድግ ሲሆን በራስ-ሰር የሚሰሩ የክፍያ እና የክትትል ሞጁሎችን ያካትታል።',
+        validDays: 30,
+        presetName: '30/40/30',
+      })
+      .expect(201);
+
+    const amharicQuote = createRes.body;
+    expect(amharicQuote.language).toBe('am');
+    expect(amharicQuote.calendar).toBe('ETHIOPIAN');
+
+    // Retrieve HTML template
+    const htmlRes = await request(app.getHttpServer())
+      .get(`/quotes/${amharicQuote.id}/html`)
+      .set('Authorization', `Bearer ${pmToken}`)
+      .expect(200);
+
+    const html = htmlRes.text;
+
+    // Verify Amharic headers & Ge'ez fonts
+    expect(html).toContain('ኦፊሴላዊ የዋጋ ማቅረቢያ');
+    expect(html).toContain('Noto Sans Ethiopic');
+    expect(html).toContain('የፕሮጀክት ክፍሎች እና የዋጋ ዝርዝር');
+    expect(html).toContain('ለደንበኛ የቀረበ');
+    expect(html).toContain('የኢትዮጵያ አየር መንገድ');
+
+    // Verify Ethiopian Calendar formatting (ዓ.ም.)
+    expect(html).toContain('ዓ.ም.');
+    expect(html).toContain('እ.ኤ.አ'); // Dual date indicator
+
+    // Verify Statutory Tax citation in Amharic (Proclamation 1341/2016)
+    expect(html).toContain('ተጨማሪ እሴት ታክስ');
+    expect(html).toContain('1341/2016');
+    expect(html).toContain('የቅድመ ግብር ተቀናሽ ማስታወሻ');
+
+    // Verify currency formatted with Birr symbol
+    expect(html).toContain('ብር');
+
+    // Verify Payment milestones in Amharic
+    expect(html).toContain('የክፍያ ደረጃዎች እና የጊዜ ሰሌዳ');
+    expect(html).toContain('ደረጃ 1');
+    expect(html).toContain('ደረጃ 2');
+    expect(html).toContain('ደረጃ 3');
+
+    // Verify Commercial terms and sign-offs in Amharic
+    expect(html).toContain('የውል ስምምነት እና ቅድመ ሁኔታዎች');
+    expect(html).toContain('በአፍሮ ዲጂታል ኃላፊ የተፈረመ');
+    expect(html).toContain('በደንበኛ ተቀባይነት ማረጋገጫ እና ፊርማ');
+  });
+
+  it('10. Stage 11: Renders Amharic quote with Ethiopian calendar as binary PDF via Playwright', async () => {
+    const pmToken = createToken(storedUsers[1]); // PM
+
+    // Create Amharic quote
+    const createRes = await request(app.getHttpServer())
+      .post(`/projects/${testProjectId}/versions/${testVersionId}/quotes`)
+      .set('Authorization', `Bearer ${pmToken}`)
+      .send({
+        title: 'የኢንተርፕራይዝ የክፍያ እና የሂሳብ አያያዝ ሥርዓት',
+        clientName: 'የኢትዮጵያ ንግድ ባንክ (Commercial Bank of Ethiopia)',
+        language: 'am',
+        calendar: 'ETHIOPIAN',
+        validDays: 45,
+      })
+      .expect(201);
+
+    const quoteId = createRes.body.id;
+
+    const pdfRes = await request(app.getHttpServer())
+      .get(`/quotes/${quoteId}/pdf`)
+      .set('Authorization', `Bearer ${pmToken}`)
+      .expect(200);
+
+    expect(pdfRes.headers['content-type']).toBe('application/pdf');
+    const buffer = Buffer.from(pdfRes.body);
+    expect(buffer.length).toBeGreaterThan(1000);
+    expect(buffer.subarray(0, 5).toString('ascii')).toBe('%PDF-');
+  });
 });

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { chromium, Browser } from 'playwright';
+import { formatEthiopianDate } from '@selet/shared';
 
 export interface FormattedQuoteData {
   quoteNumber: string;
@@ -10,6 +11,8 @@ export interface FormattedQuoteData {
   clientContact?: string | null;
   clientEmail?: string | null;
   currency: string;
+  language?: string | null;
+  calendar?: string | null;
   subtotalMinor: string | bigint;
   taxPackVersion: string;
   vatRate: number;
@@ -63,44 +66,57 @@ export class PdfService {
   /**
    * Format minor units into clean localized currency string.
    */
-  public formatMoney(amountMinor: string | bigint | number | undefined | null, currency = 'ETB'): string {
-    if (amountMinor === undefined || amountMinor === null) return `0.00 ${currency}`;
+  public formatMoney(
+    amountMinor: string | bigint | number | undefined | null,
+    currency = 'ETB',
+    isAmharic = false,
+  ): string {
+    if (amountMinor === undefined || amountMinor === null) {
+      return isAmharic && currency === 'ETB' ? 'ብር 0.00' : `0.00 ${currency}`;
+    }
     const minorVal = typeof amountMinor === 'bigint' ? Number(amountMinor) : Number(amountMinor);
     const majorVal = minorVal / 100;
-    return `${currency} ${majorVal.toLocaleString('en-US', {
+    const formattedNum = majorVal.toLocaleString('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    })}`;
+    });
+    if (isAmharic && currency === 'ETB') {
+      return `ብር ${formattedNum}`;
+    }
+    return `${currency} ${formattedNum}`;
   }
 
   /**
-   * Generates the Afro Digital branded HTML template for quotes.
+   * Generates the Afro Digital branded HTML template for quotes with full Amharic and Ethiopian calendar support.
    */
   public generateHtml(data: FormattedQuoteData): string {
+    const isAmharic = data.language === 'am';
+    const isEthiopianCal = data.calendar === 'ETHIOPIAN' || isAmharic;
+
     const branding = data.brandingSnapshot || {};
-    const companyName = branding.companyName || 'Afro Digital Technologies';
+    const companyName = branding.companyName || (isAmharic ? 'አፍሮ ዲጂታል ቴክኖሎጂስ' : 'Afro Digital Technologies');
     const companyTin = branding.companyTin || '0076543210';
-    const companyAddress = branding.companyAddress || 'Bole Sub-City, Woreda 03, Addis Ababa, Ethiopia';
+    const companyAddress = branding.companyAddress || (isAmharic ? 'ቦሌ ክ/ከተማ፣ ወረዳ 03፣ አዲስ አበባ፣ ኢትዮጵያ' : 'Bole Sub-City, Woreda 03, Addis Ababa, Ethiopia');
     const companyEmail = branding.companyEmail || 'billing@afrodigital.et';
     const companyPhone = branding.companyPhone || '+251 91 123 4567';
     const primaryColor = branding.primaryColor || '#047857'; // Afro Digital Emerald
     const logoUrl = branding.logoUrl || 'https://raw.githubusercontent.com/Afro-Digital/Selet-/main/docs/logo.png';
 
-    const subtotalFormatted = this.formatMoney(data.subtotalMinor, data.currency);
-    const vatFormatted = this.formatMoney(data.vatAmountMinor, data.currency);
-    const totalFormatted = this.formatMoney(data.totalPriceMinor, data.currency);
+    const subtotalFormatted = this.formatMoney(data.subtotalMinor, data.currency, isAmharic);
+    const vatFormatted = this.formatMoney(data.vatAmountMinor, data.currency, isAmharic);
+    const totalFormatted = this.formatMoney(data.totalPriceMinor, data.currency, isAmharic);
     const vatPercent = Math.round((data.vatRate || 0.15) * 100);
 
     const withholdingPercent = Math.round((data.withholdingRate || 0.03) * 100);
     const withholdingFormatted = data.withholdingAmountMinor
-      ? this.formatMoney(data.withholdingAmountMinor, data.currency)
+      ? this.formatMoney(data.withholdingAmountMinor, data.currency, isAmharic)
       : null;
     const expectedCashFormatted = data.expectedCashMinor
-      ? this.formatMoney(data.expectedCashMinor, data.currency)
+      ? this.formatMoney(data.expectedCashMinor, data.currency, isAmharic)
       : null;
 
     const recurringFormatted = data.clientRecurringMonthlyMinor && Number(data.clientRecurringMonthlyMinor) > 0
-      ? this.formatMoney(data.clientRecurringMonthlyMinor, data.currency)
+      ? this.formatMoney(data.clientRecurringMonthlyMinor, data.currency, isAmharic)
       : null;
 
     // Secondary currency details
@@ -109,17 +125,14 @@ export class PdfService {
       const secondaryTotalFormatted = this.formatMoney(data.secondaryTotalPriceMinor, data.secondaryCurrency);
       secondarySummaryHtml = `
         <div class="secondary-currency-badge">
-          <span class="label">Equivalent (${data.secondaryCurrency}):</span>
+          <span class="label">${isAmharic ? 'ተመጣጣኝ ዋጋ' : 'Equivalent'} (${data.secondaryCurrency}):</span>
           <span class="value">${secondaryTotalFormatted}</span>
           <span class="rate-note">(@ 1 ${data.secondaryCurrency} = ${data.exchangeRateSnapshot.toFixed(2)} ETB snapshot)</span>
         </div>
       `;
     }
 
-    // Process line items according to visibility rules:
-    // SHOW_PRICE -> title, desc, price
-    // DESCRIPTION_ONLY -> title, desc, no price displayed
-    // MERGE_GROUP -> items grouped together by groupName
+    // Process line items according to visibility rules
     interface ProcessedLine {
       title: string;
       description?: string;
@@ -146,14 +159,14 @@ export class PdfService {
         processedLines.push({
           title: item.title,
           description: item.description,
-          priceHtml: '<span class="included-badge">Included in Scope</span>',
+          priceHtml: `<span class="included-badge">${isAmharic ? 'በጥቅል ውስጥ የተካተተ' : 'Included in Scope'}</span>`,
         });
       } else {
         // SHOW_PRICE
         processedLines.push({
           title: item.title,
           description: item.description,
-          priceHtml: this.formatMoney(item.priceMinor, data.currency),
+          priceHtml: this.formatMoney(item.priceMinor, data.currency, isAmharic),
         });
       }
     }
@@ -163,7 +176,7 @@ export class PdfService {
       processedLines.push({
         title: groupName,
         description: groupData.descriptions.join(' • '),
-        priceHtml: this.formatMoney(groupData.totalPriceMinor, data.currency),
+        priceHtml: this.formatMoney(groupData.totalPriceMinor, data.currency, isAmharic),
         isMergedGroup: true,
       });
     }
@@ -174,7 +187,7 @@ export class PdfService {
         <tr class="${idx % 2 === 0 ? 'even' : 'odd'}">
           <td class="col-num">${idx + 1}</td>
           <td class="col-desc">
-            <div class="line-title">${this.escapeHtml(line.title)} ${line.isMergedGroup ? '<span class="group-tag">Package Group</span>' : ''}</div>
+            <div class="line-title">${this.escapeHtml(line.title)} ${line.isMergedGroup ? `<span class="group-tag">${isAmharic ? 'ጥቅል አገልግሎት' : 'Package Group'}</span>` : ''}</div>
             ${line.description ? `<div class="line-sub">${this.escapeHtml(line.description)}</div>` : ''}
           </td>
           <td class="col-price">${line.priceHtml}</td>
@@ -187,43 +200,71 @@ export class PdfService {
       .map(
         (m, idx) => `
         <tr>
-          <td class="m-stage">Stage ${idx + 1}</td>
+          <td class="m-stage">${isAmharic ? `ደረጃ ${idx + 1}` : `Stage ${idx + 1}`}</td>
           <td class="m-title">
             <strong>${this.escapeHtml(m.title)}</strong>
             ${m.description ? `<div class="m-desc">${this.escapeHtml(m.description)}</div>` : ''}
           </td>
           <td class="m-pct">${m.percentage !== undefined ? `${m.percentage}%` : '-'}</td>
-          <td class="m-amt">${m.amountMinor ? this.formatMoney(m.amountMinor, data.currency) : '-'}</td>
-          <td class="m-due">${m.dueDate ? this.escapeHtml(m.dueDate) : 'Upon milestone sign-off'}</td>
+          <td class="m-amt">${m.amountMinor ? this.formatMoney(m.amountMinor, data.currency, isAmharic) : '-'}</td>
+          <td class="m-due">${m.dueDate ? this.escapeHtml(m.dueDate) : (isAmharic ? 'የደረጃው ርክክብ ሲፈረም' : 'Upon milestone sign-off')}</td>
         </tr>`,
       )
       .join('\n');
 
-    const validUntilStr = new Date(data.validUntil).toLocaleDateString('en-GB', {
+    // Dates formatting (Ethiopian & Gregorian)
+    const validDate = new Date(data.validUntil);
+    const issuedDate = data.issuedAt ? new Date(data.issuedAt) : new Date(data.createdAt);
+
+    const validGregStr = validDate.toLocaleDateString('en-GB', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
     });
-    const issuedDateStr = data.issuedAt
-      ? new Date(data.issuedAt).toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-        })
-      : new Date(data.createdAt).toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-        });
+    const issuedGregStr = issuedDate.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+
+    let validUntilStr = validGregStr;
+    let issuedDateStr = issuedGregStr;
+
+    if (isEthiopianCal) {
+      const validEthStr = formatEthiopianDate(validDate, { locale: isAmharic ? 'am' : 'en' });
+      const issuedEthStr = formatEthiopianDate(issuedDate, { locale: isAmharic ? 'am' : 'en' });
+      if (isAmharic) {
+        validUntilStr = `${validEthStr} (${validGregStr} እ.ኤ.አ)`;
+        issuedDateStr = `${issuedEthStr} (${issuedGregStr} እ.ኤ.አ)`;
+      } else {
+        validUntilStr = `${validEthStr} (${validGregStr} GC)`;
+        issuedDateStr = `${issuedEthStr} (${issuedGregStr} GC)`;
+      }
+    }
 
     const statusBadgeClass = `status-${(data.status || 'DRAFT').toLowerCase()}`;
+    const statusLabelMap: Record<string, { en: string; am: string }> = {
+      DRAFT: { en: 'DRAFT', am: 'ረቂቅ (DRAFT)' },
+      ISSUED: { en: 'ISSUED', am: 'የተሰጠ (ISSUED)' },
+      ACCEPTED: { en: 'ACCEPTED', am: 'ተቀባይነት ያገኘ (ACCEPTED)' },
+      EXPIRED: { en: 'EXPIRED', am: 'ጊዜው ያለፈበት (EXPIRED)' },
+      REJECTED: { en: 'REJECTED', am: 'ውድቅ የተደረገ (REJECTED)' },
+    };
+    const statusUpper = (data.status || 'DRAFT').toUpperCase();
+    const statusDisplayText = isAmharic
+      ? statusLabelMap[statusUpper]?.am || statusUpper
+      : statusLabelMap[statusUpper]?.en || statusUpper;
 
     return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${isAmharic ? 'am' : 'en'}">
 <head>
   <meta charset="UTF-8">
-  <title>Quote ${this.escapeHtml(data.quoteNumber)} - ${this.escapeHtml(data.title)}</title>
+  <title>${isAmharic ? 'የዋጋ ማቅረቢያ' : 'Quote'} ${this.escapeHtml(data.quoteNumber)} - ${this.escapeHtml(data.title)}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;500;600;700;800;900&display=swap');
     @page {
       size: A4;
       margin: 15mm;
@@ -234,7 +275,7 @@ export class PdfService {
       padding: 0;
     }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Noto Sans Ethiopic', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       font-size: 13px;
       line-height: 1.5;
       color: #0f172a;
@@ -270,7 +311,7 @@ export class PdfService {
       width: 50%;
     }
     .quote-badge-title {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 900;
       color: #0f172a;
       letter-spacing: -0.5px;
@@ -548,10 +589,10 @@ export class PdfService {
         </div>
       </td>
       <td class="header-meta-cell">
-        <div class="quote-badge-title">FORMAL QUOTE</div>
+        <div class="quote-badge-title">${isAmharic ? 'ኦፊሴላዊ የዋጋ ማቅረቢያ' : 'FORMAL QUOTE'}</div>
         <div class="quote-number">${this.escapeHtml(data.quoteNumber)}</div>
         <div>
-          <span class="status-badge ${statusBadgeClass}">${this.escapeHtml(data.status)}</span>
+          <span class="status-badge ${statusBadgeClass}">${this.escapeHtml(statusDisplayText)}</span>
         </div>
       </td>
     </tr>
@@ -560,18 +601,18 @@ export class PdfService {
   <!-- Client & Validity Details -->
   <div class="client-grid">
     <div class="client-col">
-      <div class="section-label">Prepared For Client</div>
+      <div class="section-label">${isAmharic ? 'ለደንበኛ የቀረበ (Prepared For)' : 'Prepared For Client'}</div>
       <div class="client-name">${this.escapeHtml(data.clientName)}</div>
-      ${data.clientTin ? `<div class="client-detail-line">Client TIN: ${this.escapeHtml(data.clientTin)}</div>` : ''}
-      ${data.clientContact ? `<div class="client-detail-line">Contact Person: ${this.escapeHtml(data.clientContact)}</div>` : ''}
-      ${data.clientEmail ? `<div class="client-detail-line">Email: ${this.escapeHtml(data.clientEmail)}</div>` : ''}
+      ${data.clientTin ? `<div class="client-detail-line">${isAmharic ? 'የደንበኛ የግብር መለያ (TIN):' : 'Client TIN:'} ${this.escapeHtml(data.clientTin)}</div>` : ''}
+      ${data.clientContact ? `<div class="client-detail-line">${isAmharic ? 'ግንኙነት አድራጊ:' : 'Contact Person:'} ${this.escapeHtml(data.clientContact)}</div>` : ''}
+      ${data.clientEmail ? `<div class="client-detail-line">${isAmharic ? 'ኢሜይል:' : 'Email:'} ${this.escapeHtml(data.clientEmail)}</div>` : ''}
     </div>
     <div class="client-col-right">
-      <div class="section-label">Quote Details</div>
-      <div class="client-detail-line"><strong>Issued Date:</strong> ${issuedDateStr}</div>
-      <div class="client-detail-line"><strong>Valid Until:</strong> ${validUntilStr}</div>
-      <div class="client-detail-line"><strong>Primary Currency:</strong> ${this.escapeHtml(data.currency)}</div>
-      <div class="client-detail-line"><strong>Tax Pack:</strong> Ethiopia v${this.escapeHtml(data.taxPackVersion)}</div>
+      <div class="section-label">${isAmharic ? 'የዋጋ ማቅረቢያ ዝርዝር መረጃ' : 'Quote Details'}</div>
+      <div class="client-detail-line"><strong>${isAmharic ? 'የተሰጠበት ቀን:' : 'Issued Date:'}</strong> ${issuedDateStr}</div>
+      <div class="client-detail-line"><strong>${isAmharic ? 'የሚያበቃበት ቀን:' : 'Valid Until:'}</strong> ${validUntilStr}</div>
+      <div class="client-detail-line"><strong>${isAmharic ? 'ዋና የገንዘብ አይነት:' : 'Primary Currency:'}</strong> ${this.escapeHtml(data.currency)}</div>
+      <div class="client-detail-line"><strong>${isAmharic ? 'የግብር ደንብ:' : 'Tax Pack:'}</strong> ${isAmharic ? 'ኢትዮጵያ' : 'Ethiopia'} v${this.escapeHtml(data.taxPackVersion)}</div>
     </div>
   </div>
 
@@ -579,20 +620,20 @@ export class PdfService {
   ${
     data.executiveSummary
       ? `<div class="exec-summary-box">
-          <div class="exec-summary-title">Scope & Executive Summary</div>
+          <div class="exec-summary-title">${isAmharic ? 'የፕሮጀክት አጠቃላይ መግለጫ እና ወሰን (Scope & Summary)' : 'Scope & Executive Summary'}</div>
           ${this.escapeHtml(data.executiveSummary)}
          </div>`
       : ''
   }
 
   <!-- Deliverables & Pricing Lines -->
-  <div class="section-header">Project Deliverables & Scope Breakdown</div>
+  <div class="section-header">${isAmharic ? 'የፕሮጀክት ክፍሎች እና የዋጋ ዝርዝር (Project Deliverables & Scope)' : 'Project Deliverables & Scope Breakdown'}</div>
   <table class="deliverables-table">
     <thead>
       <tr>
         <th class="col-num">#</th>
-        <th class="col-desc">Module / Deliverable Description</th>
-        <th class="col-price">Investment (${this.escapeHtml(data.currency)})</th>
+        <th class="col-desc">${isAmharic ? 'የሥራው / ሞጁል ዝርዝር መግለጫ' : 'Module / Deliverable Description'}</th>
+        <th class="col-price">${isAmharic ? `ዋጋ (${data.currency === 'ETB' ? 'ብር' : this.escapeHtml(data.currency)})` : `Investment (${this.escapeHtml(data.currency)})`}</th>
       </tr>
     </thead>
     <tbody>
@@ -604,7 +645,7 @@ export class PdfService {
   ${
     recurringFormatted
       ? `<div class="recurring-box">
-          <strong>Recurring Client Infrastructure:</strong> ${recurringFormatted} / month (estimated for Cloud Hosting, Domain, SSL, CDN & Payment Gateway). Billed directly to client by service providers.
+          <strong>${isAmharic ? 'ወርሃዊ ተደጋጋሚ የደመና መሠረተ ልማት ወጪ:' : 'Recurring Client Infrastructure:'}</strong> ${recurringFormatted} ${isAmharic ? 'በወር (ለደመና ማስተናገጃ፣ ለዶሜይን፣ SSL፣ CDN እና ክፍያ መቀበያ የተገመተ)። በቀጥታ ለአገልግሎት ሰጪ ድርጅቶች የሚከፈል።' : '/ month (estimated for Cloud Hosting, Domain, SSL, CDN & Payment Gateway). Billed directly to client by service providers.'}
          </div>`
       : ''
   }
@@ -613,15 +654,23 @@ export class PdfService {
   <div class="summary-container">
     <div class="summary-notes-cell">
       <div class="tax-citation-card">
-        <strong>Statutory Tax Compliance:</strong><br>
-        VAT applied at ${vatPercent}% in accordance with Ethiopian <strong>Proclamation 1341/2024</strong>. All statutory obligations are fully recorded and transparently itemized.
+        <strong>${isAmharic ? 'የታክስ ህግ ተገዢነት ማረጋገጫ (Statutory Tax Compliance):' : 'Statutory Tax Compliance:'}</strong><br>
+        ${
+          isAmharic
+            ? `ተጨማሪ እሴት ታክስ (ቫት/VAT) በኢትዮጵያ ተጨማሪ እሴት ታክስ አዋጅ ቁጥር 1341/2016 መሠረት ${vatPercent}% ተሰልቷል። ሁሉም ህጋዊ ግዴታዎች በግልጽ እና በህጉ መሠረት ተካተዋል።`
+            : `VAT applied at ${vatPercent}% in accordance with Ethiopian <strong>Proclamation 1341/2024</strong>. All statutory obligations are fully recorded and transparently itemized.`
+        }
       </div>
 
       ${
         withholdingFormatted
           ? `<div class="withholding-note">
-              <strong>Withholding Tax Note (${withholdingPercent}%):</strong><br>
-              Domestic client payments are subject to a 3% withholding tax on professional IT services (${withholdingFormatted}). Net cash receivable upon invoice presentation: <strong>${expectedCashFormatted}</strong>. Withholding tax receipt to be issued to Afro Digital by client.
+              <strong>${isAmharic ? `የቅድመ ግብር ተቀናሽ ማስታወሻ (${withholdingPercent}% Withholding):` : `Withholding Tax Note (${withholdingPercent}%):`}</strong><br>
+              ${
+                isAmharic
+                  ? `በኢትዮጵያ የታክስ አስተዳደር አዋጅ መሠረት የአገር ውስጥ ደንበኞች ከሙያዊ የአይቲ አገልግሎት ክፍያ ላይ 3% ዊዝሆልዲንግ ታክስ (${withholdingFormatted}) ቀንሰው ገቢ ያደርጋሉ። ደረሰኝ ሲቀርብ የሚከፈል የተጣራ ጥሬ ገንዘብ: <strong>${expectedCashFormatted}</strong>። ደንበኛው ህጋዊ የዊዝሆልዲንግ ደረሰኝ ለአፍሮ ዲጂታል ይሰጣል።`
+                  : `Domestic client payments are subject to a 3% withholding tax on professional IT services (${withholdingFormatted}). Net cash receivable upon invoice presentation: <strong>${expectedCashFormatted}</strong>. Withholding tax receipt to be issued to Afro Digital by client.`
+              }
              </div>`
           : ''
       }
@@ -630,15 +679,15 @@ export class PdfService {
     <div class="summary-totals-cell">
       <table class="totals-table">
         <tr>
-          <td class="total-label">Subtotal (Excl. VAT):</td>
+          <td class="total-label">${isAmharic ? 'ድምር (ያለ ቫት / Excl. VAT):' : 'Subtotal (Excl. VAT):'}</td>
           <td class="total-val">${subtotalFormatted}</td>
         </tr>
         <tr>
-          <td class="total-label">VAT (${vatPercent}% - Procl. 1341/2024):</td>
+          <td class="total-label">${isAmharic ? `ተጨማሪ እሴት ታክስ (${vatPercent}% - አዋጅ 1341/2016):` : `VAT (${vatPercent}% - Procl. 1341/2024):`}</td>
           <td class="total-val">${vatFormatted}</td>
         </tr>
         <tr class="total-grand-row">
-          <td>Total Project Price:</td>
+          <td>${isAmharic ? 'አጠቃላይ የፕሮጀክት ዋጋ:' : 'Total Project Price:'}</td>
           <td class="total-val">${totalFormatted}</td>
         </tr>
       </table>
@@ -647,15 +696,15 @@ export class PdfService {
   </div>
 
   <!-- Payment Milestones Schedule -->
-  <div class="section-header">Payment Milestones Schedule</div>
+  <div class="section-header">${isAmharic ? 'የክፍያ ደረጃዎች እና የጊዜ ሰሌዳ (Payment Milestones Schedule)' : 'Payment Milestones Schedule'}</div>
   <table class="milestones-table">
     <thead>
       <tr>
-        <th class="m-stage">Stage</th>
-        <th class="m-title">Milestone & Deliverable Condition</th>
-        <th class="m-pct">Share</th>
-        <th class="m-amt">Amount (${this.escapeHtml(data.currency)})</th>
-        <th class="m-due">Due Date / Trigger</th>
+        <th class="m-stage">${isAmharic ? 'ደረጃ' : 'Stage'}</th>
+        <th class="m-title">${isAmharic ? 'የክፍያ ደረጃ እና የሚረከበው ውጤት' : 'Milestone & Deliverable Condition'}</th>
+        <th class="m-pct">${isAmharic ? 'ድርሻ' : 'Share'}</th>
+        <th class="m-amt">${isAmharic ? `መጠን (${data.currency === 'ETB' ? 'ብር' : this.escapeHtml(data.currency)})` : `Amount (${this.escapeHtml(data.currency)})`}</th>
+        <th class="m-due">${isAmharic ? 'የሚከፈልበት ጊዜ / ቅድመ-ሁኔታ' : 'Due Date / Trigger'}</th>
       </tr>
     </thead>
     <tbody>
@@ -665,33 +714,42 @@ export class PdfService {
 
   <!-- Terms and Conditions -->
   <div class="terms-box">
-    <h4>Commercial Terms & Assumptions</h4>
-    <div>${this.escapeHtml(data.termsAndConditions || '1. Validity: This quotation remains valid for 30 days from the issue date.\n2. Invoicing: Invoices are submitted upon milestone completion according to the payment schedule above.\n3. Currency: Invoices are rendered in ETB. Foreign currency conversions reflect snapshot rates at quotation.\n4. Intellectual Property: Final source code, system documentation, and architecture IP are transferred upon receipt of full payment.')}</div>
+    <h4>${isAmharic ? 'የውል ስምምነት እና ቅድመ ሁኔታዎች (Commercial Terms)' : 'Commercial Terms & Assumptions'}</h4>
+    <div>${this.escapeHtml(
+      data.termsAndConditions ||
+        (isAmharic
+          ? '1. ተቀባይነት ጊዜ: ይህ የዋጋ ማቅረቢያ ከተሰጠበት ቀን ጀምሮ ለ30 ቀናት ፀንቶ ይቆያል።\n2. ክፍያ: በክፍያ ደረጃዎች ሰሌዳ መሠረት እያንዳንዱ የሥራ ደረጃ ሲጠናቀቅ እና ሲረከብ ደረሰኝ ይቀርባል።\n3. የገንዘብ አይነት: ደረሰኞች በኢትዮጵያ ብር (ETB) ይቀርባሉ። የውጭ ምንዛሬ ተመኖች በዋጋ ማቅረቢያው ቀን የነበረውን የምንዛሬ ቅጽበታዊ መረጃ ያመለክታሉ።\n4. የባለቤትነት መብት (IP): የሶፍትዌሩ ምንጭ ኮድ (Source Code) እና የስርዓቱ ሰነዶች ሙሉ ክፍያ ሲጠናቀቅ ለደንበኛ ይተላለፋሉ።'
+          : '1. Validity: This quotation remains valid for 30 days from the issue date.\n2. Invoicing: Invoices are submitted upon milestone completion according to the payment schedule above.\n3. Currency: Invoices are rendered in ETB. Foreign currency conversions reflect snapshot rates at quotation.\n4. Intellectual Property: Final source code, system documentation, and architecture IP are transferred upon receipt of full payment.'),
+    )}</div>
   </div>
 
   <!-- Sign-off & Acceptance Grid -->
   <div class="signoff-grid">
     <div class="signoff-col">
       <div class="sign-box">
-        <div class="sign-title">Authorized Afro Digital Representative</div>
-        <div>Name: ___________________________________</div>
-        <div>Signature: ________________________________</div>
-        <div>Date: _____________________________________</div>
+        <div class="sign-title">${isAmharic ? 'በአፍሮ ዲጂታል ኃላፊ የተፈረመ' : 'Authorized Afro Digital Representative'}</div>
+        <div>${isAmharic ? 'ስም:' : 'Name:'} ___________________________________</div>
+        <div>${isAmharic ? 'ፊርማ:' : 'Signature:'} ________________________________</div>
+        <div>${isAmharic ? 'ቀን:' : 'Date:'} _____________________________________</div>
       </div>
     </div>
     <div class="signoff-col">
       <div class="sign-box">
-        <div class="sign-title">Client Acceptance & Authorization</div>
-        <div>Name: ___________________________________</div>
-        <div>Signature: ________________________________</div>
-        <div>Date: _____________________________________</div>
+        <div class="sign-title">${isAmharic ? 'በደንበኛ ተቀባይነት ማረጋገጫ እና ፊርማ' : 'Client Acceptance & Authorization'}</div>
+        <div>${isAmharic ? 'ስም:' : 'Name:'} ___________________________________</div>
+        <div>${isAmharic ? 'ፊርማ:' : 'Signature:'} ________________________________</div>
+        <div>${isAmharic ? 'ቀን:' : 'Date:'} _____________________________________</div>
       </div>
     </div>
   </div>
 
   <!-- Footer -->
   <div class="footer">
-    Generated by Selet (ስሌት) Pricing Platform • Quote Ref: ${this.escapeHtml(data.quoteNumber)} • Tax Pack Version: ${this.escapeHtml(data.taxPackVersion)} • Immutable Record
+    ${
+      isAmharic
+        ? `በስሌት (Selet) የዋጋ ማቅረቢያ ሥርዓት የተዘጋጀ • የዋጋ ማጣቀሻ: ${this.escapeHtml(data.quoteNumber)} • የታክስ ደንብ: ኢትዮጵያ v${this.escapeHtml(data.taxPackVersion)} • የማይለወጥ ኦፊሴላዊ ሰነድ`
+        : `Generated by Selet (ስሌት) Pricing Platform • Quote Ref: ${this.escapeHtml(data.quoteNumber)} • Tax Pack Version: ${this.escapeHtml(data.taxPackVersion)} • Immutable Record`
+    }
   </div>
 
 </body>
@@ -706,7 +764,7 @@ export class PdfService {
     try {
       browser = await chromium.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        args: ['--no-sandbox', '--disable-dev-shm-usage'],
       });
 
       const page = await browser.newPage();

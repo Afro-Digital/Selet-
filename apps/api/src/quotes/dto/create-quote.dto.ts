@@ -74,6 +74,14 @@ export class CreateQuoteDto {
 
   @IsString()
   @IsOptional()
+  language?: string = 'en'; // 'en' | 'am'
+
+  @IsString()
+  @IsOptional()
+  calendar?: string = 'GREGORIAN'; // 'GREGORIAN' | 'ETHIOPIAN'
+
+  @IsString()
+  @IsOptional()
   executiveSummary?: string;
 
   @IsArray()

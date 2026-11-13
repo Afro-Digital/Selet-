@@ -256,6 +256,8 @@ export class QuotesService {
         clientContact,
         clientEmail,
         currency: project.currency || 'ETB',
+        language: dto.language || 'en',
+        calendar: dto.calendar || 'GREGORIAN',
         subtotalMinor,
         taxPackVersion: TAX_PACK_VERSION,
         vatRate,
@@ -386,6 +388,8 @@ export class QuotesService {
           dto.clientContact !== undefined ? dto.clientContact : existing.clientContact,
         clientEmail:
           dto.clientEmail !== undefined ? dto.clientEmail : existing.clientEmail,
+        language: dto.language || existing.language,
+        calendar: dto.calendar || existing.calendar,
         validUntil: dto.validUntil ? new Date(dto.validUntil) : existing.validUntil,
         executiveSummary:
           dto.executiveSummary !== undefined

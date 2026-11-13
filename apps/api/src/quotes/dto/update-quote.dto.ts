@@ -42,6 +42,14 @@ export class UpdateQuoteDto {
 
   @IsString()
   @IsOptional()
+  language?: string;
+
+  @IsString()
+  @IsOptional()
+  calendar?: string;
+
+  @IsString()
+  @IsOptional()
   executiveSummary?: string;
 
   @IsArray()

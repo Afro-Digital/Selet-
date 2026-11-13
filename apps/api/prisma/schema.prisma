@@ -478,6 +478,8 @@ model Quote {
   clientContact              String?
   clientEmail                String?
   currency                   String          @default("ETB")
+  language                   String          @default("en")        // "en" | "am"
+  calendar                   String          @default("GREGORIAN") // "GREGORIAN" | "ETHIOPIAN"
 
   // Financial snapshot in minor units
   subtotalMinor              BigInt          @default(0)

@@ -181,6 +181,16 @@ export interface TranslationDictionary {
   issueQuoteButton: string;
   quoteImmutabilityNotice: string;
   milestonesMustEqual100: string;
+  // Stage 11: Amharic and Ethiopian Calendar
+  calendarPreference: string;
+  gregorianCalendar: string;
+  ethiopianCalendar: string;
+  quoteLanguage: string;
+  quoteCalendar: string;
+  geezNumerals: string;
+  ethiopianLeapYearNotice: string;
+  pagumeThirteenthMonth: string;
+  dualDateDisplay: string;
 }
 
 export const translations: Record<Locale, TranslationDictionary> = {
@@ -368,6 +378,16 @@ export const translations: Record<Locale, TranslationDictionary> = {
     quoteImmutabilityNotice:
       'Issued quotes are frozen immutable snapshots. Future rate or tax changes will never alter an issued quote.',
     milestonesMustEqual100: 'Milestone percentages must sum to exactly 100%.',
+    // Stage 11
+    calendarPreference: 'Calendar',
+    gregorianCalendar: 'Gregorian (G.C.)',
+    ethiopianCalendar: 'Ethiopian (E.C.)',
+    quoteLanguage: 'Quote Language',
+    quoteCalendar: 'Quote Calendar System',
+    geezNumerals: 'Ge\'ez Numerals',
+    ethiopianLeapYearNotice: 'Ethiopian Leap Year (Pagumē 6 days)',
+    pagumeThirteenthMonth: '13th Month (Pagumē)',
+    dualDateDisplay: 'Dual Calendar Date',
   },
   am: {
     appName: 'ስሌት (Selet)',
@@ -551,5 +571,15 @@ export const translations: Record<Locale, TranslationDictionary> = {
     quoteImmutabilityNotice:
       'የተሰጡ የዋጋ አቅርቦቶች በቋሚነት የተቆለፉ ናቸው። የወደፊት የምንዛሬ ወይም የታክስ ለውጥ ይህንን አይለውጠውም።',
     milestonesMustEqual100: 'የክፍያ ደረጃዎች ድምር በትክክል 100% መሆን አለበት።',
+    // Stage 11
+    calendarPreference: 'የቀን መቁጠሪያ',
+    gregorianCalendar: 'ጎርጎሪዮሳዊ (እ.ኤ.አ)',
+    ethiopianCalendar: 'የኢትዮጵያ (ዓ.ም.)',
+    quoteLanguage: 'የዋጋ ማቅረቢያው ቋንቋ',
+    quoteCalendar: 'የቀን መቁጠሪያ ምርጫ',
+    geezNumerals: 'የግዕዝ ቁጥሮች',
+    ethiopianLeapYearNotice: 'የኢትዮጵያ ዘመነ ዮሐንስ / ጳጉሜ 6 ቀናት',
+    pagumeThirteenthMonth: '13ኛው ወር (ጳጉሜ)',
+    dualDateDisplay: 'ሁለቱ የቀን መቁጠሪያዎች',
   },
 };

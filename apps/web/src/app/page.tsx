@@ -51,10 +51,12 @@ import {
   TrendingUp,
   Tag,
   FileText,
+  Calendar,
 } from 'lucide-react';
 
 export default function Home() {
   const [locale, setLocale] = useState<Locale>('en');
+  const [calendarPreference, setCalendarPreference] = useState<'ETHIOPIAN' | 'GREGORIAN'>('ETHIOPIAN');
   const [userRole, setUserRole] = useState<UserRole>('OWNER');
   const [activeTab, setActiveTab] = useState<
     'people' | 'roles' | 'rate-cards' | 'catalog' | 'currency' | 'estimates' | 'scale' | 'pricing' | 'quotes'
@@ -326,14 +328,14 @@ export default function Home() {
                   Selet (ስሌት)
                 </span>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
-                  v0.1.0 Stage 9
+                  v0.1.0 Stage 11
                 </span>
               </div>
               <p className="text-xs text-slate-500 hidden sm:block">{t.tagline}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             {/* Notification Bell */}
             <NotificationBell
               notifications={notifications}
@@ -341,6 +343,33 @@ export default function Home() {
               onMarkAsRead={handleMarkAsRead}
               onMarkAllAsRead={handleMarkAllAsRead}
             />
+
+            {/* Calendar Preference Switcher */}
+            <div className="flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200" title={t.calendarPreference}>
+              <Calendar className="w-3.5 h-3.5 text-slate-400 ml-1.5 mr-1" />
+              <button
+                type="button"
+                onClick={() => setCalendarPreference('ETHIOPIAN')}
+                className={`px-2 py-0.5 text-xs font-semibold rounded-md transition-all ${
+                  calendarPreference === 'ETHIOPIAN'
+                    ? 'bg-white text-emerald-800 shadow-2xs'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                ዓ.ም.
+              </button>
+              <button
+                type="button"
+                onClick={() => setCalendarPreference('GREGORIAN')}
+                className={`px-2 py-0.5 text-xs font-semibold rounded-md transition-all ${
+                  calendarPreference === 'GREGORIAN'
+                    ? 'bg-white text-emerald-800 shadow-2xs'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                G.C.
+              </button>
+            </div>
 
             {/* Language Switcher */}
             <div className="flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200">
