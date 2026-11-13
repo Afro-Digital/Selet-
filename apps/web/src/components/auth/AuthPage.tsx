@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import {
@@ -43,21 +42,19 @@ export function AuthPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Initialize theme from document after mount to avoid hydration mismatch
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true);
     if (typeof window !== 'undefined') {
       const isDark = document.documentElement.classList.contains('dark');
       setIsDarkMode(isDark);
 
-      // Load existing config if available
       try {
         const stored = localStorage.getItem('selet_company_config');
         if (stored) {
           setConfig({ ...DEFAULT_CONFIG, ...JSON.parse(stored) });
         }
       } catch {
-        // use default
+        // fallback to default config
       }
     }
   }, []);
@@ -74,7 +71,6 @@ export function AuthPage() {
     const finalEmail = userEmail || `${provider.toLowerCase()}@afrodigital.et`;
     setEmail(finalEmail);
 
-    // Save session: user is assigned higher role OWNER by default
     if (typeof window !== 'undefined') {
       const session = {
         role: 'OWNER',
@@ -86,7 +82,6 @@ export function AuthPage() {
       localStorage.setItem('selet_auth_session', JSON.stringify(session));
     }
 
-    // Advance to onboarding / configuration step
     setStep('onboarding');
   };
 
@@ -107,10 +102,21 @@ export function AuthPage() {
 
   return (
     <main className="relative min-h-screen lg:h-screen lg:overflow-hidden lg:grid lg:grid-cols-2 bg-neutral-50 dark:bg-[#0c0c0c] text-neutral-900 dark:text-neutral-100 font-sans">
-      {/* Left Branding / Hero Side */}
+      {/* Left Column: Brand Hero & Statutory Compliance Showcase */}
       <div className="bg-neutral-100 dark:bg-[#121212] relative hidden h-full flex-col border-r border-black/[0.06] dark:border-white/[0.08] p-10 lg:flex select-none overflow-hidden">
-        <div className="from-neutral-50 dark:from-[#0c0c0c] absolute inset-0 z-10 bg-gradient-to-t to-transparent opacity-80" />
-        
+        {/* Static Architectural Grid Blueprint */}
+        <div aria-hidden className="absolute inset-0 pointer-events-none opacity-40 dark:opacity-30">
+          <svg className="w-full h-full stroke-neutral-400 dark:stroke-neutral-700" fill="none">
+            <defs>
+              <pattern id="static-blueprint-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" strokeWidth="0.75" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#static-blueprint-grid)" />
+          </svg>
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-100 dark:from-[#121212] via-transparent to-transparent" />
+        </div>
+
         {/* Brand Header */}
         <div className="z-10 flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 flex items-center justify-center shadow-sm">
@@ -121,7 +127,7 @@ export function AuthPage() {
               <span className="text-xl font-bold tracking-tight text-neutral-900 dark:text-white">
                 Selet
               </span>
-              <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 font-sans">
+              <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
                 (ስሌት)
               </span>
             </div>
@@ -132,7 +138,7 @@ export function AuthPage() {
         </div>
 
         {/* Feature Highlights */}
-        <div className="z-10 my-auto max-w-md space-y-4">
+        <div className="z-10 my-auto max-w-md space-y-5">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400">
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>Defensible Software Pricing Standard</span>
@@ -158,7 +164,7 @@ export function AuthPage() {
           </div>
         </div>
 
-        {/* Quote Testimonial */}
+        {/* Client Quote / Testimonial */}
         <div className="z-10 mt-auto pt-6 border-t border-black/[0.06] dark:border-white/[0.08]">
           <blockquote className="space-y-2">
             <p className="text-sm italic text-neutral-700 dark:text-neutral-300">
@@ -169,21 +175,11 @@ export function AuthPage() {
             </footer>
           </blockquote>
         </div>
-
-        {/* Dynamic Animated Floating Vectors */}
-        <div className="absolute inset-0 pointer-events-none opacity-40 dark:opacity-30">
-          {mounted && (
-            <>
-              <FloatingPaths position={1} />
-              <FloatingPaths position={-1} />
-            </>
-          )}
-        </div>
       </div>
 
-      {/* Right Side / Form Area */}
+      {/* Right Column: Interactive Auth & Onboarding */}
       <div className="relative flex min-h-screen flex-col justify-center p-6 sm:p-10 lg:p-12 overflow-y-auto">
-        {/* Background Radial Glow */}
+        {/* Subtle Static Accent Glow */}
         <div
           aria-hidden
           className="absolute inset-0 -z-10 overflow-hidden pointer-events-none"
@@ -191,7 +187,7 @@ export function AuthPage() {
           <div className="bg-[radial-gradient(ellipse_at_top_right,rgba(0,122,85,0.08),transparent_60%)] absolute inset-0" />
         </div>
 
-        {/* Top Controls: Return to Home & Theme Toggle */}
+        {/* Top Controls: Return to Workspace & Theme Toggle */}
         <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-20">
           <Button variant="ghost" size="sm" asChild>
             <a href="/" className="text-xs flex items-center gap-1.5 font-medium">
@@ -204,13 +200,13 @@ export function AuthPage() {
             variant="outline"
             size="icon"
             onClick={toggleTheme}
-            className="w-8 h-8 rounded-full"
+            className="w-8 h-8 rounded-full border-black/[0.08] dark:border-white/[0.08]"
             title="Toggle theme"
           >
             {mounted && isDarkMode ? (
               <Sun className="w-3.5 h-3.5 text-amber-400" />
             ) : (
-              <Moon className="w-3.5 h-3.5 text-neutral-600" />
+              <Moon className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-300" />
             )}
           </Button>
         </div>
@@ -455,59 +451,6 @@ export function AuthPage() {
         )}
       </div>
     </main>
-  );
-}
-
-function FloatingPaths({ position }: { position: number }) {
-  const paths = Array.from({ length: 24 }, (_, i) => ({
-    id: i,
-    d: `M-${380 - i * 6 * position} -${189 + i * 8}C-${
-      380 - i * 6 * position
-    } -${189 + i * 8} -${312 - i * 6 * position} ${216 - i * 8} ${
-      152 - i * 6 * position
-    } ${343 - i * 8}C${616 - i * 6 * position} ${470 - i * 8} ${
-      684 - i * 6 * position
-    } ${875 - i * 8} ${684 - i * 6 * position} ${875 - i * 8}`,
-    width: 0.6 + i * 0.04,
-  }));
-
-  return (
-    <div className="pointer-events-none absolute inset-0">
-      <svg
-        className="h-full w-full text-neutral-900 dark:text-white"
-        viewBox="0 0 696 316"
-        fill="none"
-        preserveAspectRatio="xMidYMid slice"
-      >
-        <title>Background Paths</title>
-        {paths.map((path) => (
-          <motion.path
-            key={`${position}-${path.id}`}
-            d={path.d}
-            stroke="currentColor"
-            strokeWidth={path.width}
-            strokeOpacity={0.08 + path.id * 0.015}
-            initial={{ pathLength: 0.35, pathOffset: 0, opacity: 0.2 }}
-            animate={{
-              pathOffset: [0, 1],
-              opacity: [0.15, 0.45, 0.15],
-            }}
-            transition={{
-              pathOffset: {
-                duration: 20 + (path.id % 6) * 3,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: 'linear',
-              },
-              opacity: {
-                duration: 4 + (path.id % 3) * 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: 'easeInOut',
-              },
-            }}
-          />
-        ))}
-      </svg>
-    </div>
   );
 }
 
