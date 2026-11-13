@@ -1,24 +1,16 @@
-import { z } from 'zod';
+import rawEthiopia2026 from './packs/ethiopia-2026.json';
+import { TaxPack } from './schema';
+import { loadTaxPack } from './validator';
 
-export const TAX_PACK_VERSION = '0.1.0';
+export * from './schema';
+export * from './validator';
+export * from './stale';
+export * from './paye';
+export * from './pricing-adapter';
 
-export const TaxRuleSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  rate: z.number().min(0).max(1),
-  effectiveFrom: z.string(),
-  source: z.string().url().optional(),
-  verifiedAt: z.string().optional(),
-  needsVerification: z.boolean().default(false),
-});
+export const TAX_PACK_VERSION = '2026.1';
 
-export type TaxRule = z.infer<typeof TaxRuleSchema>;
-
-export const TaxPackSchema = z.object({
-  version: z.string(),
-  country: z.literal('ET'),
-  effectiveFrom: z.string(),
-  rules: z.array(TaxRuleSchema),
-});
-
-export type TaxPack = z.infer<typeof TaxPackSchema>;
+/**
+ * Standard, bundled Ethiopian 2026 Tax Pack, pre-validated at module load time.
+ */
+export const ethiopia2026TaxPack: TaxPack = loadTaxPack(rawEthiopia2026);

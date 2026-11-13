@@ -1,18 +1,20 @@
 import { describe, it, expect } from 'vitest';
-import { TAX_PACK_VERSION, TaxRuleSchema } from './index';
+import { TAX_PACK_VERSION, TaxRuleSchema, ethiopia2026TaxPack } from './index';
 
 describe('Tax Pack', () => {
   it('has valid version', () => {
-    expect(TAX_PACK_VERSION).toBe('0.1.0');
+    expect(TAX_PACK_VERSION).toBe('2026.1');
+    expect(ethiopia2026TaxPack.version).toBe('2026.1');
   });
 
   it('validates a tax rule schema', () => {
     const validRule = {
       id: 'vat-standard',
       name: 'VAT',
+      type: 'VAT',
+      appliesTo: 'QUOTE',
       rate: 0.15,
-      effectiveFrom: '2026-01-01',
-      source: 'https://example.com/vat',
+      sourceUrl: 'https://example.com/vat',
       verifiedAt: '2026-11-12',
       needsVerification: false,
     };
